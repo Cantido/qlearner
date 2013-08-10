@@ -16,11 +16,9 @@ public class QLearner {
 		int episodeTicks = 0;
 		
 		for (int i = 0; i < 10000; i++, episodeTicks++) {
-			
-			try {
-				q.timeStep();
-			} catch (GoalReachedException e) {
-				System.out.println(e.getMessage() + ", took " + episodeTicks + " steps.");
+			q.timeStep();
+			if(q.hasReachedGoal()) {
+				System.out.println("Goal has been reached, took " + episodeTicks + " steps.");
 				q.restart();
 				episodeTicks = 0;
 			}
@@ -51,6 +49,10 @@ public class QLearner {
 		currentState = new QState(startState);
 	}
 	
+	public boolean hasReachedGoal() {
+		return (currentState.equals(GOAL_STATE));
+	}
+	
 	/**
 	 * Moves the current state back to the start state
 	 */
@@ -63,7 +65,7 @@ public class QLearner {
 	 * 
 	 * @throws GoalReachedException if the goal is reached
 	 */
-	private void timeStep() throws GoalReachedException {
+	private void timeStep() {
 		
 		QAction actionToTake;
 		
@@ -79,11 +81,6 @@ public class QLearner {
 		updateQ(currentState, actionToTake);
 		
 		currentState.takeAction(actionToTake);
-
-		
-		if (currentState.equals(GOAL_STATE)) {
-			throw new GoalReachedException();
-		}
 	}
 	
 	/**
