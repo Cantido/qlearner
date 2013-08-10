@@ -20,6 +20,10 @@
           </plugins>
       </pluginManagement>
   </build>
+  <issueManagement>
+    <system>Github</system>
+    <url>https://github.com/Cantido/qlearner/issues</url>
+  </issueManagement>
   <ciManagement>
     <system>travis-ci</system>
     <url>https://travis-ci.org/Cantido/qlearner</url>
