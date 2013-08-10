@@ -24,4 +24,8 @@
     <system>travis-ci</system>
     <url>https://travis-ci.org/Cantido/qlearner</url>
   </ciManagement>
+  <scm>
+    <connection>scm:git:https://github.com/Cantido/qlearner.git</connection>
+    <url>https://github.com/Cantido/qlearner</url>
+  </scm>
 </project>
