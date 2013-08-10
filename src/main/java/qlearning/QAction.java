@@ -5,7 +5,7 @@ package qlearning;
  * 
  * @author Robert Richter
  */
-enum Action { 
+enum QAction { 
 	UP, 
 	RIGHT, 
 	DOWN, 
@@ -17,23 +17,23 @@ enum Action {
 	 * @param ordinal The number of the action to get
 	 * @return The action with the given ordinal
 	 */
-	public static Action getActionFromOrdinal(int ordinal){
+	public static QAction getActionFromOrdinal(int ordinal){
 		assert(ordinal >= 0 && ordinal <= 3);
 		
-		Action action = null;
+		QAction action = null;
 		
 		switch(ordinal) {
 		case 0:
-			action = Action.UP;
+			action = QAction.UP;
 			break;
 		case 1:
-			action = Action.RIGHT;
+			action = QAction.RIGHT;
 			break;
 		case 2:
-			action = Action.DOWN;
+			action = QAction.DOWN;
 			break;
 		case 3:
-			action = Action.LEFT;
+			action = QAction.LEFT;
 			break;
 		default:
 			break;
@@ -41,14 +41,14 @@ enum Action {
 		return action;
 	}
 	
-	public static String toString(Action action){
-		if(action == Action.UP)
+	public static String toString(QAction action){
+		if(action == QAction.UP)
 			return ("UP");
-		else if(action == Action.RIGHT)
+		else if(action == QAction.RIGHT)
 			return ("RIGHT");
-		else if(action == Action.DOWN)
+		else if(action == QAction.DOWN)
 			return ("DOWN");
-		else if(action == Action.LEFT)
+		else if(action == QAction.LEFT)
 			return ("LEFT");
 		else
 			return ("INVALID STATE");

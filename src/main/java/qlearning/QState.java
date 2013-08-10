@@ -5,22 +5,22 @@ package qlearning;
  * 
  * @author Robert Richter
  */
-class State {
+class QState {
 
 	private int _x;
 	private int _y;
 	
-	public State() {
+	public QState() {
 		this._x = 0;
 		this._y = 0;
 	}
 
-	public State(State state) {
+	public QState(QState state) {
 		this._x = state.getX();
 		this._y = state.getY();
 	}
 	
-	public State(int x, int y) {
+	public QState(int x, int y) {
 		this._x = x;
 		this._y = y;
 	}
@@ -30,14 +30,14 @@ class State {
 	 * 
 	 * @param a The action to take
 	 */
-	public void takeAction(Action a) {
-		if (a == Action.UP && _y != (QLearner.MAX_Y - 1))
+	public void takeAction(QAction a) {
+		if (a == QAction.UP && _y != (QLearner.MAX_Y - 1))
 			_y++;
-		if (a == Action.RIGHT && _x != (QLearner.MAX_X - 1))
+		if (a == QAction.RIGHT && _x != (QLearner.MAX_X - 1))
 			_x++;
-		if (a == Action.DOWN && _y != 0)
+		if (a == QAction.DOWN && _y != 0)
 			_y--;
-		if (a == Action.LEFT && _x != 0)
+		if (a == QAction.LEFT && _x != 0)
 			_x--;
 		
 		/* wind */
@@ -63,7 +63,7 @@ class State {
 	}
 	
 	public void takeAction(int a) {
-		takeAction(Action.getActionFromOrdinal(a));
+		takeAction(QAction.getActionFromOrdinal(a));
 	}
 
 	/*
@@ -79,7 +79,7 @@ class State {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		State other = (State) obj;
+		QState other = (QState) obj;
 		if (_x != other._x)
 			return false;
 		if (_y != other._y)
