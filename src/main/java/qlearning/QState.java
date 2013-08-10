@@ -10,6 +10,10 @@ public class QState {
 	private int _x;
 	private int _y;
 	
+	private int reward;
+	
+
+	
 	public QState() {
 		this._x = 0;
 		this._y = 0;
@@ -23,6 +27,14 @@ public class QState {
 	public QState(int x, int y) {
 		this._x = x;
 		this._y = y;
+	}
+	
+	public int getReward() {
+		return reward;
+	}
+	
+	public void setReward(int reward) {
+		this.reward = reward;
 	}
 	
 	/**

@@ -91,15 +91,25 @@ public class QLearner {
 	private void updateQ(QState s, QAction a) {
 		QState sPrime = new QState(s);
 		sPrime.takeAction(a);
-
-		int reward = -1;
-		if (sPrime.equals(GOAL_STATE))
-			reward = 10;
 		
-		double newQ = getQ(s, a) + (LEARNING_RATE * (reward + DISCOUNT_FACTOR * getBestQ(sPrime) - getQ(s, a)));
+		determineReward(sPrime);
+		
+		double newQ = getQ(s, a) + (LEARNING_RATE * (sPrime.getReward() + DISCOUNT_FACTOR * getBestQ(sPrime) - getQ(s, a)));
 		
 		q[s.getX()][s.getY()][a.ordinal()] = newQ;
 	}
+	
+	/**
+	 * Sets the state's reward based on its position
+	 */
+	private void determineReward(QState state) {
+		if (state.equals(GOAL_STATE)) {
+			state.setReward(10);
+		} else {
+			state.setReward(-1);
+		}
+	}
+	
 	
 	/**
 	 * Returns the {@link QAction} with the highest Q-value for the given {@link QState}
