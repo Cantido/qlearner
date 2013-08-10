@@ -2,18 +2,10 @@ package qlearning;
 
 
 /**
+ * Main class of the qlearning package
+ * 
  * @author Robert Richter
- * 
- *         CpE 358 Computational Intelligence
- * 
- *         Final Project: Q-learning
- * 
- *         Implements Q-learning to navigate an agent though a windy gridworld
- * 
- *         Due Wednesday, December 5th @ noon
- * 
  */
-
 public class QLearner {
 	public static void main(String[] args) {
 		State start = new State(0, 3);
@@ -59,10 +51,18 @@ public class QLearner {
 		currentState = new State(startState);
 	}
 	
+	/**
+	 * Moves the current state back to the start state
+	 */
 	public void restart() {
 		currentState = new State(START_STATE);
 	}
 	
+	/**
+	 * Moves the algorithm through one full movement step
+	 * 
+	 * @throws GoalReachedException if the goal is reached
+	 */
 	private void timeStep() throws GoalReachedException {
 		
 		Action actionToTake;
@@ -86,6 +86,12 @@ public class QLearner {
 		}
 	}
 	
+	/**
+	 * Updates the Q-value for a state-action pair
+	 * 
+	 * @param s The State
+	 * @param a The Action
+	 */
 	private void updateQ(State s, Action a) {
 		State sPrime = new State(s);
 		sPrime.takeAction(a);
@@ -99,6 +105,12 @@ public class QLearner {
 		q[s.getX()][s.getY()][a.ordinal()] = newQ;
 	}
 	
+	/**
+	 * Returns the {@link Action} with the highest Q-value for the given {@link State}
+	 * 
+	 * @param s The state for which to find the best action
+	 * @return The action with the highest q-value
+	 */
 	private Action getBestAction(State s) {
 		Action bestAction = Action.UP;
 
@@ -112,6 +124,12 @@ public class QLearner {
 		return bestAction;
 	}
 	
+	/**
+	 * Returns the highest q-value for the given state
+	 * 
+	 * @param s The state for find the best q-value for
+	 * @return The best q-value for the state
+	 */
 	private double getBestQ(State s) {
 		double bestQ = -(Double.MAX_VALUE);
 		for (Action action : Action.values()) {
@@ -121,6 +139,13 @@ public class QLearner {
 		return bestQ;
 	}
 	
+	/**
+	 * Returns the q-value for the given state-action pair
+	 * 
+	 * @param s The state
+	 * @param a The action
+	 * @return The q-value for a given state-action pair
+	 */
 	private double getQ (State s, Action a) {
 		//assert(this.isValidState(s));
 		return q[s.getX()][s.getY()][a.ordinal()];

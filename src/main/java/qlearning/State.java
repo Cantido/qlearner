@@ -1,5 +1,10 @@
 package qlearning;
 
+/**
+ * The position of the q-learning agent
+ * 
+ * @author Robert Richter
+ */
 class State {
 
 	private int _x;
@@ -20,6 +25,11 @@ class State {
 		this._y = y;
 	}
 	
+	/**
+	 * Changes the state based on the given action
+	 * 
+	 * @param a The action to take
+	 */
 	public void takeAction(Action a) {
 		if (a == Action.UP && _y != (QLearner.MAX_Y - 1))
 			_y++;

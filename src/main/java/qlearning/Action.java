@@ -1,11 +1,22 @@
 package qlearning;
 
+/**
+ * Represents an action that can be taken
+ * 
+ * @author Robert Richter
+ */
 enum Action { 
 	UP, 
 	RIGHT, 
 	DOWN, 
 	LEFT;
 	
+	/**
+	 * Gets an Action from an ordinal integer
+	 * 
+	 * @param ordinal The number of the action to get
+	 * @return The action with the given ordinal
+	 */
 	public static Action getActionFromOrdinal(int ordinal){
 		assert(ordinal >= 0 && ordinal <= 3);
 		
