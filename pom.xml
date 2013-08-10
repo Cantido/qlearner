@@ -5,6 +5,9 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>QLearner</name>
   <description>A simple implementation of the q-learning algorithm</description>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <build>
       <pluginManagement>
           <plugins>
