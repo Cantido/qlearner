@@ -8,8 +8,8 @@ package qlearning;
  */
 public class QLearner {
 	public static void main(String[] args) {
-		State start = new State(0, 3);
-		State goal = new State(7, 3);
+		QState start = new QState(0, 3);
+		QState goal = new QState(7, 3);
 		
 		QLearner q = new QLearner(start, goal);
 		
@@ -27,11 +27,11 @@ public class QLearner {
 		}
 	}
 	
-	static final int MAX_X = 10;
-	static final int MAX_Y = 7;
+	public static final int MAX_X = 10;
+	public static final int MAX_Y = 7;
 	
-	final State GOAL_STATE;
-	final State START_STATE;
+	private final QState GOAL_STATE;
+	private final QState START_STATE;
 	
 	private double EPSILON = 0.1;
 	private double LEARNING_RATE = 1;
@@ -39,23 +39,23 @@ public class QLearner {
 	
 	private double[][][] q = new double[MAX_X][MAX_Y][4];
 	
-	private State currentState;
+	private QState currentState;
 	
 	public QLearner() {
-		this(new State(0, 3), new State(7, 3));
+		this(new QState(0, 3), new QState(7, 3));
 	}
 	
-	public QLearner(State startState, State goalState) {
-		START_STATE = new State(startState);
-		GOAL_STATE = new State(goalState);
-		currentState = new State(startState);
+	public QLearner(QState startState, QState goalState) {
+		START_STATE = new QState(startState);
+		GOAL_STATE = new QState(goalState);
+		currentState = new QState(startState);
 	}
 	
 	/**
 	 * Moves the current state back to the start state
 	 */
 	public void restart() {
-		currentState = new State(START_STATE);
+		currentState = new QState(START_STATE);
 	}
 	
 	/**
@@ -65,10 +65,10 @@ public class QLearner {
 	 */
 	private void timeStep() throws GoalReachedException {
 		
-		Action actionToTake;
+		QAction actionToTake;
 		
 		if (Math.random() < EPSILON) {
-			actionToTake = Action
+			actionToTake = QAction
 					.getActionFromOrdinal((int) ((Math.random() * 4)));
 			
 		} else {
@@ -92,8 +92,8 @@ public class QLearner {
 	 * @param s The State
 	 * @param a The Action
 	 */
-	private void updateQ(State s, Action a) {
-		State sPrime = new State(s);
+	private void updateQ(QState s, QAction a) {
+		QState sPrime = new QState(s);
 		sPrime.takeAction(a);
 
 		int reward = -1;
@@ -106,15 +106,15 @@ public class QLearner {
 	}
 	
 	/**
-	 * Returns the {@link Action} with the highest Q-value for the given {@link State}
+	 * Returns the {@link QAction} with the highest Q-value for the given {@link QState}
 	 * 
 	 * @param s The state for which to find the best action
 	 * @return The action with the highest q-value
 	 */
-	private Action getBestAction(State s) {
-		Action bestAction = Action.UP;
+	private QAction getBestAction(QState s) {
+		QAction bestAction = QAction.UP;
 
-		for (Action action : Action.values()) {
+		for (QAction action : QAction.values()) {
 			if (getQ(s, action) > getQ(s, bestAction)) {
 				bestAction = action;
 			} else if ((getQ(s, action) == getQ(s, bestAction)) && Math.random() > 0.5) {
@@ -130,9 +130,9 @@ public class QLearner {
 	 * @param s The state for find the best q-value for
 	 * @return The best q-value for the state
 	 */
-	private double getBestQ(State s) {
+	private double getBestQ(QState s) {
 		double bestQ = -(Double.MAX_VALUE);
-		for (Action action : Action.values()) {
+		for (QAction action : QAction.values()) {
 			if (getQ(s, action) > bestQ)
 				bestQ = getQ(s, action);
 		}
@@ -146,7 +146,7 @@ public class QLearner {
 	 * @param a The action
 	 * @return The q-value for a given state-action pair
 	 */
-	private double getQ (State s, Action a) {
+	private double getQ (QState s, QAction a) {
 		//assert(this.isValidState(s));
 		return q[s.getX()][s.getY()][a.ordinal()];
 	}
