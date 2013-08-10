@@ -20,4 +20,8 @@
           </plugins>
       </pluginManagement>
   </build>
+  <ciManagement>
+    <system>travis-ci</system>
+    <url>https://travis-ci.org/Cantido/qlearner</url>
+  </ciManagement>
 </project>
