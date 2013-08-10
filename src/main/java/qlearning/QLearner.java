@@ -70,8 +70,7 @@ public class QLearner {
 		QAction actionToTake;
 		
 		if (Math.random() < EPSILON) {
-			actionToTake = QAction
-					.getActionFromOrdinal((int) ((Math.random() * 4)));
+			actionToTake = QAction.fromOrdinal((int) ((Math.random() * 4)));
 			
 		} else {
 			actionToTake = getBestAction(currentState);

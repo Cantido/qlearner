@@ -63,7 +63,7 @@ public class QState {
 	}
 	
 	public void takeAction(int a) {
-		takeAction(QAction.getActionFromOrdinal(a));
+		takeAction(QAction.fromOrdinal(a));
 	}
 
 	/*
