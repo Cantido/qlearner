@@ -31,9 +31,9 @@ public class QLearner {
 	private final QState GOAL_STATE;
 	private final QState START_STATE;
 	
-	private double EPSILON = 0.1;
-	private double LEARNING_RATE = 1;
-	private double DISCOUNT_FACTOR = 1;
+	private final double EXPLORATION_FACTOR = 0.1;
+	private final double LEARNING_RATE = 1;
+	private final double DISCOUNT_FACTOR = 1;
 	
 	private double[][][] q = new double[MAX_X][MAX_Y][4];
 	
@@ -66,20 +66,38 @@ public class QLearner {
 	 * @throws GoalReachedException if the goal is reached
 	 */
 	private void timeStep() {
-		
 		QAction actionToTake;
 		
-		if (Math.random() < EPSILON) {
-			actionToTake = QAction.fromOrdinal((int) ((Math.random() * 4)));
-			
+		if (shouldExplore()) {
+			actionToTake = getRandomAction();
 		} else {
-			actionToTake = getBestAction(currentState);
-			
+			actionToTake = getBestAction();
 		}
 		
-		updateQ(currentState, actionToTake);
-		
-		currentState.takeAction(actionToTake);
+		takeAction(actionToTake);
+	}
+	
+	/**
+	 * @return whether or not the agent should explore in this time step
+	 */
+	private boolean shouldExplore() {
+		return (Math.random() < EXPLORATION_FACTOR);
+	}
+	
+	/**
+	 * @return a random action
+	 */
+	@SuppressWarnings("static-method")
+	private QAction getRandomAction() {
+		return QAction.fromOrdinal((int) ((Math.random() * 4)));
+	}
+	
+	/**
+	 * Takes an action
+	 */
+	private void takeAction(QAction action) {
+		updateQ(currentState, action);
+		currentState.takeAction(action);
 	}
 	
 	/**
@@ -128,6 +146,13 @@ public class QLearner {
 			}
 		}
 		return bestAction;
+	}
+	
+	/**
+	 * @return the best action for the current state
+	 */
+	private QAction getBestAction() {
+		return getBestAction(currentState);
 	}
 	
 	/**
