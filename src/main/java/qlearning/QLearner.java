@@ -20,7 +20,7 @@ public class QLearner {
 			try {
 				q.timeStep();
 			} catch (GoalReachedException e) {
-				System.out.println(e.msg + ", took " + episodeTicks + " steps.");
+				System.out.println(e.getMessage() + ", took " + episodeTicks + " steps.");
 				q.restart();
 				episodeTicks = 0;
 			}

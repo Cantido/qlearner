@@ -5,7 +5,7 @@ package qlearning;
  * 
  * @author Robert Richter
  */
-enum QAction { 
+public enum QAction { 
 	UP, 
 	RIGHT, 
 	DOWN, 

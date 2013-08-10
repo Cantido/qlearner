@@ -5,7 +5,7 @@ package qlearning;
  * 
  * @author Robert Richter
  */
-class QState {
+public class QState {
 
 	private int _x;
 	private int _y;
