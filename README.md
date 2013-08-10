@@ -11,5 +11,4 @@ learn, using q-learning, how to reach the goal in the fewest number of moves.
 
 NOTE: This code is very bad. A massive refactor is coming.
 
-[wiki]: https://en.wikipedia.org/wiki/Q_learning
-	"Q-learning - Wikipedia, the free encycopedia"
+[wiki]: https://en.wikipedia.org/wiki/Q_learning "Q-learning - Wikipedia, the free encycopedia"
