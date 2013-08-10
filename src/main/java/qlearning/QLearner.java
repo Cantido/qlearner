@@ -25,9 +25,6 @@ public class QLearner {
 		}
 	}
 	
-	public static final int MAX_X = 10;
-	public static final int MAX_Y = 7;
-	
 	private final QState GOAL_STATE;
 	private final QState START_STATE;
 	
@@ -35,7 +32,7 @@ public class QLearner {
 	private final double LEARNING_RATE = 1;
 	private final double DISCOUNT_FACTOR = 1;
 	
-	private double[][][] q = new double[MAX_X][MAX_Y][4];
+
 	
 	private QState currentState;
 	
@@ -66,15 +63,17 @@ public class QLearner {
 	 * @throws GoalReachedException if the goal is reached
 	 */
 	private void timeStep() {
-		QAction actionToTake;
-		
+		takeAction(getNextAction());
+	}
+	
+	public QAction getNextAction() {
+		QAction nextAction;
 		if (shouldExplore()) {
-			actionToTake = getRandomAction();
+			nextAction = currentState.getRandomAction();
 		} else {
-			actionToTake = getBestAction();
+			nextAction = currentState.getBestAction();
 		}
-		
-		takeAction(actionToTake);
+		return nextAction;
 	}
 	
 	/**
@@ -82,14 +81,6 @@ public class QLearner {
 	 */
 	private boolean shouldExplore() {
 		return (Math.random() < EXPLORATION_FACTOR);
-	}
-	
-	/**
-	 * @return a random action
-	 */
-	@SuppressWarnings("static-method")
-	private QAction getRandomAction() {
-		return QAction.fromOrdinal((int) ((Math.random() * 4)));
 	}
 	
 	/**
@@ -112,9 +103,9 @@ public class QLearner {
 		
 		determineReward(sPrime);
 		
-		double newQ = getQ(s, a) + (LEARNING_RATE * (sPrime.getReward() + DISCOUNT_FACTOR * getBestQ(sPrime) - getQ(s, a)));
+		double newQ = s.getQ(a) + (LEARNING_RATE * (sPrime.getReward() + DISCOUNT_FACTOR * sPrime.getBestQ() - s.getQ(a)));
 		
-		q[s.getX()][s.getY()][a.ordinal()] = newQ;
+		currentState.setQValueForAction(newQ, a);
 	}
 	
 	/**
@@ -126,59 +117,5 @@ public class QLearner {
 		} else {
 			state.setReward(-1);
 		}
-	}
-	
-	
-	/**
-	 * Returns the {@link QAction} with the highest Q-value for the given {@link QState}
-	 * 
-	 * @param s The state for which to find the best action
-	 * @return The action with the highest q-value
-	 */
-	private QAction getBestAction(QState s) {
-		QAction bestAction = QAction.UP;
-
-		for (QAction action : QAction.values()) {
-			if (getQ(s, action) > getQ(s, bestAction)) {
-				bestAction = action;
-			} else if ((getQ(s, action) == getQ(s, bestAction)) && Math.random() > 0.5) {
-				bestAction = action;
-			}
-		}
-		return bestAction;
-	}
-	
-	/**
-	 * @return the best action for the current state
-	 */
-	private QAction getBestAction() {
-		return getBestAction(currentState);
-	}
-	
-	/**
-	 * Returns the highest q-value for the given state
-	 * 
-	 * @param s The state for find the best q-value for
-	 * @return The best q-value for the state
-	 */
-	private double getBestQ(QState s) {
-		double bestQ = -(Double.MAX_VALUE);
-		for (QAction action : QAction.values()) {
-			if (getQ(s, action) > bestQ)
-				bestQ = getQ(s, action);
-		}
-		return bestQ;
-	}
-	
-	/**
-	 * Returns the q-value for the given state-action pair
-	 * 
-	 * @param s The state
-	 * @param a The action
-	 * @return The q-value for a given state-action pair
-	 */
-	private double getQ (QState s, QAction a) {
-		//assert(this.isValidState(s));
-		return q[s.getX()][s.getY()][a.ordinal()];
 	}
 }
