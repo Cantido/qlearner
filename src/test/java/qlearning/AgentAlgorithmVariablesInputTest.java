@@ -66,31 +66,7 @@ public class AgentAlgorithmVariablesInputTest {
         agent.setLearningRate(learningRate);
     }
 
-    @Theory
-    public void explorationFactorBetweenZeroAndOneInclusiveIsLegal(double explorationFactor) {
-        assumeThat(explorationFactor, greaterThanOrEqualTo(DOUBLE_ZERO));
-        assumeThat(explorationFactor, lessThanOrEqualTo(DOUBLE_ONE));
 
-        agent.setExplorationFactor(explorationFactor);
-
-        // Expect no exceptions
-    }
-
-    @Theory
-    public void explorationFactorBelowZeroIsIllegal(double explorationFactor) {
-        assumeThat(explorationFactor, lessThan(DOUBLE_ZERO));
-
-        exception.expect(IllegalArgumentException.class);
-        agent.setExplorationFactor(explorationFactor);
-    }
-
-    @Theory
-    public void explorationFactorAboveOneIsIllegal(double explorationFactor) {
-        assumeThat(explorationFactor, greaterThan(DOUBLE_ONE));
-
-        exception.expect(IllegalArgumentException.class);
-        agent.setExplorationFactor(explorationFactor);
-    }
 
     @Theory
     public void discountFactorBelowZeroIsIllegal(double discountFactor) {

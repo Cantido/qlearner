@@ -1,18 +1,15 @@
 package qlearning;
 
-import static org.apache.commons.lang3.math.NumberUtils.*;
+import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ONE;
+import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ZERO;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,11 +23,11 @@ public class Agent {
     private static final double DEFAULT_STATE_ACTION_QUALITY = DOUBLE_ZERO;
 
     private double discountFactor = DOUBLE_ONE;
-    private double explorationFactor = 0.1;
     private double learningRate = DOUBLE_ONE;
 
     private Environment environment;
-
+    private ExplorationStrategy explorationStrategy;
+    
     private Map<ImmutablePair<State, Action>, Double> qualities = new HashMap<>();
 
     private State previousState;
@@ -72,23 +69,6 @@ public class Agent {
     }
 
     /**
-     * Set the exploration factor, which determines how often the agent will choose random actions over desirable ones
-     * in order to explore the problem space.
-     * <p>
-     * A factor of 0 will make the agent never choose random actions. A factor of 1 will make the agent always choose
-     * random actions. The agent will still update quality values correctly based on the resulting state's reward, so
-     * setting the exploration factor to 0 would allow you to perform a random search through the problem space.
-     * </p>
-     * 
-     * @param ef the new exploration factor to set, in the range [0, 1]
-     */
-    public void setExplorationFactor(double ef) {
-        Validate.inclusiveBetween(DOUBLE_ZERO, DOUBLE_ONE, ef,
-                "Exploration factor must be between zero and one (inclusive)");
-        this.explorationFactor = ef;
-    }
-
-    /**
      * The discount factor determines the importance of future rewards.
      * <p>
      * A factor of 0 will make the agent "myopic" (or short-sighted) by only considering current rewards, while a factor
@@ -102,6 +82,11 @@ public class Agent {
         Validate.inclusiveBetween(DOUBLE_ZERO, Double.POSITIVE_INFINITY, df,
                 "Discount factor must be greater than or equal to zero");
         this.discountFactor = df;
+    }
+    
+    public void setExplorationStrategy(ExplorationStrategy strategy) {
+        Validate.notNull(strategy);
+        this.explorationStrategy = strategy;
     }
 
     /**
@@ -129,14 +114,26 @@ public class Agent {
     public void takeNextAction() {
         logger.debug("---- NEW TICK --- entered takeNextAction");
 
-        assertSystemCondition(this.environment != null, "Cannot take an action without an environment.");
+        assertSystemCondition(this.environment != null, "Current environment is null, cannot take action.");
+        assertSystemCondition(this.explorationStrategy != null, "Current exploration strategy is null, cannot take action");
 
         currentState = environment.getState();
 
         logger.debug("Got current state: {}", currentState);
-        Validate.notNull(currentState, "The environment returned a null state, which is not allowed");
+        Validate.notNull(currentState, "The environment's state cannot be null");
+        
+        Set<Action> possibleActions = currentState.getActions();
+        Validate.notNull(possibleActions, "The list of possible actions from a state cannot be null");
+        Validate.isTrue(!possibleActions.isEmpty(),
+                "The list of possible actions from a state cannot be empty." +
+                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
+        
+        Map<Pair<State, Action>, Double> pairs = buildPairs(currentState, possibleActions);
 
-        Action nextAction = getNextAction();
+        Action nextAction = explorationStrategy.getNextAction(pairs);
+        Validate.notNull(nextAction, 
+                "The action returned by the ExplorationStrategy cannot be null." +
+                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
 
         updateQuality();
 
@@ -150,53 +147,17 @@ public class Agent {
         logger.debug("---- END OF TICK ---- exited takeNextAction");
     }
 
-    private Action getNextAction() {
-        assertSystemCondition(currentState != null,
-                "The current state was null at a time that we needed to get the next action");
-
-        Set<Action> possibleActions = currentState.getActions();
-        Validate.notNull(possibleActions,
-                "The current state returned a null list of next actions, which is not allowed");
-
-        Action nextAction;
-
-        if (shouldExplore()) {
-            nextAction = getRandomAction(possibleActions);
-            logger.debug("Should explore, chose random action: {}", nextAction);
-        } else {
-            nextAction = getBestAction(currentState, possibleActions);
-            logger.debug("Should not explore, chose best action: {}", nextAction);
+    private Map<Pair<State, Action>, Double> buildPairs(State state, Set<Action> possibleActions) {
+        Map<Pair<State, Action>, Double> pairs = new HashMap<>(possibleActions.size());
+        
+        for(Action action : possibleActions) {
+            double quality = getQuality(state, action);
+            Pair<State, Action> pair = ImmutablePair.of(state, action);
+            
+            pairs.put(pair, quality);
         }
-
-        return nextAction;
-    }
-
-    private boolean shouldExplore() {
-        return (explorationFactor == 1) || ((explorationFactor != 0) && (Math.random() < explorationFactor));
-    }
-
-    private Action getBestAction(State state, Set<Action> possibleActions) {
-        logger.debug("Determining best action from possible actions: {}", possibleActions);
-
-        SortedSet<ImmutablePair<Double, Action>> actionQualities = new TreeSet<>();
-
-        for (Action action : possibleActions) {
-            double actionQuality = getQuality(state, action);
-            logger.debug("Got quality for action {}: {}", action, actionQuality);
-            actionQualities.add(ImmutablePair.of(actionQuality, action));
-        }
-
-        logger.debug("Possible actions and qualities: {}", actionQualities);
-
-        return actionQualities.last().getRight();
-    }
-
-    private Action getRandomAction(Set<Action> possibleActions) {
-        Validate.notNull(possibleActions);
-        Validate.isTrue(!possibleActions.isEmpty());
-
-        List<Action> actions = new ArrayList<>(possibleActions);
-        return actions.get(RandomUtils.nextInt(0, actions.size()));
+        
+        return pairs;
     }
 
     /**

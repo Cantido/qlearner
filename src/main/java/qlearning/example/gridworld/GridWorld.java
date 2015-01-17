@@ -12,6 +12,7 @@ import qlearning.Action;
 import qlearning.Agent;
 import qlearning.Environment;
 import qlearning.State;
+import qlearning.impl.RandomExplorationStrategy;
 
 /**
  * An implementation of Q-Learning that moves an agent through a grid from a starting {@code State} to a goal
@@ -32,6 +33,7 @@ public class GridWorld implements Environment {
         agent.setEnvironment(gridWorld);
         agent.setDiscountFactor(1);
         agent.setLearningRate(1);
+        agent.setExplorationStrategy(new RandomExplorationStrategy());
 
         int episodeTicks = 0;
 

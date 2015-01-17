@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import qlearning.example.gridworld.GridWorld;
+import qlearning.impl.RandomExplorationStrategy;
 
 /**
  * Tests that the {@link GridWorld} implementation of this library converges on the goal state.
@@ -15,15 +16,20 @@ public class GridWorldConvergenceTest {
 
     Agent agent;
     GridWorld gridWorld;
+    ExplorationStrategy explorationStrategy;
 
     @Before
     public void setUp() {
+        explorationStrategy = new RandomExplorationStrategy(0.1);
+        
+        
         gridWorld = new GridWorld();
         agent = new Agent();
         agent.setEnvironment(gridWorld);
         agent.setDiscountFactor(1);
         agent.setLearningRate(1);
-        agent.setExplorationFactor(0.1);
+        
+        agent.setExplorationStrategy(explorationStrategy);
     }
 
     /**
