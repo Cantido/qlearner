@@ -13,6 +13,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import qlearning.impl.QualityHashMap;
+
 /**
  * Performs {@link Action}s that will lead to changes in the {@link Environment}'s current {@link State}.
  * <p>
@@ -20,20 +22,21 @@ import org.slf4j.LoggerFactory;
  * Q-learning algorithm to pick the optimal {@code Action} to take while in each {@code State}.
  */
 public class Agent {
-    private static final double DEFAULT_STATE_ACTION_QUALITY = DOUBLE_ZERO;
-
     private double discountFactor = DOUBLE_ONE;
     private double learningRate = DOUBLE_ONE;
-
+    
+    private QualityMap qualityMap;
     private Environment environment;
     private ExplorationStrategy explorationStrategy;
     
-    private Map<ImmutablePair<State, Action>, Double> qualities = new HashMap<>();
-
+    private boolean atFirstEpisode = true;
+    
     private State previousState;
     private Action previousAction;
 
     private State currentState;
+    
+    private Set<Action> possibleNextActions;
 
     Logger logger = LoggerFactory.getLogger("qlearner.Agent");
 
@@ -85,8 +88,17 @@ public class Agent {
     }
     
     public void setExplorationStrategy(ExplorationStrategy strategy) {
-        Validate.notNull(strategy);
+        Validate.notNull(strategy, "ExplorationStrategy cannot be null");
         this.explorationStrategy = strategy;
+    }
+    
+    public void setQualityMap(QualityMap map) {
+        Validate.notNull(map, "QualityMap cannot be null");
+        this.qualityMap = map;
+    }
+    
+    public QualityMap getQualityMap() {
+        return this.qualityMap;
     }
 
     /**
@@ -102,6 +114,7 @@ public class Agent {
         this.previousState = null;
         this.previousAction = null;
         this.currentState = null;
+        this.atFirstEpisode = true;
     }
 
     /**
@@ -116,27 +129,36 @@ public class Agent {
 
         assertSystemCondition(this.environment != null, "Current environment is null, cannot take action.");
         assertSystemCondition(this.explorationStrategy != null, "Current exploration strategy is null, cannot take action");
-
+        assertSystemCondition(this.qualityMap != null, "Current quality mapping is null, cannot take action");
+        
         currentState = environment.getState();
 
         logger.debug("Got current state: {}", currentState);
         Validate.notNull(currentState, "The environment's state cannot be null");
         
-        Set<Action> possibleActions = currentState.getActions();
-        Validate.notNull(possibleActions, "The list of possible actions from a state cannot be null");
-        Validate.isTrue(!possibleActions.isEmpty(),
+        possibleNextActions = currentState.getActions();
+        
+        Validate.notNull(possibleNextActions, "The list of possible actions from a state cannot be null");
+        Validate.isTrue(!possibleNextActions.isEmpty(),
                 "The list of possible actions from a state cannot be empty." +
                 "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
         
-        Map<Pair<State, Action>, Double> pairs = buildPairs(currentState, possibleActions);
+        Map<Pair<State, Action>, Double> pairs = buildPairs(currentState, possibleNextActions);
 
         Action nextAction = explorationStrategy.getNextAction(pairs);
+        
         Validate.notNull(nextAction, 
                 "The action returned by the ExplorationStrategy cannot be null." +
                 "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
-
-        updateQuality();
-
+        
+        
+        if (atFirstEpisode) {
+            logger.debug("This episode is the algorithm's first, so we cannot update the quality for the previous state & action");
+            atFirstEpisode = false;
+        } else {
+            updateQuality();
+        }
+        
         nextAction.execute();
 
         this.previousAction = nextAction;
@@ -146,12 +168,12 @@ public class Agent {
 
         logger.debug("---- END OF TICK ---- exited takeNextAction");
     }
-
+    
     private Map<Pair<State, Action>, Double> buildPairs(State state, Set<Action> possibleActions) {
         Map<Pair<State, Action>, Double> pairs = new HashMap<>(possibleActions.size());
         
         for(Action action : possibleActions) {
-            double quality = getQuality(state, action);
+            double quality = qualityMap.get(state, action);
             Pair<State, Action> pair = ImmutablePair.of(state, action);
             
             pairs.put(pair, quality);
@@ -166,70 +188,37 @@ public class Agent {
      * @param nextState
      */
     private void updateQuality() {
-        assertSystemCondition(currentState != null, "The current State of the system was null, cannot continue");
+        double oldQuality = qualityMap.get(this.previousState, this.previousAction);
+        double reward = currentState.getReward();
+        double optimalFutureValueEstimate = estimateOptimalFutureValue(currentState, possibleNextActions);
 
-        if (this.previousState == null || this.previousAction == null) {
-            logger.debug("Previous state or previous actions is null. We will assume we are at a starting state");
-        } else {
-            double oldQuality = getQuality(this.previousState, this.previousAction);
-            double reward = currentState.getReward();
-            double optimalFutureValueEstimate = getBestQuality(currentState);
+        logger.debug(
+                "Calculating new quality using the following values: (Qt+1: {}), (a: {}), (Rt+1: {}), (d: {}), (maxQt: {})",
+                oldQuality, learningRate, reward, discountFactor, optimalFutureValueEstimate);
+        logger.debug("{} + ({} * ({} + {} * {} - {}))", oldQuality, learningRate, reward, discountFactor,
+                optimalFutureValueEstimate, oldQuality);
 
-            logger.debug(
-                    "Calculating new quality using the following values: (Qt+1: {}), (a: {}), (Rt+1: {}), (d: {}), (maxQt: {})",
-                    oldQuality, learningRate, reward, discountFactor, optimalFutureValueEstimate);
-            logger.debug("{} + ({} * ({} + {} * {} - {}))", oldQuality, learningRate, reward, discountFactor,
-                    optimalFutureValueEstimate, oldQuality);
+        double newQuality = oldQuality
+                + (learningRate * (reward + discountFactor * optimalFutureValueEstimate - oldQuality));
 
-            double newQuality = oldQuality
-                    + (learningRate * (reward + discountFactor * optimalFutureValueEstimate - oldQuality));
+        logger.debug("Updating quality for [{}, {}] to {}", previousState, previousAction, newQuality);
 
-            ImmutablePair<State, Action> pair = ImmutablePair.of(previousState, previousAction);
-
-            logger.debug("Updating quality for {} to {}", pair, newQuality);
-
-            qualities.put(pair, newQuality);
-        }
+        qualityMap.put(previousState, previousAction, newQuality);
     }
+    
+    private double estimateOptimalFutureValue(State state, Set<Action> actions) {
+        double bestQualityForState = QualityMap.MIN_QUALITY;
 
-    private double getBestQuality(State s) {
-        Validate.notNull(s);
-
-        double bestQualityForState;
-
-        Set<Action> possibleActions = s.getActions();
-
-        if (possibleActions == null || possibleActions.isEmpty()) {
-            bestQualityForState = DEFAULT_STATE_ACTION_QUALITY;
-        } else {
-            bestQualityForState = -Double.MAX_VALUE;
-            for (Action action : possibleActions) {
-                double qualityForState = getQuality(s, action);
-                logger.debug("Potential future quality for state {}, action {}: {}", s, action, qualityForState);
-                bestQualityForState = Math.max(bestQualityForState, qualityForState);
-            }
+        for (Action action : actions) {
+            double qualityForState = qualityMap.get(state, action);
+            logger.debug("Potential future quality for state {}, action {}: {}", state, action, qualityForState);
+            bestQualityForState = Math.max(bestQualityForState, qualityForState);
         }
 
-        logger.debug("Got best quality for state {}: {}", s, bestQualityForState);
+        logger.debug("Got best quality for state {}: {}", state, bestQualityForState);
         return bestQualityForState;
     }
 
-    private double getQuality(State s, Action a) {
-        double qualityToGet;
-        ImmutablePair<State, Action> pair = ImmutablePair.of(s, a);
-
-        if (s == null || a == null) {
-            qualityToGet = DEFAULT_STATE_ACTION_QUALITY;
-
-        } else if (qualities.containsKey(pair)) {
-            qualityToGet = qualities.get(pair);
-
-        } else {
-            qualityToGet = DEFAULT_STATE_ACTION_QUALITY;
-        }
-
-        return qualityToGet;
-    }
 
     private void assertSystemCondition(boolean condition, String message) {
         if (!condition) {
