@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import qlearning.domain.DiscountFactor;
 import qlearning.example.gridworld.GridWorld;
 import qlearning.impl.QualityHashMap;
 import qlearning.impl.RandomExplorationStrategy;
@@ -30,7 +31,7 @@ public class GridWorldConvergenceTest {
         
         agent = new Agent();
         agent.setEnvironment(gridWorld);
-        agent.setDiscountFactor(1);
+        agent.setDiscountFactor(new DiscountFactor(1.0));
         agent.setLearningRate(1);
         
         agent.setExplorationStrategy(explorationStrategy);

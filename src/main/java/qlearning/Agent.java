@@ -13,6 +13,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import qlearning.domain.DiscountFactor;
 import qlearning.impl.QualityHashMap;
 
 /**
@@ -22,7 +23,7 @@ import qlearning.impl.QualityHashMap;
  * Q-learning algorithm to pick the optimal {@code Action} to take while in each {@code State}.
  */
 public class Agent {
-    private double discountFactor = DOUBLE_ONE;
+    private DiscountFactor discountFactor = new DiscountFactor(DOUBLE_ONE);
     private double learningRate = DOUBLE_ONE;
     
     private QualityMap qualityMap;
@@ -71,19 +72,7 @@ public class Agent {
         this.learningRate = lr;
     }
 
-    /**
-     * The discount factor determines the importance of future rewards.
-     * <p>
-     * A factor of 0 will make the agent "myopic" (or short-sighted) by only considering current rewards, while a factor
-     * approaching 1 will make it strive for a long-term high reward. If the discount factor meets or exceeds 1, the
-     * quality values may diverge.
-     * </p>
-     * 
-     * @param df the new discount factor to set, in the range [0, &infin;)
-     */
-    public void setDiscountFactor(double df) {
-        Validate.inclusiveBetween(DOUBLE_ZERO, Double.POSITIVE_INFINITY, df,
-                "Discount factor must be greater than or equal to zero");
+    public void setDiscountFactor(DiscountFactor df) {
         this.discountFactor = df;
     }
     
@@ -199,7 +188,7 @@ public class Agent {
                 optimalFutureValueEstimate, oldQuality);
 
         double newQuality = oldQuality
-                + (learningRate * (reward + discountFactor * optimalFutureValueEstimate - oldQuality));
+                + (learningRate * (reward + discountFactor.getValue() * optimalFutureValueEstimate - oldQuality));
 
         logger.debug("Updating quality for [{}, {}] to {}", previousState, previousAction, newQuality);
 

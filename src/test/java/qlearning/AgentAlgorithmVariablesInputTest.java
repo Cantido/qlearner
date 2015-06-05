@@ -65,23 +65,4 @@ public class AgentAlgorithmVariablesInputTest {
         exception.expect(IllegalArgumentException.class);
         agent.setLearningRate(learningRate);
     }
-
-
-
-    @Theory
-    public void discountFactorBelowZeroIsIllegal(double discountFactor) {
-        assumeThat(discountFactor, lessThan(DOUBLE_ZERO));
-
-        exception.expect(IllegalArgumentException.class);
-        agent.setDiscountFactor(discountFactor);
-    }
-
-    @Theory
-    public void discountFactorAboveZeroIsLegal(double discountFactor) {
-        assumeThat(discountFactor, greaterThan(DOUBLE_ZERO));
-
-        agent.setDiscountFactor(discountFactor);
-
-        // Expect no exceptions
-    }
 }
