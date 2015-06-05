@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import qlearning.domain.DiscountFactor;
+import qlearning.domain.LearningRate;
 import qlearning.impl.QualityHashMap;
 
 /**
@@ -24,7 +25,7 @@ import qlearning.impl.QualityHashMap;
  */
 public class Agent {
     private DiscountFactor discountFactor = new DiscountFactor(DOUBLE_ONE);
-    private double learningRate = DOUBLE_ONE;
+    private LearningRate learningRate = new LearningRate(DOUBLE_ONE);
     
     private QualityMap qualityMap;
     private Environment environment;
@@ -52,23 +53,8 @@ public class Agent {
         this.environment = env;
     }
 
-    /**
-     * Set the learning rate, which determines to what extent the newly acquired information will override the old
-     * information.
-     * <p>
-     * A factor of 0 will make the agent not learn anything, while a factor of 1 would make the agent consider only the
-     * most recent information. In fully deterministic environments, a learning rate of 1 is optimal. When the problem
-     * is stochastic, the algorithm still converges under some technical conditions on the learning rate, that require
-     * it to decrease to zero.
-     * </p>
-     * <p>
-     * The default learning rate is 1.
-     * </p>
-     * 
-     * @param lr the new learning rate to set, in the range [0, 1]
-     */
-    public void setLearningRate(double lr) {
-        Validate.inclusiveBetween(DOUBLE_ZERO, DOUBLE_ONE, lr, "Learning rate must be between zero and one (inclusive)");
+    public void setLearningRate(LearningRate lr) {
+        Validate.notNull(lr, "LearningRate cannot be null");
         this.learningRate = lr;
     }
 
@@ -188,7 +174,7 @@ public class Agent {
                 optimalFutureValueEstimate, oldQuality);
 
         double newQuality = oldQuality
-                + (learningRate * (reward + discountFactor.getValue() * optimalFutureValueEstimate - oldQuality));
+                + (learningRate.getValue() * (reward + discountFactor.getValue() * optimalFutureValueEstimate - oldQuality));
 
         logger.debug("Updating quality for [{}, {}] to {}", previousState, previousAction, newQuality);
 

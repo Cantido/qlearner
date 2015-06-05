@@ -13,6 +13,7 @@ import qlearning.Agent;
 import qlearning.Environment;
 import qlearning.State;
 import qlearning.domain.DiscountFactor;
+import qlearning.domain.LearningRate;
 import qlearning.impl.RandomExplorationStrategy;
 
 /**
@@ -33,7 +34,7 @@ public class GridWorld implements Environment {
         GridWorld gridWorld = new GridWorld();
         agent.setEnvironment(gridWorld);
         agent.setDiscountFactor(new DiscountFactor(1.0));
-        agent.setLearningRate(1);
+        agent.setLearningRate(new LearningRate(1.0));
         agent.setExplorationStrategy(new RandomExplorationStrategy());
 
         int episodeTicks = 0;

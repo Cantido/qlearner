@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import qlearning.domain.DiscountFactor;
+import qlearning.domain.LearningRate;
 import qlearning.example.gridworld.GridWorld;
 import qlearning.impl.QualityHashMap;
 import qlearning.impl.RandomExplorationStrategy;
@@ -32,7 +33,7 @@ public class GridWorldConvergenceTest {
         agent = new Agent();
         agent.setEnvironment(gridWorld);
         agent.setDiscountFactor(new DiscountFactor(1.0));
-        agent.setLearningRate(1);
+        agent.setLearningRate(new LearningRate(1.0));
         
         agent.setExplorationStrategy(explorationStrategy);
         agent.setQualityMap(qualityMap);
