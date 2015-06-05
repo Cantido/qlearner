@@ -14,6 +14,7 @@ import qlearning.Environment;
 import qlearning.State;
 import qlearning.domain.DiscountFactor;
 import qlearning.domain.LearningRate;
+import qlearning.domain.Reward;
 import qlearning.impl.RandomExplorationStrategy;
 
 /**
@@ -130,11 +131,11 @@ public class GridWorld implements Environment {
 
     @Override
     public State getState() {
-        int reward;
+        int rewardValue;
         if (isAtGoalState()) {
-            reward = 10;
+            rewardValue = 10;
         } else {
-            reward = -1;
+            rewardValue = -1;
         }
 
         Set<Action> actions = new HashSet<>();
@@ -144,7 +145,7 @@ public class GridWorld implements Environment {
         if (yState > minY) { actions.add(GridWorldAction.DOWN); }
         if (yState < maxY) {  actions.add(GridWorldAction.UP); }
 
-        GridWorldState state = new GridWorldState(this.xState, this.yState, reward, actions);
+        GridWorldState state = new GridWorldState(this.xState, this.yState, new Reward(rewardValue), actions);
         logger.debug("Current environment: {}", this.toString());
         logger.debug("Returning state: {}", state);
 

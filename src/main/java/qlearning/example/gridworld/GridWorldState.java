@@ -10,12 +10,14 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import qlearning.Action;
 import qlearning.State;
+import qlearning.domain.Reward;
 
 public class GridWorldState implements State {
-    private int x, y, reward;
+    private int x, y;
+    private Reward reward;
     private Set<Action> actions = new HashSet<>();
 
-    public GridWorldState(int x, int y, int reward, Set<Action> actions) {
+    public GridWorldState(int x, int y, Reward reward, Set<Action> actions) {
         this.x = x;
         this.y = y;
         this.reward = reward;
@@ -31,7 +33,7 @@ public class GridWorldState implements State {
     }
 
     @Override
-    public double getReward() {
+    public Reward getReward() {
         return this.reward;
     }
 

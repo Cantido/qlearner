@@ -2,6 +2,8 @@ package qlearning;
 
 import java.util.Set;
 
+import qlearning.domain.Reward;
+
 /**
  * A condition that you want to reward or discourage the system from arriving at, and all of the actions that it is
  * possible to take while in this condition.
@@ -25,7 +27,7 @@ public interface State {
      * 
      * @return the score of this state's desirability
      */
-    double getReward();
+    Reward getReward();
 
     /**
      * Get all {@link Action}s that is possible to perform while in this state

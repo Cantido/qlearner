@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import qlearning.domain.DiscountFactor;
 import qlearning.domain.LearningRate;
+import qlearning.domain.Reward;
 import qlearning.impl.QualityHashMap;
 
 /**
@@ -164,7 +165,7 @@ public class Agent {
      */
     private void updateQuality() {
         double oldQuality = qualityMap.get(this.previousState, this.previousAction);
-        double reward = currentState.getReward();
+        Reward reward = currentState.getReward();
         double optimalFutureValueEstimate = estimateOptimalFutureValue(currentState, possibleNextActions);
 
         logger.debug(
@@ -174,7 +175,7 @@ public class Agent {
                 optimalFutureValueEstimate, oldQuality);
 
         double newQuality = oldQuality
-                + (learningRate.getValue() * (reward + discountFactor.getValue() * optimalFutureValueEstimate - oldQuality));
+                + (learningRate.getValue() * (reward.getValue() + discountFactor.getValue() * optimalFutureValueEstimate - oldQuality));
 
         logger.debug("Updating quality for [{}, {}] to {}", previousState, previousAction, newQuality);
 
