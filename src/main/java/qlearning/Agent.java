@@ -167,37 +167,19 @@ public class Agent {
     private void updateQuality() {
         Quality oldQuality = qualityMap.get(this.previousState, this.previousAction);
         Reward reward = currentState.getReward();
-        Quality optimalFutureValueEstimate = estimateOptimalFutureValue(currentState, possibleNextActions);
+        Quality optimalFutureValueEstimate = qualityMap.getBestQuality(currentState, possibleNextActions);
 
         logger.debug(
-                "Calculating new quality using the following values: (Qt+1: {}), (a: {}), (Rt+1: {}), (d: {}), (maxQt: {})",
+                "Creating new quality using the following values: (Qt: {}), (a: {}), (Rt+1: {}), (d: {}), (maxQt: {})",
                 oldQuality, learningRate, reward, discountFactor, optimalFutureValueEstimate);
-        logger.debug("{} + ({} * ({} + {} * {} - {}))", oldQuality, learningRate, reward, discountFactor,
-                optimalFutureValueEstimate, oldQuality);
-
-        double newQualityValue = oldQuality.getValue()
-                + (learningRate.getValue() * (reward.getValue() + discountFactor.getValue() * optimalFutureValueEstimate.getValue() - oldQuality.getValue()));
-
-        Quality newQuality = new Quality(newQualityValue);
         
+        Quality newQuality = new Quality(oldQuality, learningRate, reward, discountFactor, optimalFutureValueEstimate);
+        
+
         logger.debug("Updating quality for [{}, {}] to {}", previousState, previousAction, newQuality);
 
         qualityMap.put(previousState, previousAction, newQuality);
     }
-    
-    private Quality estimateOptimalFutureValue(State state, Set<Action> actions) {
-        Quality bestQualityForState = QualityMap.MIN_QUALITY;
-
-        for (Action action : actions) {
-            Quality qualityForState = qualityMap.get(state, action);
-            logger.debug("Potential future quality for state {}, action {}: {}", state, action, qualityForState);
-            bestQualityForState = new Quality(Math.max(bestQualityForState.getValue(), qualityForState.getValue()));
-        }
-
-        logger.debug("Got best quality for state {}: {}", state, bestQualityForState);
-        return bestQualityForState;
-    }
-
 
     private void assertSystemCondition(boolean condition, String message) {
         if (!condition) {
