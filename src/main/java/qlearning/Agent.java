@@ -90,19 +90,13 @@ public class Agent {
         Validate.notNull(currentState, "The environment's state cannot be null");
         
         possibleNextActions = currentState.getActions();
-        
-        Validate.notNull(possibleNextActions, "The list of possible actions from a state cannot be null");
-        Validate.isTrue(!possibleNextActions.isEmpty(),
-                "The list of possible actions from a state cannot be empty." +
-                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
+        validatePossibleNextActions();
         
         Map<Pair<State, Action>, Quality> pairs = buildPairs(currentState, possibleNextActions);
         
         Action nextAction = explorationStrategy.getNextAction(pairs);
         
-        Validate.notNull(nextAction, 
-                "The action returned by the ExplorationStrategy cannot be null." +
-                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
+        validateNextAction(nextAction);
         
         if (atFirstEpisode) {
             logger.debug("This episode is the algorithm's first, so we cannot update the quality for the previous state & action");
@@ -121,6 +115,21 @@ public class Agent {
         logger.debug("---- END OF TICK ---- exited takeNextAction");
     }
     
+    private void validatePossibleNextActions() {
+        Validate.notNull(possibleNextActions,
+                "The list of possible actions from a state cannot be null. " +
+                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
+        Validate.isTrue(!possibleNextActions.isEmpty(),
+                "The list of possible actions from a state cannot be empty. " +
+                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
+    }
+    
+    private void validateNextAction(Action nextAction) {
+        Validate.notNull(nextAction, 
+                "The action returned by the ExplorationStrategy cannot be null." +
+                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
+    }
+    
     private Map<Pair<State, Action>, Quality> buildPairs(State state, Set<Action> possibleActions) {
         Map<Pair<State, Action>, Quality> pairs = new HashMap<>(possibleActions.size());
         
@@ -137,8 +146,6 @@ public class Agent {
 
     /**
      * Update the quality of the previous state-action pair, given the desirability of the new state
-     * 
-     * @param nextState
      */
     private void updateQuality() {
         Quality oldQuality = qualityMap.get(this.previousState, this.previousAction);
