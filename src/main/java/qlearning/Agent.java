@@ -36,7 +36,7 @@ public class Agent {
     
     private Set<Action> possibleNextActions;
     
-    private static Logger logger = LoggerFactory.getLogger(Agent.class);
+    private Logger logger = LoggerFactory.getLogger(getClass());
     
     public Agent(Environment environment,
             ExplorationStrategy explorationStrategy,

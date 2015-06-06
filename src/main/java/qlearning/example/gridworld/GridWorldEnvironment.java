@@ -25,7 +25,7 @@ import qlearning.domain.Reward;
  * </p>
  */
 public class GridWorldEnvironment implements Environment {
-    Logger logger = LoggerFactory.getLogger("qlearner.GridWorld");
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private int maxX = 10;
     private int maxY = 10;

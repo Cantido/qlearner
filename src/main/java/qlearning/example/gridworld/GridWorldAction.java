@@ -8,7 +8,7 @@ import qlearning.Action;
 public enum GridWorldAction implements Action {
     UP, DOWN, LEFT, RIGHT;
 
-    Logger logger = LoggerFactory.getLogger("qlearner.GridWorldAction");
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private static GridWorldEnvironment gridWorld;
 

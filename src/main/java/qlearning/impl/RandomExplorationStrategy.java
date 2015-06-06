@@ -18,7 +18,7 @@ import qlearning.domain.StateActionQuality;
  * A simple {@link ExplorationStrategy} which will choose a random {@link Action} some of the time.
  */
 public class RandomExplorationStrategy implements ExplorationStrategy {
-    Logger logger =  LoggerFactory.getLogger("qlearning.impl.RandomExplorationStrategy");
+    private Logger logger =  LoggerFactory.getLogger(getClass());
     
     private final ExplorationFactor explorationFactor;
     private final Random random;
