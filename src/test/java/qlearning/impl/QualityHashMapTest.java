@@ -3,7 +3,6 @@ package qlearning.impl;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
