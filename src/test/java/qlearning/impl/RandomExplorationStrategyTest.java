@@ -4,12 +4,10 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.hamcrest.Matchers.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,6 +20,7 @@ import qlearning.Action;
 import qlearning.State;
 import qlearning.domain.ExplorationFactor;
 import qlearning.domain.Quality;
+import qlearning.domain.StateActionQuality;
 
 public class RandomExplorationStrategyTest {
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -38,10 +37,10 @@ public class RandomExplorationStrategyTest {
     Quality goodQuality;
     Quality badQuality;
     
-    Pair<State, Action> goodPair;
-    Pair<State, Action> badPair;
+    StateActionQuality goodTriplet;
+    StateActionQuality badTriplet;
     
-    Map<Pair<State, Action>, Quality> stateActionQualities;
+    Collection<StateActionQuality> stateActionQualities;
     
     
     @Before
@@ -49,12 +48,12 @@ public class RandomExplorationStrategyTest {
         goodQuality = new Quality(1.0);
         badQuality = new Quality(0.0);
         
-        goodPair = ImmutablePair.of(state, goodAction);
-        badPair = ImmutablePair.of(state, badAction);
+        goodTriplet = new StateActionQuality(state, goodAction, goodQuality);
+        badTriplet = new StateActionQuality(state, badAction, badQuality);
         
-        stateActionQualities = new HashMap<>();
-        stateActionQualities.put(goodPair, goodQuality);
-        stateActionQualities.put(badPair, badQuality);
+        stateActionQualities = new ArrayList<>();
+        stateActionQualities.add(goodTriplet);
+        stateActionQualities.add(badTriplet);
     }
     
     @Test

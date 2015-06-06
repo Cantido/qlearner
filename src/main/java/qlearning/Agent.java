@@ -1,12 +1,10 @@
 package qlearning;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +12,7 @@ import qlearning.domain.DiscountFactor;
 import qlearning.domain.LearningRate;
 import qlearning.domain.Quality;
 import qlearning.domain.Reward;
+import qlearning.domain.StateActionQuality;
 
 /**
  * Performs {@link Action}s that will lead to changes in the {@link Environment}'s current {@link State}.
@@ -92,9 +91,9 @@ public class Agent {
         possibleNextActions = currentState.getActions();
         validatePossibleNextActions();
         
-        Map<Pair<State, Action>, Quality> pairs = buildPairs(currentState, possibleNextActions);
+        Collection<StateActionQuality> potentialQualities = buildTriplets(currentState, possibleNextActions);
         
-        Action nextAction = explorationStrategy.getNextAction(pairs);
+        Action nextAction = explorationStrategy.getNextAction(potentialQualities);
         
         validateNextAction(nextAction);
         
@@ -130,14 +129,14 @@ public class Agent {
                 "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
     }
     
-    private Map<Pair<State, Action>, Quality> buildPairs(State state, Set<Action> possibleActions) {
-        Map<Pair<State, Action>, Quality> pairs = new HashMap<>(possibleActions.size());
+    private Collection<StateActionQuality> buildTriplets(State state, Set<Action> possibleActions) {
+        Collection<StateActionQuality> pairs = new ArrayList<>(possibleActions.size());
         
         for(Action action : possibleActions) {
             Quality quality = qualityMap.get(state, action);
-            Pair<State, Action> pair = ImmutablePair.of(state, action);
             
-            pairs.put(pair, quality);
+            pairs.add(new StateActionQuality(state, action, quality));
+            
             logger.debug("Potential action: {}, quality: {}", action.toString(), quality.toString());
         }
         

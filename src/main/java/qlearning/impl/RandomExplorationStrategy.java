@@ -1,24 +1,18 @@
 package qlearning.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import qlearning.Action;
 import qlearning.ExplorationStrategy;
-import qlearning.State;
 import qlearning.domain.ExplorationFactor;
-import qlearning.domain.Quality;
+import qlearning.domain.StateActionQuality;
 
 /**
  * A simple {@link ExplorationStrategy} which will choose a random {@link Action} some of the time.
@@ -86,7 +80,7 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
      * @see RandomExplorationStrategy#setExplorationFactor(ExplorationFactor)
      */
     @Override
-    public Action getNextAction(Map<Pair<State, Action>, Quality> stateActionQualities) {
+    public Action getNextAction(Collection<StateActionQuality> stateActionQualities) {
         
         Action nextAction;
         
@@ -104,27 +98,15 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
     }
     
     
-    private Action getBestAction(Map<Pair<State, Action>, Quality> stateActionQualities) {
+    private Action getBestAction(Collection<StateActionQuality> stateActionQualities) {
         logger.debug("Determining best action from possible actions: {}", stateActionQualities);
-
-        SortedSet<ImmutablePair<Quality, Action>> actionQualities = new TreeSet<>();
-
-        for (Map.Entry<Pair<State, Action>, Quality> stateActionQuality : stateActionQualities.entrySet()) {
-            Quality quality = stateActionQuality.getValue();
-            Action action = stateActionQuality.getKey().getRight();
-            
-            actionQualities.add(ImmutablePair.of(quality, action));
-        }
-
-        logger.debug("Possible actions and qualities: {}", actionQualities);
-
-        return actionQualities.last().getRight();
+        return Collections.max(stateActionQualities).getAction();
     }
 
-    private Action getRandomAction(Map<Pair<State, Action>, Quality> stateActionQualities) {
-
-        List<Pair<State, Action>> stateActions = new ArrayList<>(stateActionQualities.keySet());
+    private Action getRandomAction(Collection<StateActionQuality> stateActionQualities) {
+        Integer randomIndex = random.nextInt(stateActionQualities.size());
+        StateActionQuality randomTriplet = (StateActionQuality) stateActionQualities.toArray()[randomIndex];
         
-        return stateActions.get(random.nextInt(stateActions.size())).getRight();
+        return randomTriplet.getAction();
     }
 }
