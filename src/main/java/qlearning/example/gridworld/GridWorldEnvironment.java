@@ -12,10 +12,7 @@ import qlearning.Action;
 import qlearning.Agent;
 import qlearning.Environment;
 import qlearning.State;
-import qlearning.domain.DiscountFactor;
-import qlearning.domain.LearningRate;
 import qlearning.domain.Reward;
-import qlearning.impl.RandomExplorationStrategy;
 
 /**
  * An implementation of Q-Learning that moves an agent through a grid from a starting {@code State} to a goal
