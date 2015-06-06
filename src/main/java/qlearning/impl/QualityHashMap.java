@@ -9,39 +9,40 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import qlearning.Action;
 import qlearning.QualityMap;
 import qlearning.State;
+import qlearning.domain.Quality;
 
 public class QualityHashMap implements QualityMap {
     
-    private Map<ImmutablePair<State, Action>, Double> qualities = new HashMap<>();
+    private Map<ImmutablePair<State, Action>, Quality> qualities = new HashMap<>();
     
-    private double defaultQuality = NumberUtils.DOUBLE_ZERO;
+    private double defaultQualityValue = NumberUtils.DOUBLE_ZERO;
     
     public void setDefaultQuality(double defaultQuality) {
-        this.defaultQuality = defaultQuality;
+        this.defaultQualityValue = defaultQuality;
     }
     
     public double getDefaultQuality() {
-        return this.defaultQuality;
+        return this.defaultQualityValue;
     }
     
     @Override
-    public void put(State state, Action action, double quality) {
+    public void put(State state, Action action, Quality quality) {
         qualities.put(ImmutablePair.of(state, action), quality);
     }
 
     @Override
-    public double get(State state, Action action) {
-        double qualityToGet;
+    public Quality get(State state, Action action) {
+        Quality qualityToGet;
         ImmutablePair<State, Action> pair = ImmutablePair.of(state, action);
 
         if (state == null || action == null) {
-            qualityToGet = defaultQuality;
+            qualityToGet = new Quality(defaultQualityValue);
 
         } else if (qualities.containsKey(pair)) {
             qualityToGet = qualities.get(pair);
 
         } else {
-            qualityToGet = defaultQuality;
+            qualityToGet = new Quality(defaultQualityValue);
         }
 
         return qualityToGet;

@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import qlearning.Action;
 import qlearning.ExplorationStrategy;
 import qlearning.State;
+import qlearning.domain.Quality;
 
 /**
  * A simple {@link ExplorationStrategy} which will choose a random {@link Action} some of the time.
@@ -82,7 +83,7 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
      * @see RandomExplorationStrategy#setExplorationFactor(double)
      */
     @Override
-    public Action getNextAction(Map<Pair<State, Action>, Double> stateActionQualities) {
+    public Action getNextAction(Map<Pair<State, Action>, Quality> stateActionQualities) {
         
         Action nextAction;
         
@@ -101,13 +102,13 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
         return (explorationFactor == 1) || ((explorationFactor != 0) && (Math.random() < explorationFactor));
     }
     
-    private Action getBestAction(Map<Pair<State, Action>, Double> stateActionQualities) {
+    private Action getBestAction(Map<Pair<State, Action>, Quality> stateActionQualities) {
         logger.debug("Determining best action from possible actions: {}", stateActionQualities);
 
-        SortedSet<ImmutablePair<Double, Action>> actionQualities = new TreeSet<>();
+        SortedSet<ImmutablePair<Quality, Action>> actionQualities = new TreeSet<>();
 
-        for (Map.Entry<Pair<State, Action>, Double> stateActionQuality : stateActionQualities.entrySet()) {
-            double quality = stateActionQuality.getValue();
+        for (Map.Entry<Pair<State, Action>, Quality> stateActionQuality : stateActionQualities.entrySet()) {
+            Quality quality = stateActionQuality.getValue();
             Action action = stateActionQuality.getKey().getRight();
             
             logger.debug("Got quality for action {}: {}", action, quality);
@@ -119,7 +120,7 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
         return actionQualities.last().getRight();
     }
 
-    private Action getRandomAction(Map<Pair<State, Action>, Double> stateActionQualities) {
+    private Action getRandomAction(Map<Pair<State, Action>, Quality> stateActionQualities) {
 
         List<Pair<State, Action>> stateActions = new ArrayList<>(stateActionQualities.keySet());
         

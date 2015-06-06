@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import qlearning.domain.DiscountFactor;
 import qlearning.domain.LearningRate;
+import qlearning.domain.Quality;
 import qlearning.domain.Reward;
 import qlearning.impl.QualityHashMap;
 
@@ -119,7 +120,7 @@ public class Agent {
                 "The list of possible actions from a state cannot be empty." +
                 "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
         
-        Map<Pair<State, Action>, Double> pairs = buildPairs(currentState, possibleNextActions);
+        Map<Pair<State, Action>, Quality> pairs = buildPairs(currentState, possibleNextActions);
 
         Action nextAction = explorationStrategy.getNextAction(pairs);
         
@@ -145,11 +146,11 @@ public class Agent {
         logger.debug("---- END OF TICK ---- exited takeNextAction");
     }
     
-    private Map<Pair<State, Action>, Double> buildPairs(State state, Set<Action> possibleActions) {
-        Map<Pair<State, Action>, Double> pairs = new HashMap<>(possibleActions.size());
+    private Map<Pair<State, Action>, Quality> buildPairs(State state, Set<Action> possibleActions) {
+        Map<Pair<State, Action>, Quality> pairs = new HashMap<>(possibleActions.size());
         
         for(Action action : possibleActions) {
-            double quality = qualityMap.get(state, action);
+            Quality quality = qualityMap.get(state, action);
             Pair<State, Action> pair = ImmutablePair.of(state, action);
             
             pairs.put(pair, quality);
@@ -164,9 +165,9 @@ public class Agent {
      * @param nextState
      */
     private void updateQuality() {
-        double oldQuality = qualityMap.get(this.previousState, this.previousAction);
+        Quality oldQuality = qualityMap.get(this.previousState, this.previousAction);
         Reward reward = currentState.getReward();
-        double optimalFutureValueEstimate = estimateOptimalFutureValue(currentState, possibleNextActions);
+        Quality optimalFutureValueEstimate = estimateOptimalFutureValue(currentState, possibleNextActions);
 
         logger.debug(
                 "Calculating new quality using the following values: (Qt+1: {}), (a: {}), (Rt+1: {}), (d: {}), (maxQt: {})",
@@ -174,21 +175,23 @@ public class Agent {
         logger.debug("{} + ({} * ({} + {} * {} - {}))", oldQuality, learningRate, reward, discountFactor,
                 optimalFutureValueEstimate, oldQuality);
 
-        double newQuality = oldQuality
-                + (learningRate.getValue() * (reward.getValue() + discountFactor.getValue() * optimalFutureValueEstimate - oldQuality));
+        double newQualityValue = oldQuality.getValue()
+                + (learningRate.getValue() * (reward.getValue() + discountFactor.getValue() * optimalFutureValueEstimate.getValue() - oldQuality.getValue()));
 
+        Quality newQuality = new Quality(newQualityValue);
+        
         logger.debug("Updating quality for [{}, {}] to {}", previousState, previousAction, newQuality);
 
         qualityMap.put(previousState, previousAction, newQuality);
     }
     
-    private double estimateOptimalFutureValue(State state, Set<Action> actions) {
-        double bestQualityForState = QualityMap.MIN_QUALITY;
+    private Quality estimateOptimalFutureValue(State state, Set<Action> actions) {
+        Quality bestQualityForState = QualityMap.MIN_QUALITY;
 
         for (Action action : actions) {
-            double qualityForState = qualityMap.get(state, action);
+            Quality qualityForState = qualityMap.get(state, action);
             logger.debug("Potential future quality for state {}, action {}: {}", state, action, qualityForState);
-            bestQualityForState = Math.max(bestQualityForState, qualityForState);
+            bestQualityForState = new Quality(Math.max(bestQualityForState.getValue(), qualityForState.getValue()));
         }
 
         logger.debug("Got best quality for state {}: {}", state, bestQualityForState);
