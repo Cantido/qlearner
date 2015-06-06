@@ -1,7 +1,5 @@
 package qlearning;
 
-import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ONE;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -24,12 +22,11 @@ import qlearning.domain.Reward;
  * Q-learning algorithm to pick the optimal {@code Action} to take while in each {@code State}.
  */
 public class Agent {
-    private DiscountFactor discountFactor = new DiscountFactor(DOUBLE_ONE);
-    private LearningRate learningRate = new LearningRate(DOUBLE_ONE);
-    
-    private QualityMap qualityMap;
-    private Environment environment;
-    private ExplorationStrategy explorationStrategy;
+    private final Environment environment;
+    private final ExplorationStrategy explorationStrategy;
+    private final LearningRate learningRate;
+    private final DiscountFactor discountFactor;
+    private final QualityMap qualityMap;
     
     private boolean atFirstEpisode = true;
     
@@ -41,40 +38,24 @@ public class Agent {
     private Set<Action> possibleNextActions;
     
     private static Logger logger = LoggerFactory.getLogger(Agent.class);
-
-    /**
-     * Set the environment, which represents the problem space in which the agent acts.
-     * 
-     * @see Environment
-     * @param env the environment to set. Cannot be null.
-     */
-    public void setEnvironment(Environment env) {
-        Validate.notNull(env, "Environment cannot be null");
-        this.environment = env;
-    }
-
-    public void setLearningRate(LearningRate lr) {
-        Validate.notNull(lr, "LearningRate cannot be null");
-        this.learningRate = lr;
-    }
-
-    public void setDiscountFactor(DiscountFactor df) {
-        Validate.notNull(df, "DiscountFactor cannot be null");
-        this.discountFactor = df;
-    }
     
-    public void setExplorationStrategy(ExplorationStrategy strategy) {
-        Validate.notNull(strategy, "ExplorationStrategy cannot be null");
-        this.explorationStrategy = strategy;
-    }
-    
-    public void setQualityMap(QualityMap map) {
-        Validate.notNull(map, "QualityMap cannot be null");
-        this.qualityMap = map;
-    }
-    
-    public QualityMap getQualityMap() {
-        return this.qualityMap;
+    public Agent(Environment environment,
+            ExplorationStrategy explorationStrategy,
+            LearningRate learningRate,
+            DiscountFactor discountFactor,
+            QualityMap qualityMap) {
+
+        Validate.notNull(environment, "Environment cannot be null");
+        Validate.notNull(explorationStrategy, "LearningRate cannot be null");
+        Validate.notNull(learningRate, "DiscountFactor cannot be null");
+        Validate.notNull(discountFactor, "ExplorationStrategy cannot be null");
+        Validate.notNull(qualityMap, "QualityMap cannot be null");
+        
+        this.environment = environment;
+        this.explorationStrategy = explorationStrategy;
+        this.learningRate = learningRate;
+        this.discountFactor = discountFactor;
+        this.qualityMap = qualityMap;
     }
 
     /**

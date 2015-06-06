@@ -1,9 +1,12 @@
 package qlearning;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
+
+import qlearning.domain.DiscountFactor;
+import qlearning.domain.LearningRate;
 
 
 public class AgentTest {
@@ -11,16 +14,16 @@ public class AgentTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-    private Agent agent;
-
-    @Before
-    public void setUp() {
-        agent = new Agent();
-    }
+    @Mock private Environment environment;
+    @Mock private ExplorationStrategy explorationStrategy;
+    @Mock private LearningRate learningRate;
+    @Mock private DiscountFactor discountFactor;
+    @Mock private QualityMap qualityMap;
 
     @Test
     public void testNullEnvironmentIsIllegal() {
         exception.expect(NullPointerException.class);
-        agent.setEnvironment(null);
+        
+        new Agent((Environment) null, explorationStrategy, learningRate, discountFactor, qualityMap);
     }
 }

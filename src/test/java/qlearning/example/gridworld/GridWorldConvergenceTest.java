@@ -22,7 +22,7 @@ import qlearning.impl.RandomExplorationStrategy;
 public class GridWorldConvergenceTest {
 
     Agent agent;
-    GridWorldEnvironment gridWorld;
+    GridWorldEnvironment environment;
     ExplorationFactor explorationFactor;
     ExplorationStrategy explorationStrategy;
     QualityMap qualityMap;
@@ -31,23 +31,15 @@ public class GridWorldConvergenceTest {
 
     @Before
     public void setUp() {
-        agent = new Agent();
         
-        gridWorld = new GridWorldEnvironment();
-        agent.setEnvironment(gridWorld);
-        
+        environment = new GridWorldEnvironment();
         discountFactor = new DiscountFactor(1);
-        agent.setDiscountFactor(discountFactor);
-        
         learningRate = new LearningRate(1);
-        agent.setLearningRate(learningRate);
-        
         explorationFactor = new ExplorationFactor(0.1);
         explorationStrategy = new RandomExplorationStrategy(explorationFactor);
-        agent.setExplorationStrategy(explorationStrategy);
-
         qualityMap = new QualityHashMap();
-        agent.setQualityMap(qualityMap);
+
+        agent = new Agent(environment, explorationStrategy, learningRate, discountFactor, qualityMap);
     }
 
     /**
@@ -67,9 +59,9 @@ public class GridWorldConvergenceTest {
 
             agent.takeNextAction();
 
-            if (gridWorld.isAtGoalState()) {
+            if (environment.isAtGoalState()) {
                 totalSuccesses++;
-                gridWorld.reset();
+                environment.reset();
                 agent.resetState();
             }
         }
