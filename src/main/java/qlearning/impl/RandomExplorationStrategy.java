@@ -1,8 +1,5 @@
 package qlearning.impl;
 
-import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ONE;
-import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ZERO;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +8,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
