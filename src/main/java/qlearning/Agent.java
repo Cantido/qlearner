@@ -1,7 +1,6 @@
 package qlearning;
 
 import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ONE;
-import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ZERO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +16,6 @@ import qlearning.domain.DiscountFactor;
 import qlearning.domain.LearningRate;
 import qlearning.domain.Quality;
 import qlearning.domain.Reward;
-import qlearning.impl.QualityHashMap;
 
 /**
  * Performs {@link Action}s that will lead to changes in the {@link Environment}'s current {@link State}.
