@@ -1,4 +1,4 @@
-package qlearning;
+package qlearning.impl;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;

@@ -1,4 +1,4 @@
-package qlearning;
+package qlearning.example.gridworld;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
@@ -6,6 +6,9 @@ import static org.hamcrest.Matchers.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import qlearning.Agent;
+import qlearning.ExplorationStrategy;
+import qlearning.QualityMap;
 import qlearning.domain.DiscountFactor;
 import qlearning.domain.ExplorationFactor;
 import qlearning.domain.LearningRate;
