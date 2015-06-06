@@ -17,7 +17,7 @@ package qlearning;
  */
 public interface Action {
     /**
-     * Execute the given action.
+     * Perform the activity that this object represents.
      */
     void execute();
 }
