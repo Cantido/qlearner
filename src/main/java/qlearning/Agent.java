@@ -84,8 +84,6 @@ public class Agent {
     public void takeNextAction() {
         logger.debug("---- NEW TICK --- entered takeNextAction");
 
-        validateState();
-        
         currentState = environment.getState();
 
         logger.debug("Got current state: {}", currentState);
@@ -121,13 +119,6 @@ public class Agent {
         this.previousState = currentState;
 
         logger.debug("---- END OF TICK ---- exited takeNextAction");
-    }
-    
-    private void validateState() {
-        Validate.validState(this.environment != null, "Current environment is null, cannot take action.");
-        Validate.validState(this.explorationStrategy != null, "Current exploration strategy is null, cannot take action");
-        Validate.validState(this.qualityMap != null, "Current quality mapping is null, cannot take action");
-        
     }
     
     private Map<Pair<State, Action>, Quality> buildPairs(State state, Set<Action> possibleActions) {
