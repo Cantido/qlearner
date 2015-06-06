@@ -41,8 +41,8 @@ public class Agent {
     private State currentState;
     
     private Set<Action> possibleNextActions;
-
-    Logger logger = LoggerFactory.getLogger("qlearner.Agent");
+    
+    private static Logger logger = LoggerFactory.getLogger(Agent.class);
 
     /**
      * Set the environment, which represents the problem space in which the agent acts.
@@ -61,6 +61,7 @@ public class Agent {
     }
 
     public void setDiscountFactor(DiscountFactor df) {
+        Validate.notNull(df, "DiscountFactor cannot be null");
         this.discountFactor = df;
     }
     
@@ -104,9 +105,7 @@ public class Agent {
     public void takeNextAction() {
         logger.debug("---- NEW TICK --- entered takeNextAction");
 
-        assertSystemCondition(this.environment != null, "Current environment is null, cannot take action.");
-        assertSystemCondition(this.explorationStrategy != null, "Current exploration strategy is null, cannot take action");
-        assertSystemCondition(this.qualityMap != null, "Current quality mapping is null, cannot take action");
+        validateState();
         
         currentState = environment.getState();
 
@@ -121,13 +120,12 @@ public class Agent {
                 "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
         
         Map<Pair<State, Action>, Quality> pairs = buildPairs(currentState, possibleNextActions);
-
+        
         Action nextAction = explorationStrategy.getNextAction(pairs);
         
         Validate.notNull(nextAction, 
                 "The action returned by the ExplorationStrategy cannot be null." +
                 "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
-        
         
         if (atFirstEpisode) {
             logger.debug("This episode is the algorithm's first, so we cannot update the quality for the previous state & action");
@@ -136,14 +134,21 @@ public class Agent {
             updateQuality();
         }
         
+        logger.debug("Taking next action: {}", nextAction);
+        
         nextAction.execute();
 
         this.previousAction = nextAction;
-        logger.debug("Set previous action to {}", nextAction);
         this.previousState = currentState;
-        logger.debug("Set previous state to {}", currentState);
 
         logger.debug("---- END OF TICK ---- exited takeNextAction");
+    }
+    
+    private void validateState() {
+        Validate.validState(this.environment != null, "Current environment is null, cannot take action.");
+        Validate.validState(this.explorationStrategy != null, "Current exploration strategy is null, cannot take action");
+        Validate.validState(this.qualityMap != null, "Current quality mapping is null, cannot take action");
+        
     }
     
     private Map<Pair<State, Action>, Quality> buildPairs(State state, Set<Action> possibleActions) {
@@ -154,6 +159,7 @@ public class Agent {
             Pair<State, Action> pair = ImmutablePair.of(state, action);
             
             pairs.put(pair, quality);
+            logger.debug("Potential action: {}, quality: {}", action.toString(), quality.toString());
         }
         
         return pairs;
@@ -179,11 +185,5 @@ public class Agent {
         logger.debug("Updating quality for [{}, {}] to {}", previousState, previousAction, newQuality);
 
         qualityMap.put(previousState, previousAction, newQuality);
-    }
-
-    private void assertSystemCondition(boolean condition, String message) {
-        if (!condition) {
-            throw new IllegalStateException(message);
-        }
     }
 }
