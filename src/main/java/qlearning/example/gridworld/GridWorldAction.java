@@ -10,9 +10,9 @@ public enum GridWorldAction implements Action {
 
     Logger logger = LoggerFactory.getLogger("qlearner.GridWorldAction");
 
-    private static GridWorld gridWorld;
+    private static GridWorldEnvironment gridWorld;
 
-    public static void setGridWorld(GridWorld gw) {
+    public static void setGridWorld(GridWorldEnvironment gw) {
         gridWorld = gw;
     }
 

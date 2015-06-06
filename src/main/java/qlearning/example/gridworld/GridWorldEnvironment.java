@@ -27,12 +27,12 @@ import qlearning.impl.RandomExplorationStrategy;
  * goal state in a minimal number of moves.
  * </p>
  */
-public class GridWorld implements Environment {
+public class GridWorldEnvironment implements Environment {
     public static void main(String[] args) {
         System.out.println("Starting GridWorld experiment main log");
 
         Agent agent = new Agent();
-        GridWorld gridWorld = new GridWorld();
+        GridWorldEnvironment gridWorld = new GridWorldEnvironment();
         agent.setEnvironment(gridWorld);
         agent.setDiscountFactor(new DiscountFactor(1.0));
         agent.setLearningRate(new LearningRate(1.0));
@@ -71,7 +71,7 @@ public class GridWorld implements Environment {
     private int xState = startX;
     private int yState = startY;
 
-    public GridWorld() {
+    public GridWorldEnvironment() {
         GridWorldAction.setGridWorld(this);
     }
 

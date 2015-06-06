@@ -12,17 +12,17 @@ import qlearning.QualityMap;
 import qlearning.domain.DiscountFactor;
 import qlearning.domain.ExplorationFactor;
 import qlearning.domain.LearningRate;
-import qlearning.example.gridworld.GridWorld;
+import qlearning.example.gridworld.GridWorldEnvironment;
 import qlearning.impl.QualityHashMap;
 import qlearning.impl.RandomExplorationStrategy;
 
 /**
- * Tests that the {@link GridWorld} implementation of this library converges on the goal state.
+ * Tests that the {@link GridWorldEnvironment} implementation of this library converges on the goal state.
  */
 public class GridWorldConvergenceTest {
 
     Agent agent;
-    GridWorld gridWorld;
+    GridWorldEnvironment gridWorld;
     ExplorationFactor explorationFactor;
     ExplorationStrategy explorationStrategy;
     QualityMap qualityMap;
@@ -33,7 +33,7 @@ public class GridWorldConvergenceTest {
     public void setUp() {
         agent = new Agent();
         
-        gridWorld = new GridWorld();
+        gridWorld = new GridWorldEnvironment();
         agent.setEnvironment(gridWorld);
         
         discountFactor = new DiscountFactor(1);
