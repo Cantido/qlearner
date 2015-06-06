@@ -20,25 +20,15 @@ import qlearning.domain.StateActionQuality;
 public class RandomExplorationStrategy implements ExplorationStrategy {
     Logger logger =  LoggerFactory.getLogger("qlearning.impl.RandomExplorationStrategy");
     
-    private ExplorationFactor explorationFactor;
-    private static ExplorationFactor DEFAULT_EXPLORATION_FACTOR = new ExplorationFactor(0.1);
-    private Random random;
-    
-    /**
-     * Create a new {@link RandomExplorationStrategy} with the a default exploration factor of 0.1.
-     * 
-     * @see #setExplorationFactor(double)
-     */
-    public RandomExplorationStrategy() {
-        this(DEFAULT_EXPLORATION_FACTOR, ThreadLocalRandom.current());
-    }
+    private final ExplorationFactor explorationFactor;
+    private final Random random;
     
     /**
      * Create a new {@link RandomExplorationStrategy} with the given exploration factor.
      * 
      * @see #setExplorationFactor(double)
      * 
-     * @param explorationFactor the exploration factor to set, in the range [0, 1]
+     * @param explorationFactor the exploration factor to set
      */
     public RandomExplorationStrategy(ExplorationFactor explorationFactor) {
         this(explorationFactor, ThreadLocalRandom.current());
@@ -47,21 +37,6 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
     public RandomExplorationStrategy(ExplorationFactor explorationFactor, Random random) {
         this.explorationFactor = Validate.notNull(explorationFactor);
         this.random = Validate.notNull(random);
-    }
-    
-    /**
-     * Set the exploration factor, which determines how often the agent will choose random actions over desirable ones
-     * in order to explore the problem space.
-     * <p>
-     * A factor of 0 will make the agent never choose random actions. A factor of 1 will make the agent always choose
-     * random actions. The agent will still update quality values correctly based on the resulting state's reward, so
-     * setting the exploration factor to 0 would allow you to perform a random search through the problem space.
-     * </p>
-     * 
-     * @param ef the new exploration factor to set, in the range [0, 1]
-     */
-    public void setExplorationFactor(ExplorationFactor ef) {
-        this.explorationFactor = Validate.notNull(ef);
     }
     
     /**
