@@ -28,32 +28,6 @@ import qlearning.impl.RandomExplorationStrategy;
  * </p>
  */
 public class GridWorldEnvironment implements Environment {
-    public static void main(String[] args) {
-        System.out.println("Starting GridWorld experiment main log");
-
-        Agent agent = new Agent();
-        GridWorldEnvironment gridWorld = new GridWorldEnvironment();
-        agent.setEnvironment(gridWorld);
-        agent.setDiscountFactor(new DiscountFactor(1.0));
-        agent.setLearningRate(new LearningRate(1.0));
-        agent.setExplorationStrategy(new RandomExplorationStrategy());
-
-        int episodeTicks = 0;
-
-        for (int i = 0; i < 10000; i++, episodeTicks++) {
-            // System.out.println("Episode tick " + i + ", " + gridWorld.toString());
-
-            agent.takeNextAction();
-
-            if (gridWorld.isAtGoalState()) {
-                System.out.println("Goal has been reached!, took " + episodeTicks + " steps.");
-                gridWorld.reset();
-                agent.resetState();
-                episodeTicks = 0;
-            }
-        }
-    }
-
     Logger logger = LoggerFactory.getLogger("qlearner.GridWorld");
 
     private int maxX = 10;
