@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import qlearning.domain.DiscountFactor;
+import qlearning.domain.ExplorationFactor;
 import qlearning.domain.LearningRate;
 import qlearning.example.gridworld.GridWorld;
 import qlearning.impl.QualityHashMap;
@@ -19,23 +20,30 @@ public class GridWorldConvergenceTest {
 
     Agent agent;
     GridWorld gridWorld;
+    ExplorationFactor explorationFactor;
     ExplorationStrategy explorationStrategy;
     QualityMap qualityMap;
+    DiscountFactor discountFactor;
+    LearningRate learningRate;
 
     @Before
     public void setUp() {
-        explorationStrategy = new RandomExplorationStrategy(0.1);
+        agent = new Agent();
         
         gridWorld = new GridWorld();
-        
-        qualityMap = new QualityHashMap();
-        
-        agent = new Agent();
         agent.setEnvironment(gridWorld);
-        agent.setDiscountFactor(new DiscountFactor(1.0));
-        agent.setLearningRate(new LearningRate(1.0));
         
+        discountFactor = new DiscountFactor(1);
+        agent.setDiscountFactor(discountFactor);
+        
+        learningRate = new LearningRate(1);
+        agent.setLearningRate(learningRate);
+        
+        explorationFactor = new ExplorationFactor(0.1);
+        explorationStrategy = new RandomExplorationStrategy(explorationFactor);
         agent.setExplorationStrategy(explorationStrategy);
+
+        qualityMap = new QualityHashMap();
         agent.setQualityMap(qualityMap);
     }
 

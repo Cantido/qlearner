@@ -6,8 +6,10 @@ import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ZERO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.Validate;
@@ -19,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import qlearning.Action;
 import qlearning.ExplorationStrategy;
 import qlearning.State;
+import qlearning.domain.ExplorationFactor;
 import qlearning.domain.Quality;
 
 /**
@@ -27,8 +30,9 @@ import qlearning.domain.Quality;
 public class RandomExplorationStrategy implements ExplorationStrategy {
     Logger logger =  LoggerFactory.getLogger("qlearning.impl.RandomExplorationStrategy");
     
-    private double explorationFactor;
-    private static double DEFAULT_EXPLORATION_FACTOR = 0.1;
+    private ExplorationFactor explorationFactor;
+    private static ExplorationFactor DEFAULT_EXPLORATION_FACTOR = new ExplorationFactor(0.1);
+    private Random random;
     
     /**
      * Create a new {@link RandomExplorationStrategy} with the a default exploration factor of 0.1.
@@ -36,7 +40,7 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
      * @see #setExplorationFactor(double)
      */
     public RandomExplorationStrategy() {
-        this(DEFAULT_EXPLORATION_FACTOR);
+        this(DEFAULT_EXPLORATION_FACTOR, ThreadLocalRandom.current());
     }
     
     /**
@@ -46,9 +50,13 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
      * 
      * @param explorationFactor the exploration factor to set, in the range [0, 1]
      */
-    public RandomExplorationStrategy(double explorationFactor) {
-        validateExplorationFactor(explorationFactor);
-        this.explorationFactor = explorationFactor;
+    public RandomExplorationStrategy(ExplorationFactor explorationFactor) {
+        this(explorationFactor, ThreadLocalRandom.current());
+    }
+    
+    public RandomExplorationStrategy(ExplorationFactor explorationFactor, Random random) {
+        this.explorationFactor = Validate.notNull(explorationFactor);
+        this.random = Validate.notNull(random);
     }
     
     /**
@@ -62,9 +70,8 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
      * 
      * @param ef the new exploration factor to set, in the range [0, 1]
      */
-    public void setExplorationFactor(double ef) {
-        validateExplorationFactor(ef);
-        this.explorationFactor = ef;
+    public void setExplorationFactor(ExplorationFactor ef) {
+        this.explorationFactor = Validate.notNull(ef);
     }
     
     /**
@@ -73,21 +80,23 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
      * 
      * @return the exploration factor
      */
-    public double getExplorationFactor() {
+    public ExplorationFactor getExplorationFactor() {
         return this.explorationFactor;
     }
     
     /**
      * Choose either the best possible action, or a random action.
      *
-     * @see RandomExplorationStrategy#setExplorationFactor(double)
+     * @see RandomExplorationStrategy#setExplorationFactor(ExplorationFactor)
      */
     @Override
     public Action getNextAction(Map<Pair<State, Action>, Quality> stateActionQualities) {
         
         Action nextAction;
         
-        if (shouldExplore()) {
+        Double checkValue = random.nextDouble();
+        
+        if (explorationFactor.shouldExplore(checkValue)) {
             nextAction = getRandomAction(stateActionQualities);
             logger.debug("Should explore, chose random action: {}", nextAction);
         } else {
@@ -98,9 +107,6 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
         return nextAction;
     }
     
-    private boolean shouldExplore() {
-        return (explorationFactor == 1) || ((explorationFactor != 0) && (Math.random() < explorationFactor));
-    }
     
     private Action getBestAction(Map<Pair<State, Action>, Quality> stateActionQualities) {
         logger.debug("Determining best action from possible actions: {}", stateActionQualities);
@@ -111,7 +117,6 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
             Quality quality = stateActionQuality.getValue();
             Action action = stateActionQuality.getKey().getRight();
             
-            logger.debug("Got quality for action {}: {}", action, quality);
             actionQualities.add(ImmutablePair.of(quality, action));
         }
 
@@ -124,11 +129,6 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
 
         List<Pair<State, Action>> stateActions = new ArrayList<>(stateActionQualities.keySet());
         
-        return stateActions.get(RandomUtils.nextInt(0, stateActions.size())).getRight();
-    }
-    
-    private void validateExplorationFactor(double ef) {
-        Validate.inclusiveBetween(DOUBLE_ZERO, DOUBLE_ONE, ef,
-                "Exploration factor must be between zero and one (inclusive)");
+        return stateActions.get(random.nextInt(stateActions.size())).getRight();
     }
 }
