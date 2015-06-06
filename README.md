@@ -1,6 +1,8 @@
 qlearner
 ========
 
+[![Build Status](https://travis-ci.org/Cantido/qlearner.svg?branch=master)](https://travis-ci.org/Cantido/qlearner)
+
 A demonstration of the q-learning reinforcement learning technique. For more
 information about the technique itself, see [its Wikipedia page][wiki].
 
