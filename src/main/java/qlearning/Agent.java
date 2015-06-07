@@ -1,18 +1,9 @@
 package qlearning;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
-
 import org.apache.commons.lang3.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import qlearning.domain.DiscountFactor;
 import qlearning.domain.LearningRate;
-import qlearning.domain.Quality;
-import qlearning.domain.Reward;
-import qlearning.domain.StateActionQuality;
 
 /**
  * Performs {@link Action}s that will lead to changes in the {@link Environment}'s current {@link State}.
@@ -27,16 +18,7 @@ public class Agent {
     private final DiscountFactor discountFactor;
     private final QualityMap qualityMap;
     
-    private boolean atFirstEpisode = true;
-    
-    private State previousState;
-    private Action previousAction;
-
-    private State currentState;
-    
-    private Set<Action> possibleNextActions;
-    
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private Episode currentEpisode;
     
     public Agent(Environment environment,
             ExplorationStrategy explorationStrategy,
@@ -55,6 +37,8 @@ public class Agent {
         this.learningRate = learningRate;
         this.discountFactor = discountFactor;
         this.qualityMap = qualityMap;
+        
+        this.currentEpisode = new FirstEpisode(explorationStrategy, learningRate, discountFactor, qualityMap);
     }
 
     /**
@@ -67,10 +51,7 @@ public class Agent {
      * </p>
      */
     public void resetState() {
-        this.previousState = null;
-        this.previousAction = null;
-        this.currentState = null;
-        this.atFirstEpisode = true;
+        this.currentEpisode = new FirstEpisode(explorationStrategy, learningRate, discountFactor, qualityMap);
     }
 
     /**
@@ -81,85 +62,11 @@ public class Agent {
      * </p>
      */
     public void takeNextAction() {
-        logger.debug("---- NEW TICK --- entered takeNextAction");
-
-        currentState = environment.getState();
-
-        logger.debug("Got current state: {}", currentState);
-        Validate.notNull(currentState, "The environment's state cannot be null");
-        
-        possibleNextActions = currentState.getActions();
-        validatePossibleNextActions();
-        
-        Collection<StateActionQuality> potentialQualities = buildTriplets(currentState, possibleNextActions);
-        
-        Action nextAction = explorationStrategy.getNextAction(potentialQualities);
-        
-        validateNextAction(nextAction);
-        
-        if (atFirstEpisode) {
-            logger.debug("This episode is the algorithm's first, so we cannot update the quality for the previous state & action");
-            atFirstEpisode = false;
-        } else {
-            updateQuality();
-        }
-        
-        logger.debug("Taking next action: {}", nextAction);
-        
-        nextAction.execute();
-
-        this.previousAction = nextAction;
-        this.previousState = currentState;
-
-        logger.debug("---- END OF TICK ---- exited takeNextAction");
+        State currentState = environment.getState();        
+        currentEpisode = currentEpisode.proceed(currentState);
     }
     
-    private void validatePossibleNextActions() {
-        Validate.notNull(possibleNextActions,
-                "The list of possible actions from a state cannot be null. " +
-                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
-        Validate.isTrue(!possibleNextActions.isEmpty(),
-                "The list of possible actions from a state cannot be empty. " +
-                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
-    }
-    
-    private void validateNextAction(Action nextAction) {
-        Validate.notNull(nextAction, 
-                "The action returned by the ExplorationStrategy cannot be null." +
-                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
-    }
-    
-    private Collection<StateActionQuality> buildTriplets(State state, Set<Action> possibleActions) {
-        Collection<StateActionQuality> pairs = new ArrayList<>(possibleActions.size());
-        
-        for(Action action : possibleActions) {
-            Quality quality = qualityMap.get(state, action);
-            
-            pairs.add(new StateActionQuality(state, action, quality));
-            
-            logger.debug("Potential action: {}, quality: {}", action.toString(), quality.toString());
-        }
-        
-        return pairs;
-    }
 
-    /**
-     * Update the quality of the previous state-action pair, given the desirability of the new state
-     */
-    private void updateQuality() {
-        Quality oldQuality = qualityMap.get(this.previousState, this.previousAction);
-        Reward reward = currentState.getReward();
-        Quality optimalFutureValueEstimate = qualityMap.getBestQuality(currentState, possibleNextActions);
 
-        logger.debug(
-                "Creating new quality using the following values: (Qt: {}), (a: {}), (Rt+1: {}), (d: {}), (maxQt: {})",
-                oldQuality, learningRate, reward, discountFactor, optimalFutureValueEstimate);
-        
-        Quality newQuality = new Quality(oldQuality, learningRate, reward, discountFactor, optimalFutureValueEstimate);
-        
 
-        logger.debug("Updating quality for [{}, {}] to {}", previousState, previousAction, newQuality);
-
-        qualityMap.put(previousState, previousAction, newQuality);
-    }
 }
