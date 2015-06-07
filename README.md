@@ -20,8 +20,13 @@ a grid, from a starting state, to a goal state. It all starts with an `Agent` cl
 
 The **Agent** class the entry point to this software, and has only one method: `takeNextAction()`.
 
-```
-Agent agent = new Agent(environment, explorationStrategy, learningRate, discountFactor, qualityMap);
+```java
+Agent agent = new Agent(
+                    environment,
+                    explorationStrategy,
+                    learningRate,
+                    discountFactor,
+                    qualityMap);
 
 while(true) {
     agent.takeNextAction();
@@ -33,6 +38,48 @@ Each call to `Agent.takeNextAction()` will:
 1. Get the current `State` object from the given `Environment`
 2. Update the learned values based on this new state's `Reward` 
 4. Choose and execute the next `Action` given by the current `State`
+
+For real-world applications, you may want to allow some time for your actions to have an affect, and for your
+environment to get to a new state:
+
+```java
+while(true) {
+    agent.takeNextAction();
+    Thread.sleep(ONE_MINUTE);
+}
+```
+
+If you are trying to reach a goal state after which your program will exit, you will have to specify your own way of
+identifying that. Since your `Environment` implementation is responsible for managing `States`, why not add
+a method to your subclass?
+
+```java
+while(!myEnvironment.isAtGoalState()) {
+    agent.takeNextAction();
+    Thread.sleep(ONE_MINUTE);
+}
+```
+
+If you ever need to reset the agent while preserving the learned behavior, call `Agent.reset()`. This is important
+if you are trying to train your agent. If, for example, you are trying to have your agent learn how to play a game,
+you will need to call `Agent.reset()`, otherwise the program will learn it can make a move at the end of the game
+that will put it back to the beginning of the game!
+
+```java
+while(isTraining) {
+    myGameEnvironment = new MyEnvironmentImplemenation();
+    
+    while(!myGameEnvironment.isAtGoalState()) {
+        agent.takeNextAction();
+    }
+    // The game is over, now we have to reset before we start the game again
+    
+    agent.reset();
+}
+```
+
+You can also create a brand new `Agent` object, just be sure to save the `QualityMap` that you created it with.
+That is where we keep the learned values, and represents the hard work you just performed!
 
 To implement your own, you must implement the following interfaces:
 
