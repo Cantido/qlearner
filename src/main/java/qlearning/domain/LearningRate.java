@@ -1,3 +1,20 @@
+/**
+ * This file is part of qlearner
+ *
+ *  Qlearner is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Qlearner is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Qlearner.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package qlearning.domain;
 
 import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ONE;
@@ -13,6 +30,9 @@ import org.apache.commons.lang3.Validate;
  * is stochastic, the algorithm still converges under some technical conditions on the learning rate, that require
  * it to decrease to zero.
  * </p>
+ * This value needs to be chosen in correlation with how often a given {@code State-Action} pair will lead to the
+ * same next {@code State}. In a grid world, moving UP from one square will always lead to the square above it,
+ * so a learning rate of 1 would be correct.
  * <p>
  * The default learning rate is 1.
  * </p>
