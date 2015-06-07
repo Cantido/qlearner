@@ -35,6 +35,20 @@ public abstract class Episode {
     protected Set<Action> possibleNextActions;
     protected Action chosenNextAction;
     
+    /**
+     * Create an {@code Episode} that represents one iteration of the q-learning algorithm.
+     * 
+     * @param explorationStrategy
+     *          The {@link ExplorationStrategy} that this and future {@code Episode} objects will use
+     *          to determine when to explore
+     * @param learningRate
+     *          The {@link LearningRate} that this and future {@code Episode} objects will use
+     *          to update {@code Quality} values
+     * @param discountFactor The {@link DiscountFactor} that this and future {@code Episode} objects will use
+     *          to update {@code Quality} values
+     * @param qualityMap The {@link QualityMap} that this and future {@code Episode} objects will use
+     *          to get and update {@code Quality} values
+     */
     protected Episode(
             ExplorationStrategy explorationStrategy,
             LearningRate learningRate,
