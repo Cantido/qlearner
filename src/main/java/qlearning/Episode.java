@@ -31,8 +31,6 @@ public abstract class Episode {
     protected Set<Action> possibleNextActions;
     protected Action chosenNextAction;
     
-    protected Quality discoveredQuality;
-    
     public Episode(
             ExplorationStrategy explorationStrategy,
             LearningRate learningRate,
