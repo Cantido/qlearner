@@ -19,7 +19,7 @@ a grid, from a starting state, to a goal state. To implement your own, you must 
 #### Environment
 
 Implementations of the **Environment** interface represent some system (real-world or otherwise) that you are
-trying to affect. This program will use a single instance of an `Environment` class to fetch data on ever
+trying to affect. This program will use a single instance of an `Environment` class to fetch data on every
 learning iteration.
 
 #### State
