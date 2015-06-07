@@ -23,8 +23,8 @@ import qlearning.domain.Quality;
 
 /**
  * An iteration of the q-learning algorithm that does not have a {@link State} or {@link Action}
- * from which to update a {@link Quality} value. This class should only be used at the
- * beginning of 
+ * from which to update a {@link Quality} value. As the name implies, this is the starting point,
+ * and {@link #proceed(State)} returns a {@link LaterEpisode} object, since we then have a history to evaluate.
  * 
  * <p>Calling {@link #proceed(State)} on this object will not update any {@code Quality}
  * values, because there is no previous {@code State} or {@code Action} to update
