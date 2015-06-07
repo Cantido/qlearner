@@ -14,7 +14,27 @@ Usage
 -----
 
 The package `qlearning.example.gridworld` and its tests demonstrate how to build a qlearner to move throughout
-a grid, from a starting state, to a goal state. To implement your own, you must implement the following interfaces:
+a grid, from a starting state, to a goal state. It all starts with an `Agent` class.
+
+#### Agent
+
+The **Agent** class the entry point to this software, and has only one method: `takeNextAction()`.
+
+```
+Agent agent = new Agent(environment, explorationStrategy, learningRate, discountFactor, qualityMap);
+
+while(true) {
+    agent.takeNextAction();
+}
+```
+
+Each call to `Agent.takeNextAction()` will:
+
+1. Get the current `State` object from the given `Environment`
+2. Update the learned values based on this new state's `Reward` 
+4. Choose and execute the next `Action` given by the current `State`
+
+To implement your own, you must implement the following interfaces:
 
 #### Environment
 
@@ -35,6 +55,9 @@ rewards and minimize negative rewards.
 `State` objects to round these continuous values to the point where it is likely that the program will see that
 value again. For instance, round temperature value to a smaller precision. See the
 `qlearning.impl.QualityHashMap` class for more information.
+
+`State` classes area also responsible for returning the `Action` classes that it is possible to take from that
+state.
 
 #### Action
 
