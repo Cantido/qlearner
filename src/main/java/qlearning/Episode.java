@@ -17,6 +17,10 @@ import qlearning.domain.StateActionQuality;
  * One full iteration of the q-learning algorithm, starting at
  * a certain {@link State}, taking an {@link Action}, and updating
  * the {@link Quality} for that pair.
+ * 
+ * <p>The q-learning algorithm is implemented by calling {@link Episode#proceed(State)}
+ * on a series of {@code Episode} objects, passing the new {@link State} to this {@code Episode}
+ * to learn the effect of the last {@link Action} taken.  
  */
 public abstract class Episode {
     protected Logger logger = LoggerFactory.getLogger(getClass());
@@ -31,21 +35,16 @@ public abstract class Episode {
     protected Set<Action> possibleNextActions;
     protected Action chosenNextAction;
     
-    public Episode(
+    protected Episode(
             ExplorationStrategy explorationStrategy,
             LearningRate learningRate,
             DiscountFactor discountFactor,
             QualityMap qualityMap) {
         
-        Validate.notNull(explorationStrategy, "LearningRate cannot be null");
-        Validate.notNull(learningRate, "DiscountFactor cannot be null");
-        Validate.notNull(discountFactor, "ExplorationStrategy cannot be null");
-        Validate.notNull(qualityMap, "QualityMap cannot be null");
-        
-        this.explorationStrategy = explorationStrategy;
-        this.learningRate = learningRate;
-        this.discountFactor = discountFactor;
-        this.qualityMap = qualityMap;
+        this.explorationStrategy = Validate.notNull(explorationStrategy, "LearningRate cannot be null");
+        this.learningRate = Validate.notNull(learningRate, "DiscountFactor cannot be null");
+        this.discountFactor = Validate.notNull(discountFactor, "ExplorationStrategy cannot be null");
+        this.qualityMap = Validate.notNull(qualityMap, "QualityMap cannot be null");
     }
     
     /**
@@ -54,13 +53,14 @@ public abstract class Episode {
      * @param currentState the state to proceed from in this iteration
      * @return an {@code Episode} that represents the next iteration
      */
-    protected Episode proceed(State currentState) {
-        this.currentState = currentState;
-        getPossibleNextActions();
+    public Episode proceed(final State currentState) {
+        this.currentState = validateCurrentState(currentState);
+        
+        possibleNextActions = validatePossibleNextActions(this.currentState.getActions());
         
         Collection<StateActionQuality> potentialQualities = buildTriplets(currentState, possibleNextActions);
         
-        chosenNextAction = explorationStrategy.getNextAction(potentialQualities);
+        chosenNextAction = validateNextAction(explorationStrategy.getNextAction(potentialQualities));
         
         updateQuality();
         
@@ -69,28 +69,18 @@ public abstract class Episode {
         return getNextEpisode();
     }
     
+    /**
+     * Update the {@link Quality} value based on this episode's performance.
+     */
     protected abstract void updateQuality();
+    
+    /**
+     * Get the {@code Episode} which represents the next algorithm iteration 
+     * @return the next iteration's {@code Episode}
+     */
     protected abstract Episode getNextEpisode(); 
     
-    protected void getPossibleNextActions() {
-        possibleNextActions = currentState.getActions();
-        
-        Validate.notNull(possibleNextActions,
-                "The list of possible actions from a state cannot be null. " +
-                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
-        Validate.isTrue(!possibleNextActions.isEmpty(),
-                "The list of possible actions from a state cannot be empty. " +
-                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
-    }
-    
-    protected void validateChosenNextAction() {
-        Validate.notNull(chosenNextAction, 
-                "The action returned by the ExplorationStrategy cannot be null." +
-                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
-    }
-
-    protected Collection<StateActionQuality> buildTriplets(State state, Set<Action> possibleActions) {
-        
+    private Collection<StateActionQuality> buildTriplets(State state, Set<Action> possibleActions) {
         Collection<StateActionQuality> pairs = new ArrayList<>(possibleActions.size());
         
         for(Action action : possibleActions) {
@@ -101,5 +91,33 @@ public abstract class Episode {
             logger.debug("Potential action: {}, quality: {}", action.toString(), quality.toString());
         }
         return pairs;
+    }
+    
+    private static State validateCurrentState(State state) {
+        return Validate.notNull(state, "Current state cannot be null");
+    }
+    
+    private static Set<Action> validatePossibleNextActions(Set<Action> nextActions) {
+        Validate.notNull(nextActions,
+                "The list of possible actions from a state cannot be null. " +
+                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
+        Validate.isTrue(!nextActions.isEmpty(),
+                "The list of possible actions from a state cannot be empty. " +
+                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
+        return nextActions;
+    }
+    
+    /**
+     * Validate the given {@link Action} as an action that will be taken in the next iteration
+     * @param nextAction the {@code Action} to validate
+     * @return the {@code Action} that was validated
+     * 
+     * @throws NullPointerException of the given {@code Action} is null
+     */
+    private static Action validateNextAction(Action nextAction) {
+        Validate.notNull(nextAction, 
+                "The action returned by the ExplorationStrategy cannot be null." +
+                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
+        return nextAction;
     }
 }

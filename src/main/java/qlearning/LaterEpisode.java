@@ -7,9 +7,13 @@ import qlearning.domain.LearningRate;
 import qlearning.domain.Quality;
 import qlearning.domain.Reward;
 
+/**
+ * An iteration of the q-learning algorithm that has a previous {@link State} and {@link Action}
+ * from which to update a {@link Quality} value.
+ */
 public class LaterEpisode extends Episode {
-    protected Action previousAction;
-    protected State previousState;
+    protected final Action previousAction;
+    protected final State previousState;
     
     public LaterEpisode(
             State previousState,
@@ -22,11 +26,8 @@ public class LaterEpisode extends Episode {
         
         super(explorationStrategy, learningRate, discountFactor, qualityMap);
         
-        Validate.notNull(previousState);
-        Validate.notNull(previousAction);
-
-        this.previousState = previousState;
-        this.previousAction = previousAction;
+        this.previousState = Validate.notNull(previousState, "Previous state cannot be null");
+        this.previousAction = Validate.notNull(previousAction, "Previous action cannot be null");
     }
     
     
@@ -53,7 +54,12 @@ public class LaterEpisode extends Episode {
 
     @Override
     protected Episode getNextEpisode() {
-        
-        return new LaterEpisode(currentState, chosenNextAction, explorationStrategy, learningRate, discountFactor, qualityMap);
+        return new LaterEpisode(
+                currentState,
+                chosenNextAction,
+                explorationStrategy,
+                learningRate,
+                discountFactor,
+                qualityMap);
     }
 }
