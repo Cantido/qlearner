@@ -9,6 +9,79 @@ information about the technique itself, see [its Wikipedia page][wiki].
 This program uses the q-learning technique to move an agent through a grid.
 There is a starting square and a goal square, and the agent has to
 learn, using q-learning, how to reach the goal in the fewest number of moves.
-The test code demonstrates how to set up this "Grid World"
+
+Usage
+-----
+
+The package `qlearning.example.gridworld` and its tests demonstrate how to build a qlearner to move throughout
+a grid, from a starting state, to a goal state. To implement your own, you must implement the following interfaces:
+
+### Environment
+
+Implementations of the `Environment` interface represent some system (real-world or otherwise) that you are
+trying to affect. This program will use a single instance of an `Environment` class to fetch data on ever
+learning iteration.
+
+### State
+
+Implementations of `State` are returned by `Environment` classes via `Environment.getState()`, and
+represent a certain condition of the system you are trying to affect. If an `Environment` class is a temperature
+sensor, a `State` class would be an individual temperature reading.
+
+A `State` class has a `Reward` value, that represents how desirable it is. This program tries to maximize positive
+`Reward`s and minimize negative `Reward`s.
+
+**Warning**: This program does not yet have the functionality necessary to learn continuous values. You must build your
+`State` objects to round these continuous values to the point where it is likely that the program will see that
+value again. For instance, round temperature value to a smaller precision. See the
+`qlearning.impl.QualityHashMap` class for more information.
+
+### Action
+
+Implementations of `Action` represent a thing that can be done to affect the `Environment`. This program
+tries to learn the best `Action` to take for a given `State`. Each iteration of this program calls
+`Action.execute()` once.
+
+Domain Values
+-------------
+
+### Reward
+
+Specifying `Reward` values is the core way that you tell this program what you want. Higher `Reward` values
+mean more desirable `State`s. This program tries to maximize positive `Reward`s and minimize negative `Reward`s.
+
+Do not try to over-think things when specifying the `Reward` value of a certain `State`. The domain objects of
+this program were organize with a `State` being responsible for a `Reward` because
+**you should not be trying to reward behavior, you should be rewarding state.** This program *learns behavior*, and
+can probably do a better job at it than a human can. No offense.
+
+Certain values can be specified to affect how this program learns:
+
+1. The `LearningRate` affects how quickly the algorithm will adapt to changing conditions. This value needs to
+be chosen in correlation with how often a given `State`-`Action` pair will lead to the same next `State`. In
+fully deterministic environments, a value of 1 is optimal.
+2. The `DiscountFactor` determines the importance of future rewards. Higher discount factors will make the program
+favor states with higher long-term rewards. Lower discount factors will make the program favor states that have higher
+immediate rewards.
+3. The `ExplorationFactor` is used to determine how likely the program will pick non-optimal actions in order to
+better explore the problem space. By default, this program uses a random exploration strategy, and higher values of
+this variable will make the program more likely to pick a random `Action`.
+
+License
+-------
+Released under the [GNU General Public License, Version 3](http://www.gnu.org/licenses/gpl.html)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 [wiki]: https://en.wikipedia.org/wiki/Q_learning "Q-learning - Wikipedia, the free encycopedia"
