@@ -60,10 +60,10 @@ while(!myEnvironment.isAtGoalState()) {
 }
 ```
 
-If you ever need to reset the agent while preserving the learned behavior, call `Agent.reset()`. This is important
-if you are trying to train your agent. If, for example, you are trying to have your agent learn how to play a game,
-you will need to call `Agent.reset()`, otherwise the program will learn it can make a move at the end of the game
-that will put it back to the beginning of the game!
+If you ever need to reset the agent while preserving the learned behavior, call `Agent.reset()` when the game ends.
+This is important if you are trying to train your agent. If, for example, you are trying to have your agent learn how
+to play a game, you will need to call `Agent.reset()`, otherwise the program will learn that it can make a move at
+the end of the game that will put it back to the beginning of the game!
 
 ```java
 while(isTraining) {
