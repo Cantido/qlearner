@@ -18,15 +18,15 @@ a grid, from a starting state, to a goal state. To implement your own, you must 
 
 #### Environment
 
-Implementations of the `Environment` interface represent some system (real-world or otherwise) that you are
+Implementations of the **Environment** interface represent some system (real-world or otherwise) that you are
 trying to affect. This program will use a single instance of an `Environment` class to fetch data on ever
 learning iteration.
 
 #### State
 
-Implementations of `State` are returned by `Environment` classes via `Environment.getState()`, and
-represent a certain condition of the system you are trying to affect. If an `Environment` class is a temperature
-sensor, a `State` class would be an individual temperature reading.
+Implementations of the **State** interface are returned by `Environment` classes via
+`Environment.getState()`, and represent a certain condition of the system you are trying to affect. If an
+`Environment` class is a temperature sensor, a `State` class would be an individual temperature reading.
 
 A `State` class has a `Reward` value, that represents how desirable it is. This program tries to maximize positive
 rewards and minimize negative rewards.
@@ -38,8 +38,8 @@ value again. For instance, round temperature value to a smaller precision. See t
 
 #### Action
 
-Implementations of `Action` represent a thing that can be done to affect the `Environment`. This program
-tries to learn the best `Action` to take for a given `State`. Each iteration of this program calls
+Implementations of the **Action** interface represent a thing that can be done to affect the `Environment`. This
+program tries to learn the best `Action` to take for a given `State`. Each iteration of this program calls
 `Action.execute()` once.
 
 Domain Values
