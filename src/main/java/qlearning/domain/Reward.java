@@ -24,7 +24,7 @@ public class Reward {
         this.value = value;
     }
     
-    public Double getValue() {
+    public Double toDouble() {
         return value;
     }
     

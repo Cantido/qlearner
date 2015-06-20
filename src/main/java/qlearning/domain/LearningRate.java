@@ -60,7 +60,7 @@ public class LearningRate {
         this.value = value;
     }
     
-    public double getValue() {
+    public Double toDouble() {
         return value;
     }
     

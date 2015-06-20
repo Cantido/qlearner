@@ -44,12 +44,12 @@ public class Quality implements Comparable<Object> {
         Validate.notNull(learningRate, "LearningRate cannot be null");
         Validate.notNull(discountFactor, "DiscountFactor cannot be null");
         
-        value = oldQuality.getValue()
-                + (learningRate.getValue() *
-                        (reward.getValue() + discountFactor.getValue() * optimalFutureValueEstimate.getValue() - oldQuality.getValue()));
+        value = oldQuality.toDouble()
+                + (learningRate.toDouble() *
+                        (reward.toDouble() + discountFactor.toDouble() * optimalFutureValueEstimate.toDouble() - oldQuality.toDouble()));
     }
     
-    public Double getValue() {
+    public Double toDouble() {
         return value;
     }
     
@@ -62,14 +62,14 @@ public class Quality implements Comparable<Object> {
     public int compareTo(Object o) {
         Quality other = (Quality) o;
         return new CompareToBuilder()
-          .append(this.getValue(), other.getValue())
+          .append(this.toDouble(), other.toDouble())
           .toComparison();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(19, 61).
-                append(getValue()).
+                append(toDouble()).
                 toHashCode();
     }
 
@@ -82,7 +82,7 @@ public class Quality implements Comparable<Object> {
         }
         Quality rhs = (Quality) obj;
         return new EqualsBuilder()
-                      .append(getValue(), rhs.getValue())
+                      .append(toDouble(), rhs.toDouble())
                       .isEquals();
     }
     

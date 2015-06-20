@@ -34,10 +34,6 @@ public class ExplorationFactor {
         Validate.inclusiveBetween(DOUBLE_ZERO, DOUBLE_ONE, factorValue, "Exploration factor must be within [0,1]");
     }
     
-    public Double getValue() {
-        return value;
-    }
-    
     public boolean shouldExplore(Double checkValue) {
         validateCheckValue(checkValue);
         if (value.equals(DOUBLE_ZERO)) return false;
@@ -48,6 +44,10 @@ public class ExplorationFactor {
     private void validateCheckValue(Double checkValue) {
         Validate.isTrue(!DOUBLE_ONE.equals(checkValue), "Test value must be within [0,1). Given value: %f", checkValue);
         Validate.inclusiveBetween(DOUBLE_ZERO, DOUBLE_ONE, checkValue, "Test value must be within [0,1). Given value: %f", checkValue);
+    }
+    
+    public Double toDouble() {
+        return value;
     }
     
     @Override
