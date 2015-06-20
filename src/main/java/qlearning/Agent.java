@@ -82,8 +82,4 @@ public class Agent {
         State currentState = environment.getState();        
         currentEpisode = currentEpisode.proceed(currentState);
     }
-    
-
-
-
 }
