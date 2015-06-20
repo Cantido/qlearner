@@ -67,7 +67,7 @@ the end of the game that will put it back to the beginning of the game!
 
 ```java
 while(isTraining) {
-    myGameEnvironment = new MyEnvironmentImplemenation();
+    myGameEnvironment.startGame();
     
     while(!myGameEnvironment.isAtGoalState()) {
         agent.takeNextAction();
@@ -75,6 +75,7 @@ while(isTraining) {
     // The game is over, now we have to reset before we start the game again
     
     agent.reset();
+    myGameEnvironment.endGame();
 }
 ```
 
