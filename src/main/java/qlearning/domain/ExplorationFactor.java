@@ -31,6 +31,7 @@ public class ExplorationFactor {
     }
     
     private void validateFactorValue(Double factorValue) {
+    	Validate.notNull(factorValue, "Exploration factor must not be null");
         Validate.inclusiveBetween(DOUBLE_ZERO, DOUBLE_ONE, factorValue, "Exploration factor must be within [0,1]");
     }
     
@@ -42,6 +43,7 @@ public class ExplorationFactor {
     }
     
     private void validateCheckValue(Double checkValue) {
+    	Validate.notNull(checkValue, "Test value must not be null");
         Validate.isTrue(!DOUBLE_ONE.equals(checkValue), "Test value must be within [0,1). Given value: %f", checkValue);
         Validate.inclusiveBetween(DOUBLE_ZERO, DOUBLE_ONE, checkValue, "Test value must be within [0,1). Given value: %f", checkValue);
     }

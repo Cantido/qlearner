@@ -91,11 +91,15 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
     
     
     private Action getBestAction(Collection<StateActionQuality> stateActionQualities) {
+    	assert(stateActionQualities != null) : "stateActionQualities must not be null";
+    	
         logger.debug("Determining best action from possible actions: {}", stateActionQualities);
         return Collections.max(stateActionQualities).getAction();
     }
 
     private Action getRandomAction(Collection<StateActionQuality> stateActionQualities) {
+    	assert(stateActionQualities != null) : "stateActionQualities must not be null";
+    	
         Integer randomIndex = random.nextInt(stateActionQualities.size());
         StateActionQuality randomTriplet = (StateActionQuality) stateActionQualities.toArray()[randomIndex];
         

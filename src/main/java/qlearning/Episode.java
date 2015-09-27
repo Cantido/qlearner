@@ -112,6 +112,9 @@ public abstract class Episode {
     protected abstract Episode getNextEpisode(); 
     
     private Collection<StateActionQuality> buildTriplets(State state, Set<Action> possibleActions) {
+    	assert(state != null) : "state must not be null";
+    	assert(possibleActions != null) : "possibleActions must not be null";
+    	
         Collection<StateActionQuality> pairs = new ArrayList<>(possibleActions.size());
         
         for(Action action : possibleActions) {
