@@ -36,8 +36,8 @@ import org.mockito.junit.MockitoRule;
 import qlearning.Action;
 import qlearning.State;
 import qlearning.domain.ExplorationFactor;
-import qlearning.domain.Quality;
 import qlearning.domain.StateActionQuality;
+import qlearning.quality.Quality;
 
 public class RandomExplorationStrategyTest {
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();

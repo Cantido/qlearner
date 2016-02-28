@@ -15,22 +15,18 @@
  *  along with Qlearner.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package qlearning;
+package qlearning.quality.map;
 
-import java.util.Collection;
+import java.util.Set;
 
-import qlearning.domain.StateActionQuality;
+import qlearning.Action;
+import qlearning.State;
 import qlearning.quality.Quality;
 
-/**
- * The algorithm that is used to determine the next {@link Action} to take.
- */
-public interface ExplorationStrategy {
-    /**
-     * Pick the next {@link Action} to take
-     * 
-     * @param stateActionQualities {@link State}-{@link Action} pairs and their associated {@link Quality Qualities}
-     * @return the chosen action
-     */
-    public Action getNextAction(Collection<StateActionQuality> stateActionQualities);
+public interface QualityMap {
+    public static final Quality MIN_QUALITY = new Quality(Double.NEGATIVE_INFINITY);
+    
+    public void put(State state, Action action, Quality quality);
+    public Quality get(State state, Action action);
+    public Quality getBestQuality(State state, Set<Action> actions);
 }

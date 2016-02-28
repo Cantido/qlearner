@@ -15,12 +15,18 @@
  *  along with Qlearner.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package qlearning;
+package qlearning.agent;
 
 import org.apache.commons.lang3.Validate;
 
+import qlearning.Action;
+import qlearning.Environment;
+import qlearning.ExplorationStrategy;
+import qlearning.State;
 import qlearning.domain.DiscountFactor;
 import qlearning.domain.LearningRate;
+import qlearning.quality.map.QualityMap;
+import qlearning.quality.strategy.QualityUpdateStrategy;
 
 /**
  * Performs {@link Action}s that will lead to changes in the {@link Environment}'s current {@link State}.
@@ -31,6 +37,7 @@ import qlearning.domain.LearningRate;
 public class Agent {
     private final Environment environment;
     private final ExplorationStrategy explorationStrategy;
+    private final QualityUpdateStrategy qualityUpdateStrategy;
     private final LearningRate learningRate;
     private final DiscountFactor discountFactor;
     private final QualityMap qualityMap;
@@ -39,6 +46,7 @@ public class Agent {
     
     public Agent(Environment environment,
             ExplorationStrategy explorationStrategy,
+            QualityUpdateStrategy qualityUpdateStrategy,
             LearningRate learningRate,
             DiscountFactor discountFactor,
             QualityMap qualityMap) {
@@ -47,15 +55,17 @@ public class Agent {
         Validate.notNull(explorationStrategy, "LearningRate cannot be null");
         Validate.notNull(learningRate, "DiscountFactor cannot be null");
         Validate.notNull(discountFactor, "ExplorationStrategy cannot be null");
+        Validate.notNull(qualityUpdateStrategy, "QualityUpdateStrategy cannot be null");
         Validate.notNull(qualityMap, "QualityMap cannot be null");
         
         this.environment = environment;
         this.explorationStrategy = explorationStrategy;
+        this.qualityUpdateStrategy = qualityUpdateStrategy;
         this.learningRate = learningRate;
         this.discountFactor = discountFactor;
         this.qualityMap = qualityMap;
         
-        this.currentEpisode = new FirstEpisode(explorationStrategy, learningRate, discountFactor, qualityMap);
+        this.currentEpisode = new FirstEpisode(explorationStrategy, qualityUpdateStrategy, learningRate, discountFactor, qualityMap);
     }
 
     /**
@@ -68,7 +78,7 @@ public class Agent {
      * </p>
      */
     public void resetState() {
-        this.currentEpisode = new FirstEpisode(explorationStrategy, learningRate, discountFactor, qualityMap);
+        this.currentEpisode = new FirstEpisode(explorationStrategy, qualityUpdateStrategy, learningRate, discountFactor, qualityMap);
     }
 
     /**

@@ -18,74 +18,123 @@
 package qlearning.example.gridworld;
 
 import static org.junit.Assert.*;
+import static org.apache.commons.math3.stat.StatUtils.*;
+
 import static org.hamcrest.Matchers.*;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Timeout;
 
-import qlearning.Agent;
 import qlearning.ExplorationStrategy;
-import qlearning.QualityMap;
+import qlearning.agent.Agent;
+import qlearning.agent.AgentBuilder;
 import qlearning.domain.DiscountFactor;
 import qlearning.domain.ExplorationFactor;
 import qlearning.domain.LearningRate;
 import qlearning.example.gridworld.GridWorldEnvironment;
-import qlearning.impl.QualityHashMap;
 import qlearning.impl.RandomExplorationStrategy;
+import qlearning.quality.map.QualityHashMap;
+import qlearning.quality.map.QualityMap;
+import qlearning.quality.strategy.BackwardInduction;
+import qlearning.quality.strategy.QualityUpdateStrategy;
 
 /**
- * Tests that the {@link GridWorldEnvironment} implementation of this library converges on the goal state.
+ * Tests that the {@link GridWorldEnvironment} implementation of this library
+ * converges on the goal state.
  */
 public class GridWorldConvergenceTest {
 
-    Agent agent;
-    GridWorldEnvironment environment;
-    ExplorationFactor explorationFactor;
-    ExplorationStrategy explorationStrategy;
-    QualityMap qualityMap;
-    DiscountFactor discountFactor;
-    LearningRate learningRate;
+	@Rule
+	public Timeout timeout = Timeout.seconds(1);
 
-    @Before
-    public void setUp() {
-        
-        environment = new GridWorldEnvironment();
-        discountFactor = new DiscountFactor(1);
-        learningRate = new LearningRate(1);
-        explorationFactor = new ExplorationFactor(0.1);
-        explorationStrategy = new RandomExplorationStrategy(explorationFactor);
-        qualityMap = new QualityHashMap();
+	private Agent agent;
+	private GridWorldEnvironment environment;
+	private QualityMap qualityMap;
+	private QualityUpdateStrategy qualityUpdateStrategy;
 
-        agent = new Agent(environment, explorationStrategy, learningRate, discountFactor, qualityMap);
-    }
+	private static final ExplorationFactor EXPLORATION_FACTOR = new ExplorationFactor(0.1);
+	private static final ExplorationStrategy EXPLORATION_STRATEGY = new RandomExplorationStrategy(EXPLORATION_FACTOR);
+	private static final DiscountFactor DISCOUNT_FACTOR = new DiscountFactor(1);
+	private static final LearningRate LEARNING_RATE = new LearningRate(1);
 
-    /**
-     * Tests that the number of steps that we take to reach the goal goes below an observed value. Even though the agent
-     * explores a little randomly, we can be fairly certain that the average steps per success goes down below around
-     * 50, given the values set in {@link #setUp}. After running this a few times, the average steps per success is
-     * around 30, so 50 gives us some wiggle room but can still assert that the agent is learning the space.
-     */
-    @Test
-    public void testConvergence() {
-        int totalSteps = 0;
-        int totalSuccesses = 0;
+	/**
+	 * We can reasonably expect the agent to learn the environment after this
+	 * many successful sessions
+	 */
+	private static final double SUCCESSES_UNTIL_CONVERGENCE = 10;
 
-        // I increment totalSteps in the loop, instead of assuming it is exactly 10000, because we'll
-        // probably end up halfway through an episode once we hit 10000 total steps
-        for (int i = 0; i < 10000; i++, totalSteps++) {
+	/**
+	 * The "correct" solution to our gridworld takes exactly 20 steps. After a
+	 * learning period, the agent should take this many steps most of the time.
+	 */
+	private static final double EXACT_SOLUTION = 20;
+	
+	/**
+	 * How many successes we want to run this test for
+	 */
+	private static final int MAX_SUCCESS_COUNT = 1000;
+	
+	/**
+	 * The percentage of all sessions that should have step counts below {@link #EXACT_SOLUTION}
+	 */
+	private static final double CONVERGENCE_PERCENTAGE = SUCCESSES_UNTIL_CONVERGENCE / MAX_SUCCESS_COUNT;
 
-            agent.takeNextAction();
+	@Before
+	public void setUp() {
+		environment = new GridWorldEnvironment();
+		qualityMap = new QualityHashMap();
+		qualityUpdateStrategy = new BackwardInduction();
+		
+		
+		agent = (new AgentBuilder())
+					.setEnvironment(environment)
+					.setExplorationStrategy(EXPLORATION_STRATEGY)
+					.setLearningRate(LEARNING_RATE)
+					.setDiscountFactor(DISCOUNT_FACTOR)
+					.setQualityMap(qualityMap)
+					.setQualityUpdateStrategy(qualityUpdateStrategy)
+					.getAgent();
+	}
 
-            if (environment.isAtGoalState()) {
-                totalSuccesses++;
-                environment.reset();
-                agent.resetState();
-            }
-        }
+	/**
+	 * Tests that the number of steps that we take to reach the goal goes below
+	 * an observed value.
+	 * 
+	 * This will run the agent until it reaches the goal a certain number of
+	 * times ({@link #MAX_SUCCESS_COUNT}), and will calculate the average number
+	 * of steps it took to reach the goal state. The average number of steps
+	 * that it takes to reach the goal state must end up under
+	 * {@link #MAX_AVERAGE_STEPS_PER_SUCCESS}.
+	 * 
+	 * There is the potential for the agent to never find the goal state, and
+	 * for this test to take an infinite amount of time. For that reason,
+	 * {@link #timeout} has been set up to guard us from that.
+	 */
+	@Test
+	public void reachesHighSuccessRate() {
+		// I know the fastest way to do this would be to just divide totalSteps
+		// by totalSuccesses, but
+		// creating a double array allows us to do some more fancy statistics,
+		// if I ever write tests for that.
 
-        int avgStepsPerSuccess = totalSteps / totalSuccesses;
+		double[] stepCounts = new double[MAX_SUCCESS_COUNT];
+		int successCount = 0;
 
-        assertThat(avgStepsPerSuccess, lessThan(50));
-    }
+		for (successCount = 0; successCount < MAX_SUCCESS_COUNT; successCount++) {
+			int stepCount = 0;
 
+			while (!environment.isAtGoalState()) {
+				agent.takeNextAction();
+				stepCount++;
+			}
+
+			stepCounts[successCount] = stepCount;
+			environment.reset();
+			agent.resetState();
+		}
+
+		assertThat(percentile(stepCounts, CONVERGENCE_PERCENTAGE), lessThanOrEqualTo(EXACT_SOLUTION));
+	}
 }

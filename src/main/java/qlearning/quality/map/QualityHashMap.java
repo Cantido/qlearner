@@ -15,7 +15,7 @@
  *  along with Qlearner.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package qlearning.impl;
+package qlearning.quality.map;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,9 +26,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import qlearning.Action;
-import qlearning.QualityMap;
 import qlearning.State;
-import qlearning.domain.Quality;
+import qlearning.quality.Quality;
 
 public class QualityHashMap implements QualityMap {
     private Map<ImmutablePair<State, Action>, Quality> qualities = new HashMap<>();

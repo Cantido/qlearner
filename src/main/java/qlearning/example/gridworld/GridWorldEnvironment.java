@@ -26,9 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import qlearning.Action;
-import qlearning.Agent;
 import qlearning.Environment;
 import qlearning.State;
+import qlearning.agent.Agent;
 import qlearning.domain.Reward;
 
 /**

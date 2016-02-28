@@ -15,7 +15,7 @@
  *  along with Qlearner.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package qlearning;
+package qlearning.agent;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,10 +25,15 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import qlearning.Action;
+import qlearning.ExplorationStrategy;
+import qlearning.State;
 import qlearning.domain.DiscountFactor;
 import qlearning.domain.LearningRate;
-import qlearning.domain.Quality;
 import qlearning.domain.StateActionQuality;
+import qlearning.quality.Quality;
+import qlearning.quality.map.QualityMap;
+import qlearning.quality.strategy.QualityUpdateStrategy;
 
 /**
  * One full iteration of the q-learning algorithm, starting at
@@ -39,10 +44,11 @@ import qlearning.domain.StateActionQuality;
  * on a series of {@code Episode} objects, passing the new {@link State} to this {@code Episode}
  * to learn the effect of the last {@link Action} taken.  
  */
-public abstract class Episode {
+/* package-private */ abstract class Episode {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     protected final ExplorationStrategy explorationStrategy;
+    protected final QualityUpdateStrategy qualityUpdateStrategy;
     protected final LearningRate learningRate;
     protected final DiscountFactor discountFactor;
     protected final QualityMap qualityMap;
@@ -68,11 +74,13 @@ public abstract class Episode {
      */
     protected Episode(
             ExplorationStrategy explorationStrategy,
+            QualityUpdateStrategy qualityUpdateStrategy,
             LearningRate learningRate,
             DiscountFactor discountFactor,
             QualityMap qualityMap) {
         
         this.explorationStrategy = Validate.notNull(explorationStrategy, "LearningRate cannot be null");
+        this.qualityUpdateStrategy = Validate.notNull(qualityUpdateStrategy, "QualityUpdateStrategy cannot be null");
         this.learningRate = Validate.notNull(learningRate, "DiscountFactor cannot be null");
         this.discountFactor = Validate.notNull(discountFactor, "ExplorationStrategy cannot be null");
         this.qualityMap = Validate.notNull(qualityMap, "QualityMap cannot be null");

@@ -15,20 +15,25 @@
  *  along with Qlearner.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package qlearning;
+package qlearning.agent;
 
 import org.apache.commons.lang3.Validate;
 
+import qlearning.Action;
+import qlearning.ExplorationStrategy;
+import qlearning.State;
 import qlearning.domain.DiscountFactor;
 import qlearning.domain.LearningRate;
-import qlearning.domain.Quality;
 import qlearning.domain.Reward;
+import qlearning.quality.Quality;
+import qlearning.quality.map.QualityMap;
+import qlearning.quality.strategy.QualityUpdateStrategy;
 
 /**
  * An iteration of the q-learning algorithm that has a previous {@link State} and {@link Action}
  * from which to update a {@link Quality} value.
  */
-public class LaterEpisode extends Episode {
+/* package-private */ class LaterEpisode extends Episode {
     protected final Action previousAction;
     protected final State previousState;
     
@@ -37,11 +42,12 @@ public class LaterEpisode extends Episode {
             Action previousAction,
             
             ExplorationStrategy explorationStrategy,
+            QualityUpdateStrategy qualityUpdateStrategy,
             LearningRate learningRate,
             DiscountFactor discountFactor,
             QualityMap qualityMap) {
         
-        super(explorationStrategy, learningRate, discountFactor, qualityMap);
+        super(explorationStrategy, qualityUpdateStrategy, learningRate, discountFactor, qualityMap);
         
         this.previousState = Validate.notNull(previousState, "Previous state cannot be null");
         this.previousAction = Validate.notNull(previousAction, "Previous action cannot be null");
@@ -61,7 +67,7 @@ public class LaterEpisode extends Episode {
                 "Creating new quality using the following values: (Qt: {}), (a: {}), (Rt+1: {}), (d: {}), (maxQt: {})",
                 oldQuality, learningRate, reward, discountFactor, optimalFutureValueEstimate);
         
-        Quality newQuality = new Quality(oldQuality, learningRate, reward, discountFactor, optimalFutureValueEstimate);
+        Quality newQuality = qualityUpdateStrategy.next(oldQuality, learningRate, reward, discountFactor, optimalFutureValueEstimate);
         
 
         logger.debug("Updating quality for [{}, {}] to {}", previousState, previousAction, newQuality);
@@ -75,6 +81,7 @@ public class LaterEpisode extends Episode {
                 currentState,
                 chosenNextAction,
                 explorationStrategy,
+                qualityUpdateStrategy,
                 learningRate,
                 discountFactor,
                 qualityMap);

@@ -19,6 +19,7 @@ package qlearning;
 
 import java.util.Set;
 
+import qlearning.agent.Agent;
 import qlearning.domain.Reward;
 
 /**

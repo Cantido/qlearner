@@ -30,10 +30,10 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import qlearning.Action;
-import qlearning.QualityMap;
 import qlearning.State;
-import qlearning.domain.Quality;
-import qlearning.impl.QualityHashMap;
+import qlearning.quality.Quality;
+import qlearning.quality.map.QualityHashMap;
+import qlearning.quality.map.QualityMap;
 
 @RunWith(MockitoJUnitRunner.class)
 public class QualityHashMapTest {

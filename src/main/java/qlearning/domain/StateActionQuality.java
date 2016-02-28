@@ -22,6 +22,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import qlearning.Action;
 import qlearning.State;
+import qlearning.quality.Quality;
 
 /**
  * A triplet of a {@link State}, {@link Action}, and {@link Quality} of that pair

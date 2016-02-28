@@ -15,11 +15,16 @@
  *  along with Qlearner.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package qlearning;
+package qlearning.agent;
 
+import qlearning.Action;
+import qlearning.ExplorationStrategy;
+import qlearning.State;
 import qlearning.domain.DiscountFactor;
 import qlearning.domain.LearningRate;
-import qlearning.domain.Quality;
+import qlearning.quality.Quality;
+import qlearning.quality.map.QualityMap;
+import qlearning.quality.strategy.QualityUpdateStrategy;
 
 /**
  * An iteration of the q-learning algorithm that does not have a {@link State} or {@link Action}
@@ -30,7 +35,7 @@ import qlearning.domain.Quality;
  * values, because there is no previous {@code State} or {@code Action} to update
  * a {@code Quality} for. It will, however, return a new {@code Episode} with that data.
  */
-public class FirstEpisode extends Episode {
+/* package-private */ class FirstEpisode extends Episode {
     
     /**
      * Create an {@code Episode} that does not have a previous {@link State} or {@link Action}
@@ -49,15 +54,16 @@ public class FirstEpisode extends Episode {
      */
     public FirstEpisode(
             ExplorationStrategy explorationStrategy,
+            QualityUpdateStrategy qualityUpdateStrategy,
             LearningRate learningRate,
             DiscountFactor discountFactor,
             QualityMap qualityMap) {
-        super(explorationStrategy, learningRate, discountFactor, qualityMap);
+        super(explorationStrategy, qualityUpdateStrategy, learningRate, discountFactor, qualityMap);
     }
     
     @Override
     protected Episode getNextEpisode() {
-        return new LaterEpisode(currentState, chosenNextAction, explorationStrategy, learningRate, discountFactor, qualityMap);
+        return new LaterEpisode(currentState, chosenNextAction, explorationStrategy, qualityUpdateStrategy, learningRate, discountFactor, qualityMap);
     }
 
     @Override

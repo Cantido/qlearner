@@ -15,12 +15,13 @@
  *  along with Qlearner.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package qlearning.domain;
+package qlearning.quality;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import qlearning.domain.Reward;
 
 /**
  * The learned value of a {@link State}-{@link Action} pair's potential for future {@link Reward}s
@@ -30,23 +31,6 @@ public class Quality implements Comparable<Object> {
     
     public Quality(Double value) {
         this.value = value;
-    }
-    
-    public Quality(Quality oldQuality,
-            LearningRate learningRate,
-            Reward reward,
-            DiscountFactor discountFactor,
-            Quality optimalFutureValueEstimate) {
-
-        Validate.notNull(oldQuality, "Quality cannot be null");
-        Validate.notNull(reward, "Reward cannot be null");
-        Validate.notNull(optimalFutureValueEstimate, "Optimal future value estimate cannot be null");
-        Validate.notNull(learningRate, "LearningRate cannot be null");
-        Validate.notNull(discountFactor, "DiscountFactor cannot be null");
-        
-        value = oldQuality.toDouble()
-                + (learningRate.toDouble() *
-                        (reward.toDouble() + discountFactor.toDouble() * optimalFutureValueEstimate.toDouble() - oldQuality.toDouble()));
     }
     
     public Double toDouble() {
