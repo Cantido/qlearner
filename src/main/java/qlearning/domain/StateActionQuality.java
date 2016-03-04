@@ -19,6 +19,7 @@ package qlearning.domain;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.eclipse.jdt.annotation.Nullable;
 
 import qlearning.Action;
 import qlearning.State;
@@ -60,7 +61,7 @@ public class StateActionQuality implements Comparable<StateActionQuality> {
     }
     
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (obj == null) { return false; }
         if (obj == this) { return true; }
         if (obj.getClass() != getClass()) {
@@ -78,6 +79,4 @@ public class StateActionQuality implements Comparable<StateActionQuality> {
     public int compareTo(StateActionQuality o) {
         return quality.compareTo(o.getQuality());
     }
-    
-    
 }

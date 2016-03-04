@@ -52,6 +52,7 @@ public class ExplorationFactor {
         return value;
     }
     
+    @SuppressWarnings("null")
     @Override
     public String toString() {
         return String.format("ExplorationFactor[%f]", value);

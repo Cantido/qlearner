@@ -28,6 +28,7 @@ public class Reward {
         return value;
     }
     
+    @SuppressWarnings("null")
     @Override
     public String toString() {
         return value.toString();

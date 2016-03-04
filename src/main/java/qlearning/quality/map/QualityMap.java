@@ -24,9 +24,18 @@ import qlearning.State;
 import qlearning.quality.Quality;
 
 public interface QualityMap {
-    public static final Quality MIN_QUALITY = new Quality(Double.NEGATIVE_INFINITY);
+    public static final QualityMap BLACK_HOLE = new QualityMap() { /* Use default behavior */ };
     
-    public void put(State state, Action action, Quality quality);
-    public Quality get(State state, Action action);
-    public Quality getBestQuality(State state, Set<Action> actions);
+    @SuppressWarnings("unused")
+    public default void put(State state, Action action, Quality quality) {
+        /* Do nothing */
+    }
+    @SuppressWarnings("unused")
+    public default Quality get(State state, Action action) {
+        return Quality.ZERO;
+    }
+    @SuppressWarnings("unused")
+    public default Quality getBestQuality(State state, Set<Action> actions) {
+        return Quality.ZERO;
+    }
 }

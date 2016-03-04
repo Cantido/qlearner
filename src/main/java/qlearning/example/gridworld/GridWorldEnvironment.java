@@ -42,6 +42,7 @@ import qlearning.domain.Reward;
  * </p>
  */
 public class GridWorldEnvironment implements Environment {
+    @SuppressWarnings("null")
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     private int maxX = 10;
@@ -140,6 +141,7 @@ public class GridWorldEnvironment implements Environment {
         return state;
     }
 
+    @SuppressWarnings("null")
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)

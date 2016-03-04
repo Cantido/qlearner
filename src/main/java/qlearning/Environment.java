@@ -26,6 +26,8 @@ package qlearning;
  * the Actions encapsulate the output.
  */
 public interface Environment {
+    public static Environment EMPTY = new Environment() { /* Use default implementations */ };
+    
     /**
      * Get the current {@link State} of the environment.
      * 
@@ -33,5 +35,7 @@ public interface Environment {
      * 
      * @return the environment's current state
      */
-	public State getState();
+	default public State getState() {
+	    return State.NULL;
+	}
 }

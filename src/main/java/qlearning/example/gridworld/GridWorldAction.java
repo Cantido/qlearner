@@ -17,6 +17,7 @@
 
 package qlearning.example.gridworld;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,9 +26,10 @@ import qlearning.Action;
 public enum GridWorldAction implements Action {
     UP, DOWN, LEFT, RIGHT;
 
+    @SuppressWarnings("null")
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private static GridWorldEnvironment gridWorld;
+    @Nullable private static GridWorldEnvironment gridWorld;
 
     public static void setGridWorld(GridWorldEnvironment gw) {
         gridWorld = gw;
@@ -35,6 +37,11 @@ public enum GridWorldAction implements Action {
 
     @Override
     public void execute() {
+        final GridWorldEnvironment gridWorld = GridWorldAction.gridWorld;
+        if(gridWorld == null) {
+            throw new IllegalStateException("Grid World Environment was not initalized yet");
+        }
+        
         logger.debug("Executing GridWorldAction {}", this);
         switch (this) {
             case UP:

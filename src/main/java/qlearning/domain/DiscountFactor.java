@@ -52,6 +52,7 @@ public class DiscountFactor {
         return value;
     }
     
+    @SuppressWarnings("null")
     @Override
     public String toString() {
         return String.format("DiscountFactor[%f]", value);

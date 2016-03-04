@@ -25,6 +25,7 @@ import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assume.assumeThat;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.Rule;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
@@ -34,6 +35,7 @@ import org.junit.runner.RunWith;
 
 import qlearning.domain.LearningRate;
 
+@NonNullByDefault({})
 @RunWith(Theories.class)
 public class LearningRateTest {
     @Rule public ExpectedException exception = ExpectedException.none();
@@ -50,6 +52,7 @@ public class LearningRateTest {
         Double.POSITIVE_INFINITY
     };
     
+    @SuppressWarnings("unused")
     @Theory
     public void learningRateBetweenZeroAndOneInclusiveIsLegal(double learningRate) {
         assumeThat(learningRate, greaterThanOrEqualTo(DOUBLE_ZERO));
@@ -59,6 +62,7 @@ public class LearningRateTest {
         new LearningRate(learningRate);
     }
 
+    @SuppressWarnings("unused")
     @Theory
     public void learningRateLessThanZeroIsIllegal(double learningRate) {
         assumeThat(learningRate, lessThan(DOUBLE_ZERO));
@@ -67,6 +71,7 @@ public class LearningRateTest {
         new LearningRate(learningRate);
     }
 
+    @SuppressWarnings("unused")
     @Theory
     public void learningRateGreaterThanOneIsIllegal(double learningRate) {
         assumeThat(learningRate, greaterThan(DOUBLE_ONE));

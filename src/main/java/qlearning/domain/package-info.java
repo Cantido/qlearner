@@ -1,3 +1,3 @@
 @NonNullByDefault
-package qlearning.quality;
+package qlearning.domain;
 import org.eclipse.jdt.annotation.NonNullByDefault;

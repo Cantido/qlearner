@@ -20,6 +20,7 @@ package qlearning.quality;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.eclipse.jdt.annotation.Nullable;
 
 import qlearning.domain.Reward;
 
@@ -27,9 +28,16 @@ import qlearning.domain.Reward;
  * The learned value of a {@link State}-{@link Action} pair's potential for future {@link Reward}s
  */
 public class Quality implements Comparable<Object> {
+    public static final Quality ZERO = new Quality(0.0);
+    public static final Quality MIN = new Quality(Double.NEGATIVE_INFINITY);
+    public static final Quality MAX = new Quality(Double.POSITIVE_INFINITY);
+    
     private final Double value;
     
     public Quality(Double value) {
+        if(value.isNaN()) {
+            throw new IllegalArgumentException("Cannot create a Quality from NaN");
+        }
         this.value = value;
     }
     
@@ -37,6 +45,7 @@ public class Quality implements Comparable<Object> {
         return value;
     }
     
+    @SuppressWarnings("null")
     @Override
     public String toString() {
         return value.toString();
@@ -44,10 +53,7 @@ public class Quality implements Comparable<Object> {
 
     @Override
     public int compareTo(Object o) {
-        Quality other = (Quality) o;
-        return new CompareToBuilder()
-          .append(this.toDouble(), other.toDouble())
-          .toComparison();
+        return CompareToBuilder.reflectionCompare(this, o);
     }
 
     @Override
@@ -58,7 +64,7 @@ public class Quality implements Comparable<Object> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (obj == null) { return false; }
         if (obj == this) { return true; }
         if (obj.getClass() != getClass()) {
@@ -69,5 +75,4 @@ public class Quality implements Comparable<Object> {
                       .append(toDouble(), rhs.toDouble())
                       .isEquals();
     }
-    
 }

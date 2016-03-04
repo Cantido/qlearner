@@ -18,6 +18,7 @@
 package qlearning;
 
 import java.util.Set;
+import java.util.TreeSet;
 
 import qlearning.agent.Agent;
 import qlearning.domain.Reward;
@@ -36,6 +37,7 @@ import qlearning.domain.Reward;
  * <p>
  */
 public interface State {
+    public static State NULL = new State() { /* default implementations */};
 
     /**
      * Get the desirability of the current state. Higher values will make the {@link Agent} prefer this state, and lower
@@ -45,12 +47,16 @@ public interface State {
      * 
      * @return the score of this state's desirability
      */
-    Reward getReward();
+    default Reward getReward() {
+        return new Reward(0);
+    }
 
     /**
      * Get all {@link Action}s that is possible to perform while in this state
      * 
      * @return all actions that can be taken
      */
-    Set<Action> getActions();
+    default Set<Action> getActions() {
+        return new TreeSet<>();
+    }
 }

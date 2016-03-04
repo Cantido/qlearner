@@ -25,6 +25,7 @@ import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assume.assumeThat;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.Rule;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theory;
@@ -34,6 +35,7 @@ import org.junit.runner.RunWith;
 
 import qlearning.domain.ExplorationFactor;
 
+@NonNullByDefault({})
 @RunWith(Theories.class)
 public class ExplorationFactorValidValuesTest {
     @DataPoints
@@ -51,6 +53,7 @@ public class ExplorationFactorValidValuesTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
     
+    @SuppressWarnings("unused")
     @Theory
     public void explorationFactorBetweenZeroAndOneInclusiveIsLegal(double value) {
         assumeThat(value, greaterThanOrEqualTo(DOUBLE_ZERO));
@@ -61,6 +64,7 @@ public class ExplorationFactorValidValuesTest {
         // Expect no exceptions
     }
 
+    @SuppressWarnings("unused")
     @Theory
     public void explorationFactorBelowZeroIsIllegal(double value) {
         assumeThat(value, lessThan(DOUBLE_ZERO));
@@ -70,6 +74,7 @@ public class ExplorationFactorValidValuesTest {
         new ExplorationFactor(value);
     }
 
+    @SuppressWarnings("unused")
     @Theory
     public void explorationFactorAboveOneIsIllegal(double value) {
         assumeThat(value, greaterThan(DOUBLE_ONE));

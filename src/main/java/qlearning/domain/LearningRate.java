@@ -64,6 +64,7 @@ public class LearningRate {
         return value;
     }
     
+    @SuppressWarnings("null")
     @Override
     public String toString() {
         return String.format("LearningRate[%f]", value);

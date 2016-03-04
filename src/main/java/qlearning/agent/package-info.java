@@ -18,4 +18,6 @@
 /**
  * Framework for an actor to perform a q-learning decision process
  */
+@NonNullByDefault
 package qlearning.agent;
+import org.eclipse.jdt.annotation.NonNullByDefault;

@@ -20,6 +20,7 @@ package qlearning.agent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -45,6 +46,7 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
  * to learn the effect of the last {@link Action} taken.  
  */
 /* package-private */ abstract class Episode {
+    @SuppressWarnings("null")
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     protected final ExplorationStrategy explorationStrategy;
@@ -53,10 +55,9 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
     protected final DiscountFactor discountFactor;
     protected final QualityMap qualityMap;
     
-    protected State currentState;
-    
-    protected Set<Action> possibleNextActions;
-    protected Action chosenNextAction;
+    protected State currentState = State.NULL;
+    protected Set<Action> possibleNextActions = new TreeSet<>();
+    protected Action chosenNextAction = Action.NONE;
     
     /**
      * Create an {@code Episode} that represents one iteration of the q-learning algorithm.

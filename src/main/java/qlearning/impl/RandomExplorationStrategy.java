@@ -35,6 +35,7 @@ import qlearning.domain.StateActionQuality;
  * A simple {@link ExplorationStrategy} which will choose a random {@link Action} some of the time.
  */
 public class RandomExplorationStrategy implements ExplorationStrategy {
+    @SuppressWarnings("null")
     private Logger logger =  LoggerFactory.getLogger(getClass());
     
     private final ExplorationFactor explorationFactor;
@@ -47,6 +48,7 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
      * 
      * @param explorationFactor the exploration factor to set
      */
+    @SuppressWarnings("null")
     public RandomExplorationStrategy(ExplorationFactor explorationFactor) {
         this(explorationFactor, ThreadLocalRandom.current());
     }

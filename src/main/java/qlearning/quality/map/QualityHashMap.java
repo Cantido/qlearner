@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import qlearning.Action;
@@ -32,7 +31,7 @@ import qlearning.quality.Quality;
 public class QualityHashMap implements QualityMap {
     private Map<ImmutablePair<State, Action>, Quality> qualities = new HashMap<>();
     
-    private Quality defaultQuality = new Quality(NumberUtils.DOUBLE_ZERO);
+    private Quality defaultQuality = new Quality(0.0);
     
     public void setDefaultQuality(Quality defaultQuality) {
         this.defaultQuality = defaultQuality;
@@ -44,18 +43,15 @@ public class QualityHashMap implements QualityMap {
     
     @Override
     public void put(State state, Action action, Quality quality) {
-        qualities.put(ImmutablePair.of(state, action), quality);
+        qualities.put(new ImmutablePair<>(state, action), quality);
     }
 
     @Override
     public Quality get(State state, Action action) {
         Quality qualityToGet;
-        ImmutablePair<State, Action> pair = ImmutablePair.of(state, action);
+        ImmutablePair<State, Action> pair = new ImmutablePair<>(state, action);
 
-        if (state == null || action == null) {
-            qualityToGet = defaultQuality;
-
-        } else if (qualities.containsKey(pair)) {
+        if (qualities.containsKey(pair)) {
             qualityToGet = qualities.get(pair);
 
         } else {
@@ -67,7 +63,7 @@ public class QualityHashMap implements QualityMap {
     
     @Override
     public Quality getBestQuality(State state, Set<Action> actions) {
-        TreeSet<Quality> qualities = new TreeSet<Quality>();
+        TreeSet<Quality> qualities = new TreeSet<>();
         
         for (Action action : actions) {
             qualities.add(get(state, action));

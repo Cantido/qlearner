@@ -35,8 +35,12 @@ import qlearning.agent.Agent;
  * <p>
  */
 public interface Action {
+    public static Action NONE = new Action() { /* default behavior */ };
+    
     /**
      * Perform the activity that this object represents.
      */
-    void execute();
+    default void execute() {
+        /* Do nothing */
+    }
 }

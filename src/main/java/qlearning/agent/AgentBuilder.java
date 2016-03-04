@@ -3,8 +3,12 @@ package qlearning.agent;
 import qlearning.Environment;
 import qlearning.ExplorationStrategy;
 import qlearning.domain.DiscountFactor;
+import qlearning.domain.ExplorationFactor;
 import qlearning.domain.LearningRate;
+import qlearning.impl.RandomExplorationStrategy;
+import qlearning.quality.map.QualityHashMap;
 import qlearning.quality.map.QualityMap;
+import qlearning.quality.strategy.BackwardInduction;
 import qlearning.quality.strategy.QualityUpdateStrategy;
 
 /**
@@ -22,13 +26,19 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
  * </pre>
  */
 public class AgentBuilder {
-    private Environment environment;
-    private ExplorationStrategy explorationStrategy;
-    private QualityUpdateStrategy qualityUpdateStrategy;
-    private LearningRate learningRate;
-    private DiscountFactor discountFactor;
-    private QualityMap qualityMap;
-
+    private static final ExplorationFactor DEFAULT_EXPLORATION_FACTOR = new ExplorationFactor(0.2);
+    
+    private Environment environment = Environment.EMPTY;
+    private ExplorationStrategy explorationStrategy = new RandomExplorationStrategy(DEFAULT_EXPLORATION_FACTOR);
+    private QualityUpdateStrategy qualityUpdateStrategy = new BackwardInduction();
+    private LearningRate learningRate = new LearningRate(1);
+    private DiscountFactor discountFactor = new DiscountFactor(1);
+    private QualityMap qualityMap = new QualityHashMap();
+    
+    public AgentBuilder(Environment environment) {
+        this.environment = environment;
+    }
+    
     public AgentBuilder setEnvironment(Environment environment) {
         this.environment = environment;
         return this;
