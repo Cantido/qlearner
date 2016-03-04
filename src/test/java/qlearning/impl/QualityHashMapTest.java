@@ -23,6 +23,7 @@ import static org.hamcrest.Matchers.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,10 +36,12 @@ import qlearning.quality.Quality;
 import qlearning.quality.map.QualityHashMap;
 import qlearning.quality.map.QualityMap;
 
+@SuppressWarnings("null")
+@NonNullByDefault({})
 @RunWith(MockitoJUnitRunner.class)
 public class QualityHashMapTest {
     
-    QualityMap map;
+    QualityMap map = new QualityHashMap();
     @Mock State state;
     @Mock Action highestAction;
     @Mock Action middleAction;
@@ -47,13 +50,10 @@ public class QualityHashMapTest {
     Quality middleQuality = new Quality(0.0);
     Quality highestQuality = new Quality(1.0);
     
-    Set<Action> actions;
+    Set<Action> actions = new HashSet<>();
     
     @Before
     public void setUp() {
-        map = new QualityHashMap();
-        actions = new HashSet<>();
-        
         actions.add(worstAction);
         actions.add(middleAction);
         actions.add(highestAction);

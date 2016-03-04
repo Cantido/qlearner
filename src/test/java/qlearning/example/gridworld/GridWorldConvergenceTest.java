@@ -18,6 +18,10 @@
 package qlearning.example.gridworld;
 
 import static org.junit.Assert.*;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import static org.apache.commons.math3.stat.StatUtils.*;
 
 import static org.hamcrest.Matchers.*;
@@ -44,20 +48,22 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
  * Tests that the {@link GridWorldEnvironment} implementation of this library
  * converges on the goal state.
  */
+@NonNullByDefault({})
 public class GridWorldConvergenceTest {
 
 	@Rule
 	public Timeout timeout = Timeout.seconds(1);
 
 	private Agent agent;
-	private GridWorldEnvironment environment;
-	private QualityMap qualityMap;
-	private QualityUpdateStrategy qualityUpdateStrategy;
-
-	private static final ExplorationFactor EXPLORATION_FACTOR = new ExplorationFactor(0.1);
-	private static final ExplorationStrategy EXPLORATION_STRATEGY = new RandomExplorationStrategy(EXPLORATION_FACTOR);
-	private static final DiscountFactor DISCOUNT_FACTOR = new DiscountFactor(1);
-	private static final LearningRate LEARNING_RATE = new LearningRate(1);
+	
+	@NonNull private final GridWorldEnvironment environment = new GridWorldEnvironment();
+	@NonNull private final QualityMap qualityMap = new QualityHashMap();
+	@NonNull private final QualityUpdateStrategy qualityUpdateStrategy = new BackwardInduction();
+	
+	@NonNull private static final ExplorationFactor EXPLORATION_FACTOR = new ExplorationFactor(0.1);
+	@NonNull private static final ExplorationStrategy EXPLORATION_STRATEGY = new RandomExplorationStrategy(EXPLORATION_FACTOR);
+	@NonNull private static final DiscountFactor DISCOUNT_FACTOR = new DiscountFactor(1);
+	@NonNull private static final LearningRate LEARNING_RATE = new LearningRate(1);
 
 	/**
 	 * We can reasonably expect the agent to learn the environment after this
@@ -83,13 +89,7 @@ public class GridWorldConvergenceTest {
 
 	@Before
 	public void setUp() {
-		environment = new GridWorldEnvironment();
-		qualityMap = new QualityHashMap();
-		qualityUpdateStrategy = new BackwardInduction();
-		
-		
-		agent = (new AgentBuilder())
-					.setEnvironment(environment)
+		agent = (new AgentBuilder(environment))
 					.setExplorationStrategy(EXPLORATION_STRATEGY)
 					.setLearningRate(LEARNING_RATE)
 					.setDiscountFactor(DISCOUNT_FACTOR)

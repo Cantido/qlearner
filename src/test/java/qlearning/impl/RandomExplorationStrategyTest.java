@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,6 +40,8 @@ import qlearning.domain.ExplorationFactor;
 import qlearning.domain.StateActionQuality;
 import qlearning.quality.Quality;
 
+@SuppressWarnings("null")
+@NonNullByDefault({})
 public class RandomExplorationStrategyTest {
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
     

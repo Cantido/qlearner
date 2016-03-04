@@ -1,9 +1,8 @@
 package qlearning.impl;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.junit.MockitoJUnit;
@@ -17,14 +16,10 @@ import qlearning.quality.strategy.BackwardInduction;
 import qlearning.quality.strategy.QualityUpdateStrategy;
 
 public class BackwardInductionTest {
-	@Rule public MockitoRule mockito = MockitoJUnit.rule();
+	@SuppressWarnings("null")
+    @Rule public MockitoRule mockito = MockitoJUnit.rule();
 	
-	private QualityUpdateStrategy backwardInduction;
-	
-	@Before
-	public void setUp() {
-		backwardInduction = new BackwardInduction();
-	}
+	private final QualityUpdateStrategy backwardInduction = new BackwardInduction();
 	
     @Test
     public void computeNewQuality() {
