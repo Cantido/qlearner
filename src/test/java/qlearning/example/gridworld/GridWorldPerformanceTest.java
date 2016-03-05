@@ -20,7 +20,7 @@ public class GridWorldPerformanceTest {
 
     public static void main(String[] args) {
         GridWorldEnvironment environment = new GridWorldEnvironment();
-        QualityMap qualityMap = new QualityHashMap();
+        QualityMap qualityMap = new QualityHashMap(400);
         QualityUpdateStrategy qualityUpdateStrategy = new BackwardInduction();
         
         ExplorationFactor EXPLORATION_FACTOR = new ExplorationFactor(0.1);
