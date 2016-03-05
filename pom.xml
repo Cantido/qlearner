@@ -14,7 +14,13 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	<organization>
+		<name>Robert Richter</name>
+		<url>https://github.com/Cantido</url>
+	</organization>
+	<inceptionYear>2012</inceptionYear>
 	<properties>
+		<license.licenseName>gpl_v3</license.licenseName>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<build>
@@ -28,8 +34,63 @@
 						<target>1.8</target>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>license-maven-plugin</artifactId>
+										<versionRange>[1.8,)</versionRange>
+										<goals>
+											<goal>check-file-header</goal>
+											<goal>update-file-header</goal>
+											<goal>update-project-license</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute>
+											<runOnIncremental>false</runOnIncremental>
+										</execute>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.8</version>
+				<configuration>
+					<verbose>false</verbose>
+				</configuration>
+				<executions>
+					<execution>
+						<id>first</id>
+						<goals>
+							<goal>check-file-header</goal>
+							<goal>update-file-header</goal>
+							<goal>update-project-license</goal>
+						</goals>
+						<phase>process-sources</phase>
+						<configuration>
+							<roots>
+								<root>src/main/java</root>
+								<root>src/test</root>
+							</roots>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 	<issueManagement>
 		<system>GitHub</system>
