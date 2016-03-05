@@ -34,8 +34,7 @@ import qlearning.quality.Quality;
 
 public class QualityHashMap implements QualityMap {
     private Map<ImmutablePair<State, Action>, Quality> qualities = new HashMap<>();
-    
-    private Quality defaultQuality = new Quality(0.0);
+    private Quality defaultQuality = Quality.ZERO;
     
     public void setDefaultQuality(Quality defaultQuality) {
         this.defaultQuality = defaultQuality;
