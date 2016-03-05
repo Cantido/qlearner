@@ -36,28 +36,28 @@ public class Quality implements Comparable<Quality> {
     public static final Quality MIN = new Quality(Double.NEGATIVE_INFINITY);
     public static final Quality MAX = new Quality(Double.POSITIVE_INFINITY);
     
-    private final Double value;
+    private final double value;
     
-    public Quality(Double value) {
-        if(value.isNaN()) {
+    public Quality(double value) {
+        if(Double.isNaN(value)) {
             throw new IllegalArgumentException("Cannot create a Quality from NaN");
         }
         this.value = value;
     }
     
-    public Double toDouble() {
+    public double toDouble() {
         return value;
     }
     
     @SuppressWarnings("null")
     @Override
     public String toString() {
-        return value.toString();
+        return Double.toString(value);
     }
 
     @Override
     public int compareTo(Quality o) {
-        return value.compareTo(o.value);
+        return Double.compare(value, o.value);
     }
 
     @Override
