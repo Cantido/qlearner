@@ -61,7 +61,7 @@ public class GridWorldConvergenceTest {
 
 	private Agent agent;
 	
-	@NonNull private final GridWorldEnvironment environment = new GridWorldEnvironment();
+	@NonNull private final GridWorldEnvironment environment = new GridWorldEnvironment(10, 10, 0, 0, 10, 10);
 	@NonNull private final QualityMap qualityMap = new QualityHashMap();
 	@NonNull private final QualityUpdateStrategy qualityUpdateStrategy = new BackwardInduction();
 	

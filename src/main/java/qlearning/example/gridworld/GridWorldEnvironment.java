@@ -47,28 +47,39 @@ public class GridWorldEnvironment implements Environment {
     @SuppressWarnings("null")
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private int maxX = 10;
-    private int maxY = 10;
+    private final int maxX;
+    private final int maxY;
 
-    private int minX = 0;
-    private int minY = 0;
+    private final int minX = 0;
+    private final int minY = 0;
 
-    private int startX = 0;
-    private int startY = 0;
+    private final int startX;
+    private final int startY;
 
-    private int goalX = 10;
-    private int goalY = 10;
+    private final int goalX;
+    private final int goalY;
 
-    private int xState = startX;
-    private int yState = startY;
+    private final GridWorldState [][] states;
     
-    GridWorldState currentState;
-    GridWorldState [][] states = {};
+    private int xState;
+    private int yState;
+    private GridWorldState currentState;
 
-    public GridWorldEnvironment() {
-        buildStateCache();
+    public GridWorldEnvironment(int sizeX, int sizeY, int startX, int startY, int goalX, int goalY) {
+        this.maxX = sizeX;
+        this.maxY = sizeY;
         
-        // Redundant, but Eclipse won't yell at us about a null current state anymore
+        this.startX = startX;
+        this.startY = startY;
+        
+        this.xState = startX;
+        this.yState = startY;
+        
+        this.goalX = goalX;
+        this.goalY = goalY;
+        
+        states = buildStateCache();
+        
         GridWorldState newCurrentState = states[xState][yState];
         if(newCurrentState == null) {
             throw new NullPointerException("State at position (" + xState + ", " + yState + ") was null");
@@ -77,13 +88,7 @@ public class GridWorldEnvironment implements Environment {
         currentState = newCurrentState;
     }
 
-    public void setSize(int totalX, int totalY) {
-        this.maxX = totalX;
-        this.maxY = totalY;
-        buildStateCache();
-    }
-    
-    private void buildStateCache() {
+    private GridWorldState [][] buildStateCache() {
         GridWorldState [][] states = new GridWorldState [maxX+1][maxY+1];
         
         for(int x = minX; x < maxX+1; x++) {
@@ -106,17 +111,7 @@ public class GridWorldEnvironment implements Environment {
                 states[x][y] = state;
             }
         }
-        setStates(states);
-    }
-    
-    public void setStart(int x, int y) {
-        this.startX = x;
-        this.startY = y;
-    }
-
-    public void setGoal(int x, int y) {
-        this.goalX = x;
-        this.goalY = y;
+        return states;
     }
     
     private GridWorldState getState(int x, int y) {
@@ -138,21 +133,11 @@ public class GridWorldEnvironment implements Environment {
         currentState = state;
     }
     
-    private void setStates(GridWorldState [][] states) {
-        this.states = states;
-        setCurrentState(getState(xState, yState));
-    }
-    
     private boolean isGoalState(int x, int y) {
         return (x == goalX && y == goalY);
     }
 
     public boolean isAtGoalState() {
-        /*
-         * Don't delegate to #isGoalState. This method is called at every iteration,
-         * so it needs to be blazing fast. Eliminating that method call significantly
-         * reduced the amount of time spent on this method.
-         */
         return (xState == goalX && yState == goalY);
     }
 
@@ -190,7 +175,6 @@ public class GridWorldEnvironment implements Environment {
         }
     }
     
-
     @Override
     public State getState() {
         logger.debug("Current environment: {}", this);

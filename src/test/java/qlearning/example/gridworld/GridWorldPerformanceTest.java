@@ -42,7 +42,7 @@ public class GridWorldPerformanceTest {
     private static final int MAX_SUCCESS_COUNT = 50000;
 
     public static void main(String[] args) {
-        GridWorldEnvironment environment = new GridWorldEnvironment();
+        GridWorldEnvironment environment = new GridWorldEnvironment(10, 10, 0, 0, 10, 10);
         QualityMap qualityMap = new QualityHashMap(400);
         QualityUpdateStrategy qualityUpdateStrategy = new BackwardInduction();
         
