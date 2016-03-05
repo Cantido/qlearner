@@ -66,7 +66,7 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
     protected void updateQuality() {
         Quality oldQuality = qualityMap.get(this.previousState, this.previousAction);
         Reward reward = currentState.getReward();
-        Quality optimalFutureValueEstimate = qualityMap.getBestQuality(currentState, possibleNextActions);
+        Quality optimalFutureValueEstimate = qualityMap.getBestQuality(currentState);
 
         logger.debug(
                 "Creating new quality using the following values: (Qt: {}), (a: {}), (Rt+1: {}), (d: {}), (maxQt: {})",

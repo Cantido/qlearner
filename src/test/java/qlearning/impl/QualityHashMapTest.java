@@ -23,6 +23,7 @@ package qlearning.impl;
  */
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.*;
 
 import java.util.HashSet;
@@ -63,6 +64,8 @@ public class QualityHashMapTest {
         actions.add(middleAction);
         actions.add(highestAction);
         
+        when(state.getActions()).thenReturn(actions);
+        
         map.put(state, highestAction, lowestQuality);
         map.put(state, middleAction, middleQuality);
         map.put(state, highestAction, highestQuality);
@@ -77,7 +80,7 @@ public class QualityHashMapTest {
     
     @Test
     public void getBestQualityForState() {
-        Quality actualQuality = map.getBestQuality(state, actions);
+        Quality actualQuality = map.getBestQuality(state);
         
         assertThat(actualQuality, is(highestQuality));
     }

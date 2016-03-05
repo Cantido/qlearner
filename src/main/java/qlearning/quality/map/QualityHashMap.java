@@ -67,12 +67,13 @@ public class QualityHashMap implements QualityMap {
     }
     
     @Override
-    public Quality getBestQuality(State state, Set<Action> actions) {
+    public Quality getBestQuality(State state) {
         TreeSet<Quality> qualities = new TreeSet<>();
         
-        for (Action action : actions) {
+        for (Action action : state.getActions()) {
             qualities.add(get(state, action));
         }
+        
         return qualities.last();
     }
 }

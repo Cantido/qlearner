@@ -39,7 +39,7 @@ public interface QualityMap {
         return Quality.ZERO;
     }
     
-    public default Quality getBestQuality(State state, Set<Action> actions) {
+    public default Quality getBestQuality(State state) {
         return Quality.ZERO;
     }
 }
