@@ -20,8 +20,9 @@
 	</organization>
 	<inceptionYear>2012</inceptionYear>
 	<properties>
-		<license.licenseName>gpl_v3</license.licenseName>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<license.licenseName>gpl_v3</license.licenseName>
+		<license.failOnMissingHeader>true</license.failOnMissingHeader>
 	</properties>
 	<build>
 		<pluginManagement>
@@ -69,9 +70,6 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>license-maven-plugin</artifactId>
 				<version>1.8</version>
-				<configuration>
-					<verbose>false</verbose>
-				</configuration>
 				<executions>
 					<execution>
 						<id>first</id>
