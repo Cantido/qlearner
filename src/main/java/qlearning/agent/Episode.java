@@ -136,7 +136,7 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
             
             pairs.add(new StateActionQuality(state, action, quality));
             
-            logger.debug("Potential action: {}, quality: {}", action.toString(), quality.toString());
+            logger.debug("Potential action: {}, quality: {}", action, quality);
         }
         return pairs;
     }
