@@ -65,27 +65,37 @@ public class GridWorldState implements State {
         return this.actions;
     }
 
+
+
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(107, 29)
-            .append(x)
-            .append(y)
-            .toHashCode();
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (actions.hashCode());
+        result = prime * result + (reward.hashCode());
+        result = prime * result + x;
+        result = prime * result + y;
+        return result;
     }
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (obj == null) { return false; }
-        if (obj == this) { return true; }
-        if (obj.getClass() != getClass()) {
+        if (this == obj)
+            return true;
+        if (obj == null)
             return false;
-        }
-        
-        GridWorldState rhs = (GridWorldState) obj;
-        return new EqualsBuilder()
-            .append(x, rhs.getX())
-            .append(y, rhs.getY())
-            .isEquals();
+        if (getClass() != obj.getClass())
+            return false;
+        GridWorldState other = (GridWorldState) obj;
+        if (!actions.equals(other.actions))
+            return false;
+        if (!reward.equals(other.reward))
+            return false;
+        if (x != other.x)
+            return false;
+        if (y != other.y)
+            return false;
+        return true;
     }
 
     @SuppressWarnings("null")

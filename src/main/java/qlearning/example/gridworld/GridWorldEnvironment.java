@@ -64,14 +64,43 @@ public class GridWorldEnvironment implements Environment {
 
     private int xState = startX;
     private int yState = startY;
+    
+    GridWorldState[][] states = {};
 
     public GridWorldEnvironment() {
         GridWorldAction.setGridWorld(this);
+        buildStateCache();
     }
 
     public void setSize(int totalX, int totalY) {
         this.maxX = totalX;
         this.maxY = totalY;
+        buildStateCache();
+    }
+    
+    private void buildStateCache() {
+        states = new GridWorldState[maxX+1][maxY+1];
+        
+        for(int x = minX; x < maxX+1; x++) {
+            for(int y = minY; y < maxY+1; y++) {
+                int rewardValue;
+                if (isGoalState(x, y)) {
+                    rewardValue = 10;
+                } else {
+                    rewardValue = -1;
+                }
+
+                Set<Action> actions = new HashSet<>();
+
+                if (x > minX) { actions.add(GridWorldAction.LEFT); }
+                if (x < maxX) { actions.add(GridWorldAction.RIGHT); }
+                if (y > minY) { actions.add(GridWorldAction.DOWN); }
+                if (y < maxY) {  actions.add(GridWorldAction.UP); }
+
+                GridWorldState state = new GridWorldState(x, y, new Reward(rewardValue), actions);
+                states[x][y] = state;
+            }
+        }
     }
 
     public void setStart(int x, int y) {
@@ -83,9 +112,13 @@ public class GridWorldEnvironment implements Environment {
         this.goalX = x;
         this.goalY = y;
     }
+    
+    private boolean isGoalState(int x, int y) {
+        return (x == goalX && y == goalY);
+    }
 
     public boolean isAtGoalState() {
-        return (xState == goalX && yState == goalY);
+        return isGoalState(xState, yState);
     }
 
     public void reset() {
@@ -122,27 +155,19 @@ public class GridWorldEnvironment implements Environment {
             throw new UnsupportedOperationException("Current at the boundary, cannot move any further");
         }
     }
+    
 
     @Override
     public State getState() {
-        int rewardValue;
-        if (isAtGoalState()) {
-            rewardValue = 10;
-        } else {
-            rewardValue = -1;
-        }
+        GridWorldState state = states[xState][yState];
 
-        Set<Action> actions = new HashSet<>();
-
-        if (xState > minX) { actions.add(GridWorldAction.LEFT); }
-        if (xState < maxX) { actions.add(GridWorldAction.RIGHT); }
-        if (yState > minY) { actions.add(GridWorldAction.DOWN); }
-        if (yState < maxY) {  actions.add(GridWorldAction.UP); }
-
-        GridWorldState state = new GridWorldState(this.xState, this.yState, new Reward(rewardValue), actions);
         logger.debug("Current environment: {}", this.toString());
         logger.debug("Returning state: {}", state);
 
+        if(state == null) {
+            throw new NullPointerException("State at position (" + xState + ", " + yState + ") was null");
+        }
+        
         return state;
     }
 
