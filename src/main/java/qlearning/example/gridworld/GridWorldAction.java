@@ -1,5 +1,7 @@
 package qlearning.example.gridworld;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /*
  * #%L
  * QLearner
@@ -29,12 +31,38 @@ import org.slf4j.LoggerFactory;
 import qlearning.Action;
 
 public enum GridWorldAction implements Action {
-    UP, DOWN, LEFT, RIGHT;
+    UP {
+        @Override
+        protected void performMove(@NonNull GridWorldEnvironment environment) {
+            environment.moveUp();
+        }
+    },
+    DOWN {
+        @Override
+        protected void performMove(@NonNull GridWorldEnvironment environment) {
+            environment.moveDown();
+        }
+    },
+    LEFT {
+        @Override
+        protected void performMove(@NonNull GridWorldEnvironment environment) {
+            environment.moveLeft();
+        }
+    },
+    RIGHT {
+        @Override
+        protected void performMove(@NonNull GridWorldEnvironment environment) {
+            environment.moveRight();
+        }
+    };
+    
 
     @SuppressWarnings("null")
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Nullable private static GridWorldEnvironment gridWorld;
+    
+    protected abstract void performMove(GridWorldEnvironment environment);
 
     public static void setGridWorld(GridWorldEnvironment gw) {
         gridWorld = gw;
@@ -48,21 +76,7 @@ public enum GridWorldAction implements Action {
         }
         
         logger.debug("Executing GridWorldAction {}", this);
-        switch (this) {
-            case UP:
-                gridWorld.moveUp();
-                break;
-            case DOWN:
-                gridWorld.moveDown();
-                break;
-            case LEFT:
-                gridWorld.moveLeft();
-                break;
-            case RIGHT:
-                gridWorld.moveRight();
-                break;
-            default:
-                throw new IllegalStateException("GridWorldAction not equal to any direction: " + this);
-        }
+        
+        performMove(gridWorld);
     }
 }
