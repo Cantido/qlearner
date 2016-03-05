@@ -64,7 +64,7 @@ public class GridWorldEnvironment implements Environment {
     private int yState = startY;
     
     GridWorldState currentState;
-    GridWorldState[][] states = {};
+    GridWorldState [][] states = {};
 
     public GridWorldEnvironment() {
         GridWorldAction.setGridWorld(this);
@@ -86,7 +86,7 @@ public class GridWorldEnvironment implements Environment {
     }
     
     private void buildStateCache() {
-        states = new GridWorldState[maxX+1][maxY+1];
+        GridWorldState [][] states = new GridWorldState [maxX+1][maxY+1];
         
         for(int x = minX; x < maxX+1; x++) {
             for(int y = minY; y < maxY+1; y++) {
@@ -108,19 +108,9 @@ public class GridWorldEnvironment implements Environment {
                 states[x][y] = state;
             }
         }
-        
-        updateCurrentState();
+        setStates(states);
     }
     
-    private void updateCurrentState() {
-        GridWorldState newCurrentState = states[xState][yState];
-        if(newCurrentState == null) {
-            throw new NullPointerException("State at position (" + xState + ", " + yState + ") was null");
-        }
-        
-        currentState = newCurrentState;
-    }
-
     public void setStart(int x, int y) {
         this.startX = x;
         this.startY = y;
@@ -131,11 +121,28 @@ public class GridWorldEnvironment implements Environment {
         this.goalY = y;
     }
     
+    private GridWorldState getState(int x, int y) {
+        GridWorldState state = states[x][y];
+        if(state == null){
+            throw new NullPointerException("State at position (" + x + ", " + y + ") was null");
+        }
+        return state;
+    }
+    
     private void setState(int x, int y) {
         xState = x;
         yState = y;
         
-        updateCurrentState();
+        setCurrentState(getState(xState, yState));
+    }
+    
+    private void setCurrentState(GridWorldState state) {
+        currentState = state;
+    }
+    
+    private void setStates(GridWorldState [][] states) {
+        this.states = states;
+        setCurrentState(getState(xState, yState));
     }
     
     private boolean isGoalState(int x, int y) {
