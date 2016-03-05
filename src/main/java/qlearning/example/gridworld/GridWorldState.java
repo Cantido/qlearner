@@ -36,6 +36,7 @@ public class GridWorldState implements State {
     private final Set<Action> actions;
     
     private final int hashCodeValue;
+    private final String toStringValue;
 
     public GridWorldState(int x, int y, Reward reward, Set<Action> actions) {
         this.x = x;
@@ -44,6 +45,7 @@ public class GridWorldState implements State {
         this.actions = actions;
         
         this.hashCodeValue = computeHashCode();
+        this.toStringValue = computeToString();
     }
 
     public int getX() {
@@ -99,9 +101,13 @@ public class GridWorldState implements State {
         return true;
     }
 
-    @SuppressWarnings("null")
     @Override
     public String toString() {
+        return toStringValue;
+    }
+    
+    @SuppressWarnings("null")
+    public String computeToString() {
         StringBuilder builder = new StringBuilder();
         builder.append("GridWorldState[")
                .append("X: ").append(x)
