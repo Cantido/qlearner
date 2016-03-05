@@ -25,8 +25,6 @@ package qlearning.example.gridworld;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,11 +63,20 @@ public class GridWorldEnvironment implements Environment {
     private int xState = startX;
     private int yState = startY;
     
+    GridWorldState currentState;
     GridWorldState[][] states = {};
 
     public GridWorldEnvironment() {
         GridWorldAction.setGridWorld(this);
         buildStateCache();
+        
+        // Redundant, but Eclipse won't yell at us about a null current state anymore
+        GridWorldState newCurrentState = states[xState][yState];
+        if(newCurrentState == null) {
+            throw new NullPointerException("State at position (" + xState + ", " + yState + ") was null");
+        }
+        
+        currentState = newCurrentState;
     }
 
     public void setSize(int totalX, int totalY) {
@@ -101,6 +108,17 @@ public class GridWorldEnvironment implements Environment {
                 states[x][y] = state;
             }
         }
+        
+        updateCurrentState();
+    }
+    
+    private void updateCurrentState() {
+        GridWorldState newCurrentState = states[xState][yState];
+        if(newCurrentState == null) {
+            throw new NullPointerException("State at position (" + xState + ", " + yState + ") was null");
+        }
+        
+        currentState = newCurrentState;
     }
 
     public void setStart(int x, int y) {
@@ -113,6 +131,13 @@ public class GridWorldEnvironment implements Environment {
         this.goalY = y;
     }
     
+    private void setState(int x, int y) {
+        xState = x;
+        yState = y;
+        
+        updateCurrentState();
+    }
+    
     private boolean isGoalState(int x, int y) {
         return (x == goalX && y == goalY);
     }
@@ -122,31 +147,30 @@ public class GridWorldEnvironment implements Environment {
     }
 
     public void reset() {
-        xState = startX;
-        yState = startY;
+        setState(startX, startY);
     }
 
     public void moveUp() {
         assertNotAtBoundary(yState, maxY);
-        yState++;
+        setState(xState, yState + 1);
         logger.debug("Moved to new Y = {}", yState);
     }
 
     public void moveDown() {
         assertNotAtBoundary(yState, minY);
-        yState--;
+        setState(xState, yState - 1);
         logger.debug("Moved to new Y = {}", yState);
     }
 
     public void moveLeft() {
         assertNotAtBoundary(xState, minX);
-        xState--;
+        setState(xState - 1, yState);
         logger.debug("Moved to new X = {}", xState);
     }
 
     public void moveRight() {
         assertNotAtBoundary(xState, maxX);
-        xState++;
+        setState(xState + 1, yState);
         logger.debug("Moved to new X = {}", xState);
     }
 
@@ -159,24 +183,14 @@ public class GridWorldEnvironment implements Environment {
 
     @Override
     public State getState() {
-        GridWorldState state = states[xState][yState];
-
         logger.debug("Current environment: {}", this.toString());
-        logger.debug("Returning state: {}", state);
-
-        if(state == null) {
-            throw new NullPointerException("State at position (" + xState + ", " + yState + ") was null");
-        }
+        logger.debug("Returning state: {}", currentState);
         
-        return state;
+        return currentState;
     }
 
-    @SuppressWarnings("null")
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
-            .append("X", xState)
-            .append("Y", yState)
-            .toString();
+        return "GridWorldEnvironment[Current state: " + currentState + "]";
     }
 }
