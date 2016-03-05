@@ -24,8 +24,6 @@ package qlearning.example.gridworld;
 
 import java.util.Set;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.eclipse.jdt.annotation.Nullable;
 
 import qlearning.Action;
@@ -104,11 +102,13 @@ public class GridWorldState implements State {
     @SuppressWarnings("null")
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .append("X", x)
-            .append("Y", y)
-            .append("reward", reward)
-            .append("actions", actions)
-            .toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append("GridWorldState[")
+               .append("X: ").append(x)
+               .append(", Y: ").append(y)
+               .append(", Reward: ").append(reward)
+               .append(", Actions: ").append(actions)
+               .append("]");
+        return builder.toString();
     }
 }
