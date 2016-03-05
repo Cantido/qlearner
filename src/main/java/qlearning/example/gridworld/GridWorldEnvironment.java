@@ -190,14 +190,18 @@ public class GridWorldEnvironment implements Environment {
 
     @Override
     public State getState() {
-        logger.debug("Current environment: {}", this.toString());
-        logger.debug("Returning state: {}", currentState);
+        logger.debug("Current environment: {}", this);
         
         return currentState;
     }
 
+    @SuppressWarnings("null")
     @Override
     public String toString() {
-        return "GridWorldEnvironment[Current state: " + currentState + "]";
+        StringBuilder builder = new StringBuilder();
+        builder.append("GridWorldEnvironment[Current state: ")
+               .append(currentState)
+               .append("]");
+        return builder.toString();
     }
 }
