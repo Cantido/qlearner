@@ -36,15 +36,19 @@ import qlearning.State;
 import qlearning.domain.Reward;
 
 public class GridWorldState implements State {
-    private int x, y;
-    private Reward reward;
-    private Set<Action> actions = new HashSet<>();
+    private final int x, y;
+    private final Reward reward;
+    private final Set<Action> actions;
+    
+    private final int hashCodeValue;
 
     public GridWorldState(int x, int y, Reward reward, Set<Action> actions) {
         this.x = x;
         this.y = y;
         this.reward = reward;
         this.actions = actions;
+        
+        this.hashCodeValue = computeHashCode();
     }
 
     public int getX() {
@@ -65,10 +69,7 @@ public class GridWorldState implements State {
         return this.actions;
     }
 
-
-
-    @Override
-    public int hashCode() {
+    private int computeHashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (actions.hashCode());
@@ -76,6 +77,11 @@ public class GridWorldState implements State {
         result = prime * result + x;
         result = prime * result + y;
         return result;
+    }
+    
+    @Override
+    public int hashCode() {
+        return this.hashCodeValue;
     }
 
     @Override
