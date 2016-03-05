@@ -61,7 +61,7 @@ public interface State {
      * 
      * @return all actions that can be taken
      */
-    default Set<Action> getActions() {
+    default Set<Runnable> getActions() {
         return new TreeSet<>();
     }
 }

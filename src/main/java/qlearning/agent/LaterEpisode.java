@@ -39,13 +39,12 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
  * from which to update a {@link Quality} value.
  */
 /* package-private */ class LaterEpisode extends Episode {
-    protected final Action previousAction;
+    protected final Runnable previousAction;
     protected final State previousState;
     
     public LaterEpisode(
             State previousState,
-            Action previousAction,
-            
+            Runnable previousAction,
             ExplorationStrategy explorationStrategy,
             QualityUpdateStrategy qualityUpdateStrategy,
             LearningRate learningRate,

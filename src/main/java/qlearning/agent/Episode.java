@@ -61,8 +61,13 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
     protected final QualityMap qualityMap;
     
     protected State currentState = State.NULL;
-    protected Set<Action> possibleNextActions = new TreeSet<>();
-    protected Action chosenNextAction = Action.NONE;
+    protected Set<Runnable> possibleNextActions = new TreeSet<>();
+    protected Runnable chosenNextAction = new Runnable() {
+        @Override
+        public void run() {
+            // Do nothing
+        }
+    };
     
     /**
      * Create an {@code Episode} that represents one iteration of the q-learning algorithm.
@@ -109,7 +114,7 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
         
         updateQuality();
         
-        chosenNextAction.execute();
+        chosenNextAction.run();
 
         return getNextEpisode();
     }
@@ -125,13 +130,13 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
      */
     protected abstract Episode getNextEpisode(); 
     
-    private Collection<StateActionQuality> buildTriplets(State state, Set<Action> possibleActions) {
+    private Collection<StateActionQuality> buildTriplets(State state, Set<Runnable> possibleActions) {
     	assert(state != null) : "state must not be null";
     	assert(possibleActions != null) : "possibleActions must not be null";
     	
         Collection<StateActionQuality> pairs = new ArrayList<>(possibleActions.size());
         
-        for(Action action : possibleActions) {
+        for(Runnable action : possibleActions) {
             Quality quality = qualityMap.get(state, action);
             
             pairs.add(new StateActionQuality(state, action, quality));
@@ -145,7 +150,7 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
         return Validate.notNull(state, "Current state cannot be null");
     }
     
-    private static Set<Action> validatePossibleNextActions(Set<Action> nextActions) {
+    private static Set<Runnable> validatePossibleNextActions(Set<Runnable> nextActions) {
         Validate.notNull(nextActions,
                 "The list of possible actions from a state cannot be null. " +
                 "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
@@ -162,7 +167,7 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
      * 
      * @throws NullPointerException of the given {@code Action} is null
      */
-    private static Action validateNextAction(Action nextAction) {
+    private static Runnable validateNextAction(Runnable nextAction) {
         Validate.notNull(nextAction, 
                 "The action returned by the ExplorationStrategy cannot be null." +
                 "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");

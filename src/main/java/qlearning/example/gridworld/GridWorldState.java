@@ -26,19 +26,18 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import qlearning.Action;
 import qlearning.State;
 import qlearning.domain.Reward;
 
 public class GridWorldState implements State {
     private final int x, y;
     private final Reward reward;
-    private final Set<Action> actions;
+    private final Set<Runnable> actions;
     
     private final int hashCodeValue;
     private final String toStringValue;
 
-    public GridWorldState(int x, int y, Reward reward, Set<Action> actions) {
+    public GridWorldState(int x, int y, Reward reward, Set<Runnable> actions) {
         this.x = x;
         this.y = y;
         this.reward = reward;
@@ -62,7 +61,7 @@ public class GridWorldState implements State {
     }
 
     @Override
-    public Set<Action> getActions() {
+    public Set<Runnable> getActions() {
         return this.actions;
     }
 

@@ -32,10 +32,10 @@ import qlearning.quality.Quality;
 public interface QualityMap {
     public static final QualityMap BLACK_HOLE = new QualityMap() { /* Use default behavior */ };
     
-    public default void put(State state, Action action, Quality quality) {
+    public default void put(State state, Runnable action, Quality quality) {
         /* Do nothing */
     }
-    public default Quality get(State state, Action action) {
+    public default Quality get(State state, Runnable action) {
         return Quality.ZERO;
     }
     

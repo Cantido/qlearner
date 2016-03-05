@@ -38,14 +38,18 @@ import qlearning.agent.Agent;
  * are seen as equivalent, then the system will not work correctly. For example, if you are moving a game piece on a
  * board, make sure that "up" means the same "up" everywhere!
  * <p>
+ * <p>
+ * Implementations of {@link Runnable} can be used anywhere that an {@link Action} can be used. This interface
+ * is mostly intended for documentation. If your {@code Runnable}s spawn new threads, be careful of the QLearning
+ * system interacting with the {@link Environment} is thread-safe, lest your Runnable manipulates the Environment
+ * while the Agent is trying to get the next State from it
+ * </p>
  */
-public interface Action {
-    public static Action NONE = new Action() { /* default behavior */ };
-    
+@FunctionalInterface
+public interface Action extends Runnable {
     /**
      * Perform the activity that this object represents.
      */
-    default void execute() {
-        /* Do nothing */
-    }
+    @Override
+    void run();
 }

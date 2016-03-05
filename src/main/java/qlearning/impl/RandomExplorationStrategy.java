@@ -79,9 +79,9 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
      * @see RandomExplorationStrategy#setExplorationFactor(ExplorationFactor)
      */
     @Override
-    public Action getNextAction(Collection<StateActionQuality> stateActionQualities) {
+    public Runnable getNextAction(Collection<StateActionQuality> stateActionQualities) {
         
-        Action nextAction;
+        Runnable nextAction;
         
         Double checkValue = random.nextDouble();
         
@@ -97,14 +97,14 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
     }
     
     
-    private Action getBestAction(Collection<StateActionQuality> stateActionQualities) {
+    private Runnable getBestAction(Collection<StateActionQuality> stateActionQualities) {
     	assert(stateActionQualities != null) : "stateActionQualities must not be null";
     	
         logger.debug("Determining best action from possible actions: {}", stateActionQualities);
         return Collections.max(stateActionQualities).getAction();
     }
 
-    private Action getRandomAction(Collection<StateActionQuality> stateActionQualities) {
+    private Runnable getRandomAction(Collection<StateActionQuality> stateActionQualities) {
     	assert(stateActionQualities != null) : "stateActionQualities must not be null";
     	
         Integer randomIndex = random.nextInt(stateActionQualities.size());

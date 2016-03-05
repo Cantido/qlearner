@@ -31,15 +31,11 @@ import qlearning.quality.Quality;
  * The algorithm that is used to determine the next {@link Action} to take.
  */
 public interface ExplorationStrategy {
-    public static final ExplorationStrategy SIT_THERE = new ExplorationStrategy() { /* Use default implementation */};
-    
     /**
      * Pick the next {@link Action} to take
      * 
      * @param stateActionQualities {@link State}-{@link Action} pairs and their associated {@link Quality Qualities}
      * @return the chosen action
      */
-    public default Action getNextAction(@SuppressWarnings("unused") Collection<StateActionQuality> stateActionQualities) {
-        return Action.NONE;
-    }
+    public Runnable getNextAction(Collection<StateActionQuality> stateActionQualities);
 }

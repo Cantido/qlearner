@@ -85,7 +85,7 @@ public class RandomExplorationStrategyTest {
     public void getBestAction() {
         when(explorationFactor.shouldExplore(anyDouble())).thenReturn(false);
         
-        Action actualAction = strategy.getNextAction(stateActionQualities);
+        Runnable actualAction = strategy.getNextAction(stateActionQualities);
         
         assertThat(actualAction, is(goodAction));
     }
@@ -94,7 +94,7 @@ public class RandomExplorationStrategyTest {
     public void getRandomAction() {
         when(explorationFactor.shouldExplore(anyDouble())).thenReturn(true);
         
-        Action actualAction = strategy.getNextAction(stateActionQualities);
+        Runnable actualAction = strategy.getNextAction(stateActionQualities);
         
         assertThat(actualAction, isOneOf(goodAction, badAction));
     }

@@ -35,10 +35,10 @@ import qlearning.quality.Quality;
  */
 public class StateActionQuality implements Comparable<StateActionQuality> {
     private final State state;
-    private final Action action;
+    private final Runnable action;
     private final Quality quality;
     
-    public StateActionQuality(State state, Action action, Quality quality) {
+    public StateActionQuality(State state, Runnable action, Quality quality) {
         this.state = state;
         this.action = action;
         this.quality = quality;
@@ -48,7 +48,7 @@ public class StateActionQuality implements Comparable<StateActionQuality> {
         return this.state;
     }
     
-    public Action getAction() {
+    public Runnable getAction() {
         return this.action;
     }
     

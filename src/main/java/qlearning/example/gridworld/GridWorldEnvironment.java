@@ -28,7 +28,6 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import qlearning.Action;
 import qlearning.Environment;
 import qlearning.State;
 import qlearning.agent.Agent;
@@ -67,7 +66,6 @@ public class GridWorldEnvironment implements Environment {
     GridWorldState [][] states = {};
 
     public GridWorldEnvironment() {
-        GridWorldAction.setGridWorld(this);
         buildStateCache();
         
         // Redundant, but Eclipse won't yell at us about a null current state anymore
@@ -97,12 +95,12 @@ public class GridWorldEnvironment implements Environment {
                     rewardValue = -1;
                 }
 
-                Set<Action> actions = new HashSet<>();
+                Set<Runnable> actions = new HashSet<>(4);
 
-                if (x > minX) { actions.add(GridWorldAction.LEFT); }
-                if (x < maxX) { actions.add(GridWorldAction.RIGHT); }
-                if (y > minY) { actions.add(GridWorldAction.DOWN); }
-                if (y < maxY) {  actions.add(GridWorldAction.UP); }
+                if (x > minX) { actions.add(this::moveLeft); }
+                if (x < maxX) { actions.add(this::moveRight); }
+                if (y > minY) { actions.add(this::moveDown); }
+                if (y < maxY) {  actions.add(this::moveUp); }
 
                 GridWorldState state = new GridWorldState(x, y, new Reward(rewardValue), actions);
                 states[x][y] = state;
@@ -150,7 +148,12 @@ public class GridWorldEnvironment implements Environment {
     }
 
     public boolean isAtGoalState() {
-        return isGoalState(xState, yState);
+        /*
+         * Don't delegate to #isGoalState. This method is called at every iteration,
+         * so it needs to be blazing fast. Eliminating that method call significantly
+         * reduced the amount of time spent on this method.
+         */
+        return (xState == goalX && yState == goalY);
     }
 
     public void reset() {

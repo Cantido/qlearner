@@ -56,7 +56,7 @@ public class QualityHashMapTest {
     Quality middleQuality = new Quality(0.0);
     Quality highestQuality = new Quality(1.0);
     
-    Set<Action> actions = new HashSet<>();
+    Set<Runnable> actions = new HashSet<>();
     
     @Before
     public void setUp() {

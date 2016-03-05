@@ -28,12 +28,11 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
-import qlearning.Action;
 import qlearning.State;
 import qlearning.quality.Quality;
 
 public class QualityHashMap implements QualityMap {
-    private final Map<ImmutablePair<State, Action>, Quality> qualities;
+    private final Map<ImmutablePair<State, Runnable>, Quality> qualities;
     private Quality defaultQuality = Quality.ZERO;
     
     public QualityHashMap() {
@@ -57,14 +56,14 @@ public class QualityHashMap implements QualityMap {
     }
     
     @Override
-    public void put(State state, Action action, Quality quality) {
+    public void put(State state, Runnable action, Quality quality) {
         qualities.put(new ImmutablePair<>(state, action), quality);
     }
 
     @Override
-    public Quality get(State state, Action action) {
+    public Quality get(State state, Runnable action) {
         Quality qualityToGet;
-        ImmutablePair<State, Action> pair = new ImmutablePair<>(state, action);
+        ImmutablePair<State, Runnable> pair = new ImmutablePair<>(state, action);
 
         if (qualities.containsKey(pair)) {
             qualityToGet = qualities.get(pair);
@@ -80,7 +79,7 @@ public class QualityHashMap implements QualityMap {
     public Quality getBestQuality(State state) {
         TreeSet<Quality> qualities = new TreeSet<>();
         
-        for (Action action : state.getActions()) {
+        for (Runnable action : state.getActions()) {
             qualities.add(get(state, action));
         }
         
