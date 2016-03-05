@@ -23,18 +23,17 @@ import qlearning.Action;
 import qlearning.State;
 import qlearning.quality.Quality;
 
+@SuppressWarnings("unused")
 public interface QualityMap {
     public static final QualityMap BLACK_HOLE = new QualityMap() { /* Use default behavior */ };
     
-    @SuppressWarnings("unused")
     public default void put(State state, Action action, Quality quality) {
         /* Do nothing */
     }
-    @SuppressWarnings("unused")
     public default Quality get(State state, Action action) {
         return Quality.ZERO;
     }
-    @SuppressWarnings("unused")
+    
     public default Quality getBestQuality(State state, Set<Action> actions) {
         return Quality.ZERO;
     }
