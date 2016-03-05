@@ -75,8 +75,6 @@ public class Quality implements Comparable<Quality> {
           return false;
         }
         Quality rhs = (Quality) obj;
-        return new EqualsBuilder()
-                      .append(toDouble(), rhs.toDouble())
-                      .isEquals();
+        return value == rhs.value;
     }
 }
