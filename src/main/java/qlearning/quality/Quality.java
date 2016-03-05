@@ -22,7 +22,6 @@ package qlearning.quality;
  * #L%
  */
 
-import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.eclipse.jdt.annotation.Nullable;
@@ -32,7 +31,7 @@ import qlearning.domain.Reward;
 /**
  * The learned value of a {@link State}-{@link Action} pair's potential for future {@link Reward}s
  */
-public class Quality implements Comparable<Object> {
+public class Quality implements Comparable<Quality> {
     public static final Quality ZERO = new Quality(0.0);
     public static final Quality MIN = new Quality(Double.NEGATIVE_INFINITY);
     public static final Quality MAX = new Quality(Double.POSITIVE_INFINITY);
@@ -57,8 +56,8 @@ public class Quality implements Comparable<Object> {
     }
 
     @Override
-    public int compareTo(Object o) {
-        return CompareToBuilder.reflectionCompare(this, o);
+    public int compareTo(Quality o) {
+        return value.compareTo(o.value);
     }
 
     @Override
