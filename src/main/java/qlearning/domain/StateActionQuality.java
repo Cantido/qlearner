@@ -89,6 +89,6 @@ public class StateActionQuality implements Comparable<StateActionQuality> {
 
     @Override
     public int compareTo(StateActionQuality o) {
-        return quality.compareTo(o.getQuality());
+        return quality.compareTo(o.quality);
     }
 }
