@@ -1,5 +1,7 @@
 package qlearning.agent;
 
+import java.util.concurrent.Executor;
+
 /*
  * #%L
  * QLearner
@@ -22,15 +24,18 @@ package qlearning.agent;
  * #L%
  */
 
-import org.apache.commons.lang3.Validate;
-
 import qlearning.Action;
 import qlearning.Environment;
 import qlearning.ExplorationStrategy;
 import qlearning.State;
+import qlearning.agent.executors.DirectExecutor;
 import qlearning.domain.DiscountFactor;
+import qlearning.domain.ExplorationFactor;
 import qlearning.domain.LearningRate;
+import qlearning.impl.RandomExplorationStrategy;
+import qlearning.quality.map.QualityHashMap;
 import qlearning.quality.map.QualityMap;
+import qlearning.quality.strategy.BackwardInduction;
 import qlearning.quality.strategy.QualityUpdateStrategy;
 
 /**
@@ -40,37 +45,112 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
  * Q-learning algorithm to pick the optimal {@code Action} to take while in each {@code State}.
  */
 public class Agent {
+    /**
+     * Builds {@link Agent} objects using the Builder pattern:
+     * 
+     * <pre>
+     * Agent agent = 
+     *  new AgentBuilder()
+     *        .setEnvironment(environment)
+     *        .setExplorationStrategy(EXPLORATION_STRATEGY)
+     *        .setLearningRate(LEARNING_RATE)
+     *        .setDiscountFactor(DISCOUNT_FACTOR)
+     *        .setQualityMap(qualityMap)
+     *        .getAgent();
+     * </pre>
+     */
+    public static class AgentBuilder {
+        private static final ExplorationFactor DEFAULT_EXPLORATION_FACTOR = new ExplorationFactor(0.2);
+        
+        private Environment environment;
+        private Executor actionExecutor = new DirectExecutor();
+        private DiscountFactor discountFactor = new DiscountFactor(1);
+        private ExplorationStrategy explorationStrategy = new RandomExplorationStrategy(DEFAULT_EXPLORATION_FACTOR);
+        private LearningRate learningRate = new LearningRate(1);
+        private QualityMap qualityMap = new QualityHashMap();
+        private QualityUpdateStrategy qualityUpdateStrategy = new BackwardInduction();
+
+        public AgentBuilder(Environment environment) {
+            this.environment = environment;
+        }
+
+        public Executor getActionExecutor() {
+            return actionExecutor;
+        }
+        public Agent getAgent() {
+            return new Agent(this);
+        }
+        public DiscountFactor getDiscountFactor() {
+            return discountFactor;
+        }
+        public Environment getEnvironment() {
+            return environment;
+        }
+        public ExplorationStrategy getExplorationStrategy() {
+            return explorationStrategy;
+        }
+        public LearningRate getLearningRate() {
+            return learningRate;
+        }
+        public QualityMap getQualityMap() {
+            return qualityMap;
+        }
+        
+        public QualityUpdateStrategy getQualityUpdateStrategy() {
+            return qualityUpdateStrategy;
+        }
+        
+        public void setActionExecutor(Executor actionExecutor) {
+            this.actionExecutor = actionExecutor;
+        }
+
+        public AgentBuilder setDiscountFactor(DiscountFactor discountFactor) {
+            this.discountFactor = discountFactor;
+            return this;
+        }
+
+        public AgentBuilder setEnvironment(Environment environment) {
+            this.environment = environment;
+            return this;
+        }
+
+        public AgentBuilder setExecutor(Executor executor) {
+            this.actionExecutor = executor;
+            return this;
+        }
+
+        public AgentBuilder setExplorationStrategy(ExplorationStrategy explorationStrategy) {
+            this.explorationStrategy = explorationStrategy;
+            return this;
+        }
+
+        public AgentBuilder setLearningRate(LearningRate learningRate) {
+            this.learningRate = learningRate;
+            return this;
+        }
+        
+        public AgentBuilder setQualityMap(QualityMap qualityMap) {
+            this.qualityMap = qualityMap;
+            return this;
+        }
+
+        public AgentBuilder setQualityUpdateStrategy(QualityUpdateStrategy qualityUpdateStrategy) {
+            this.qualityUpdateStrategy = qualityUpdateStrategy;
+            return this;
+        }
+    }
+    
     private final Environment environment;
-    private final ExplorationStrategy explorationStrategy;
-    private final QualityUpdateStrategy qualityUpdateStrategy;
-    private final LearningRate learningRate;
-    private final DiscountFactor discountFactor;
-    private final QualityMap qualityMap;
+    
+    private final AgentBuilder builder;
     
     private Episode currentEpisode;
     
-    public Agent(Environment environment,
-            ExplorationStrategy explorationStrategy,
-            QualityUpdateStrategy qualityUpdateStrategy,
-            LearningRate learningRate,
-            DiscountFactor discountFactor,
-            QualityMap qualityMap) {
-
-        Validate.notNull(environment, "Environment cannot be null");
-        Validate.notNull(explorationStrategy, "LearningRate cannot be null");
-        Validate.notNull(learningRate, "DiscountFactor cannot be null");
-        Validate.notNull(discountFactor, "ExplorationStrategy cannot be null");
-        Validate.notNull(qualityUpdateStrategy, "QualityUpdateStrategy cannot be null");
-        Validate.notNull(qualityMap, "QualityMap cannot be null");
+    private Agent(AgentBuilder agentBuilder) {
+        this.builder = agentBuilder;
         
-        this.environment = environment;
-        this.explorationStrategy = explorationStrategy;
-        this.qualityUpdateStrategy = qualityUpdateStrategy;
-        this.learningRate = learningRate;
-        this.discountFactor = discountFactor;
-        this.qualityMap = qualityMap;
-        
-        this.currentEpisode = new FirstEpisode(explorationStrategy, qualityUpdateStrategy, learningRate, discountFactor, qualityMap);
+        this.environment = agentBuilder.environment;
+        this.currentEpisode = new FirstEpisode(builder);
     }
 
     /**
@@ -83,7 +163,7 @@ public class Agent {
      * </p>
      */
     public void resetState() {
-        this.currentEpisode = new FirstEpisode(explorationStrategy, qualityUpdateStrategy, learningRate, discountFactor, qualityMap);
+        this.currentEpisode = new FirstEpisode(builder);
     }
 
     /**

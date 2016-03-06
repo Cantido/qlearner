@@ -1,4 +1,4 @@
-package qlearning;
+package qlearning.agent.executors;
 
 /*
  * #%L
@@ -22,21 +22,21 @@ package qlearning;
  * #L%
  */
 
+
+import java.util.concurrent.Executor;
+
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
- * The space in which {@link Action}s can be performed.
- * <p>
- * This library assumes that taking actions using {@link Action#execute()} somehow changes the state of the environment.
- * This relationship could be implemented in code, as in our Gridworld example, or in meatspace, as in a learning robot
- * or smart home thermostat system. In other words, the {@code Environment} encapsulates the input to this system, while
- * the Actions encapsulate the output.
+ * An {@link Executor} that just runs the given {@link Runnable}
+ * in the same thread. Probably the simplest possible implementation.
  */
-public interface Environment {
-    /**
-     * Get the current {@link State} of the environment.
-     * 
-     * @see State
-     * 
-     * @return the environment's current state
-     */
-	public State getState();
+public class DirectExecutor implements Executor {
+    @Override
+    public void execute(@Nullable Runnable command) {
+        if(command == null) {
+            throw new NullPointerException("Cannot execute a null command");
+        }
+        command.run();
+    }
 }

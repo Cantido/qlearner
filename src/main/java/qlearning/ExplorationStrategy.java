@@ -37,5 +37,5 @@ public interface ExplorationStrategy {
      * @param stateActionQualities {@link State}-{@link Action} pairs and their associated {@link Quality Qualities}
      * @return the chosen action
      */
-    public Runnable getNextAction(Collection<StateActionQuality> stateActionQualities);
+    public Action getNextAction(Collection<StateActionQuality> stateActionQualities);
 }

@@ -28,7 +28,7 @@ import java.time.Instant;
 
 import qlearning.ExplorationStrategy;
 import qlearning.agent.Agent;
-import qlearning.agent.AgentBuilder;
+import qlearning.agent.Agent.AgentBuilder;
 import qlearning.domain.DiscountFactor;
 import qlearning.domain.ExplorationFactor;
 import qlearning.domain.LearningRate;
@@ -43,7 +43,7 @@ public class GridWorldPerformanceTest {
 
     public static void main(String[] args) {
         GridWorldEnvironment environment = new GridWorldEnvironment(10, 10, 0, 0, 10, 10);
-        QualityMap qualityMap = new QualityHashMap(400);
+        QualityMap qualityMap = new QualityHashMap(100, 4);
         QualityUpdateStrategy qualityUpdateStrategy = new BackwardInduction();
         
         ExplorationFactor EXPLORATION_FACTOR = new ExplorationFactor(0.1);

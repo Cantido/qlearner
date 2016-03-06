@@ -1,5 +1,7 @@
 package qlearning;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 /*
  * #%L
  * QLearner
@@ -39,17 +41,21 @@ import qlearning.agent.Agent;
  * board, make sure that "up" means the same "up" everywhere!
  * <p>
  * <p>
- * Implementations of {@link Runnable} can be used anywhere that an {@link Action} can be used. This interface
- * is mostly intended for documentation. If your {@code Runnable}s spawn new threads, be careful of the QLearning
+ * You can use this class to wrap your own {@code Runnable} classes. If your {@code Runnable}s spawn new threads, be careful of the QLearning
  * system interacting with the {@link Environment} is thread-safe, lest your Runnable manipulates the Environment
- * while the Agent is trying to get the next State from it
+ * while the Agent is trying to get the next State from it.
  * </p>
  */
-@FunctionalInterface
-public interface Action extends Runnable {
+public abstract class Action implements Runnable {
     /**
      * Perform the activity that this object represents.
      */
     @Override
-    void run();
+    public abstract void run();
+    
+    @Override
+    public abstract int hashCode();
+    
+    @Override
+    public abstract boolean equals(@Nullable Object other);
 }

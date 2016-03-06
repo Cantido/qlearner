@@ -1,5 +1,8 @@
 package qlearning.quality;
 
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
 /*
  * #%L
  * QLearner
@@ -23,6 +26,7 @@ package qlearning.quality;
  */
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import qlearning.domain.Reward;
@@ -31,6 +35,22 @@ import qlearning.domain.Reward;
  * The learned value of a {@link State}-{@link Action} pair's potential for future {@link Reward}s
  */
 public class Quality implements Comparable<Quality> {
+    private static class ReverseOrder implements Comparator<Quality> {
+        @Override
+        public int compare(@NonNull Quality o1, @NonNull Quality o2) {
+            return Double.compare(o2.value, o1.value);
+        }
+    }
+    
+    /**
+     * A {@link Comparator} sorts {@link Quality} objects in reverse order
+     * from their natural ordering.
+     * 
+     * When used in a {@link PriorityQueue}, then the highest quality
+     * will be at the top of the queue.
+     */
+    public static final Comparator<Quality> DESCENDING_ORDER = new ReverseOrder();
+    
     public static final Quality ZERO = new Quality(0.0);
     public static final Quality MIN = new Quality(Double.NEGATIVE_INFINITY);
     public static final Quality MAX = new Quality(Double.POSITIVE_INFINITY);

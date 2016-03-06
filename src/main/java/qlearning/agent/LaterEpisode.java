@@ -22,47 +22,36 @@ package qlearning.agent;
  * #L%
  */
 
-import org.apache.commons.lang3.Validate;
-
 import qlearning.Action;
-import qlearning.ExplorationStrategy;
 import qlearning.State;
-import qlearning.domain.DiscountFactor;
-import qlearning.domain.LearningRate;
+import qlearning.agent.Agent.AgentBuilder;
 import qlearning.domain.Reward;
 import qlearning.quality.Quality;
-import qlearning.quality.map.QualityMap;
-import qlearning.quality.strategy.QualityUpdateStrategy;
 
 /**
  * An iteration of the q-learning algorithm that has a previous {@link State} and {@link Action}
  * from which to update a {@link Quality} value.
  */
 /* package-private */ class LaterEpisode extends Episode {
-    protected final Runnable previousAction;
+    protected final Action previousAction;
     protected final State previousState;
     
-    public LaterEpisode(
-            State previousState,
-            Runnable previousAction,
-            ExplorationStrategy explorationStrategy,
-            QualityUpdateStrategy qualityUpdateStrategy,
-            LearningRate learningRate,
-            DiscountFactor discountFactor,
-            QualityMap qualityMap) {
-        
-        super(explorationStrategy, qualityUpdateStrategy, learningRate, discountFactor, qualityMap);
-        
-        this.previousState = Validate.notNull(previousState, "Previous state cannot be null");
-        this.previousAction = Validate.notNull(previousAction, "Previous action cannot be null");
+    public LaterEpisode(State previousState, Action chosenNextAction, AgentBuilder builder) {
+        super(builder);
+        this.previousState = previousState;
+        this.previousAction = chosenNextAction;
     }
-    
-    
+
     /**
      * Update the quality of the previous state-action pair, given the desirability of the new state
      */
     @Override
     protected void updateQuality() {
+        State currentState = this.currentState;
+        if(currentState == null) {
+            throw new NullPointerException("Chosen next action was null");
+        }
+        
         Quality oldQuality = qualityMap.get(this.previousState, this.previousAction);
         Reward reward = currentState.getReward();
         Quality optimalFutureValueEstimate = qualityMap.getBestQuality(currentState);
@@ -81,13 +70,17 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
 
     @Override
     protected Episode getNextEpisode() {
+        Action nextAction = chosenNextAction;
+        if(nextAction == null) {
+            throw new NullPointerException("Chosen next action was null");
+        }
+        State currentState = this.currentState;
+        if(currentState == null) {
+            throw new NullPointerException("Chosen next action was null");
+        }
         return new LaterEpisode(
                 currentState,
-                chosenNextAction,
-                explorationStrategy,
-                qualityUpdateStrategy,
-                learningRate,
-                discountFactor,
-                qualityMap);
+                nextAction,
+                builder);
     }
 }

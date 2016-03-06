@@ -22,8 +22,6 @@ package qlearning.domain;
  * #L%
  */
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.eclipse.jdt.annotation.Nullable;
 
 import qlearning.Action;
@@ -35,10 +33,10 @@ import qlearning.quality.Quality;
  */
 public class StateActionQuality implements Comparable<StateActionQuality> {
     private final State state;
-    private final Runnable action;
+    private final Action action;
     private final Quality quality;
     
-    public StateActionQuality(State state, Runnable action, Quality quality) {
+    public StateActionQuality(State state, Action action, Quality quality) {
         this.state = state;
         this.action = action;
         this.quality = quality;
@@ -48,7 +46,7 @@ public class StateActionQuality implements Comparable<StateActionQuality> {
         return this.state;
     }
     
-    public Runnable getAction() {
+    public Action getAction() {
         return this.action;
     }
     
@@ -57,29 +55,38 @@ public class StateActionQuality implements Comparable<StateActionQuality> {
     }
     
     @Override
-    public int hashCode() {
-        return new HashCodeBuilder(47, 61)
-                .append(state)
-                .append(action)
-                .append(quality)
-                .toHashCode();
+    public String toString() {
+        return "StateActionQuality [state=" + state + ", action=" + action + ", quality=" + quality + "]";
     }
-    
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + action.hashCode();
+        result = prime * result + quality.hashCode();
+        result = prime * result + state.hashCode();
+        return result;
+    }
+
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (obj == null) { return false; }
-        if (obj == this) { return true; }
-        if (obj.getClass() != getClass()) {
-          return false;
-        }
-        StateActionQuality rhs = (StateActionQuality) obj;
-        return new EqualsBuilder()
-                      .append(quality, rhs.getQuality())
-                      .append(state, rhs.getState())
-                      .append(action, rhs.getAction())
-                      .isEquals();
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        StateActionQuality other = (StateActionQuality) obj;
+        if (!action.equals(other.action))
+            return false;
+        if (!quality.equals(other.quality))
+            return false;
+        if (!state.equals(other.state))
+            return false;
+        return true;
     }
-    
+
     @Override
     public int compareTo(StateActionQuality o) {
         return quality.compareTo(o.getQuality());

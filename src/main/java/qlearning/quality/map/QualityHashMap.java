@@ -24,65 +24,90 @@ package qlearning.quality.map;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeSet;
+import java.util.PriorityQueue;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
+import qlearning.Action;
 import qlearning.State;
 import qlearning.quality.Quality;
 
 public class QualityHashMap implements QualityMap {
-    private final Map<ImmutablePair<State, Runnable>, Quality> qualities;
+    private final int EXPECTED_AVERAGE_ACTIONS_PER_STATE;
+    
+    /**
+     * Mapping of State-Action pairs to their Quality value
+     */
+    private final Map<ImmutablePair<State, Runnable>, Quality> actionQualities;
+    /**
+     * An optimization; stores the best quality for each state
+     * 
+     * Be careful if you are changing this data structure: it is possible
+     * to have two equivalent quality values for a given state,
+     * and then when we update any of the actions with that quality,
+     * we would lose that quality for all actions.
+     */
+    private final Map<State, PriorityQueue<Quality>> bestQualities;
     private Quality defaultQuality = Quality.ZERO;
     
     public QualityHashMap() {
-        qualities = new HashMap<>();
+        // Will just match the default PriorityQueue size
+        EXPECTED_AVERAGE_ACTIONS_PER_STATE = 11;
+        actionQualities = new HashMap<>();
+        bestQualities = new HashMap<>();
     }
     
-    public QualityHashMap(int intialCapacity) {
-        qualities = new HashMap<>(intialCapacity);
-    }
-    
-    public QualityHashMap(int intialCapacity, float loadFactor) {
-        qualities = new HashMap<>(intialCapacity, loadFactor);
+    public QualityHashMap(int expectedStates, int actionsPerState) {
+        EXPECTED_AVERAGE_ACTIONS_PER_STATE = actionsPerState;
+        actionQualities = new HashMap<>(expectedStates * actionsPerState);
+        bestQualities = new HashMap<>(expectedStates);
     }
     
     public void setDefaultQuality(Quality defaultQuality) {
         this.defaultQuality = defaultQuality;
     }
     
+    @Override
     public Quality getDefaultQuality() {
         return this.defaultQuality;
     }
     
     @Override
-    public void put(State state, Runnable action, Quality quality) {
-        qualities.put(new ImmutablePair<>(state, action), quality);
+    public void put(State state, Action action, Quality quality) {
+        Quality oldQuality = get(state, action);
+        
+        actionQualities.put(new ImmutablePair<>(state, action), quality);
+        
+        PriorityQueue<Quality> queueToUpdate;
+        
+        if(bestQualities.containsKey(state)) {
+            queueToUpdate = bestQualities.get(state);
+            queueToUpdate.remove(oldQuality);
+        } else {
+            queueToUpdate = new PriorityQueue<>(EXPECTED_AVERAGE_ACTIONS_PER_STATE, Quality.DESCENDING_ORDER);
+            bestQualities.put(state, queueToUpdate);
+        }
+        
+        queueToUpdate.add(quality);
     }
 
+    @SuppressWarnings({ "unused", "null" })
     @Override
-    public Quality get(State state, Runnable action) {
-        Quality qualityToGet;
-        ImmutablePair<State, Runnable> pair = new ImmutablePair<>(state, action);
-
-        if (qualities.containsKey(pair)) {
-            qualityToGet = qualities.get(pair);
-
-        } else {
-            qualityToGet = defaultQuality;
+    public Quality get(State state, Action action) {
+        Quality quality = actionQualities.get(new ImmutablePair<>(state, action));
+        
+        if(quality == null) {
+            return defaultQuality;
         }
-
-        return qualityToGet;
+        
+        return quality;
     }
     
     @Override
     public Quality getBestQuality(State state) {
-        TreeSet<Quality> qualities = new TreeSet<>();
-        
-        for (Runnable action : state.getActions()) {
-            qualities.add(get(state, action));
+        if(bestQualities.containsKey(state)) {
+            return bestQualities.get(state).peek();
         }
-        
-        return qualities.last();
+        return defaultQuality;
     }
 }

@@ -38,7 +38,7 @@ import org.junit.rules.Timeout;
 
 import qlearning.ExplorationStrategy;
 import qlearning.agent.Agent;
-import qlearning.agent.AgentBuilder;
+import qlearning.agent.Agent.AgentBuilder;
 import qlearning.domain.DiscountFactor;
 import qlearning.domain.ExplorationFactor;
 import qlearning.domain.LearningRate;
@@ -54,10 +54,10 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
  * converges on the goal state.
  */
 @NonNullByDefault({})
-public class GridWorldConvergenceTest {
+public class GridWorldIntegrationTest {
 
 	@Rule
-	public Timeout timeout = Timeout.seconds(1);
+	public Timeout timeout = Timeout.seconds(10);
 
 	private Agent agent;
 	

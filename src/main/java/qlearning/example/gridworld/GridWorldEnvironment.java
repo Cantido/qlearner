@@ -28,10 +28,15 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import qlearning.Action;
 import qlearning.Environment;
 import qlearning.State;
 import qlearning.agent.Agent;
 import qlearning.domain.Reward;
+import qlearning.example.gridworld.actions.Down;
+import qlearning.example.gridworld.actions.Left;
+import qlearning.example.gridworld.actions.Right;
+import qlearning.example.gridworld.actions.Up;
 
 /**
  * An implementation of Q-Learning that moves an agent through a grid from a starting {@code State} to a goal
@@ -46,6 +51,7 @@ import qlearning.domain.Reward;
 public class GridWorldEnvironment implements Environment {
     @SuppressWarnings("null")
     private Logger logger = LoggerFactory.getLogger(getClass());
+    
 
     private final int maxX;
     private final int maxY;
@@ -64,6 +70,26 @@ public class GridWorldEnvironment implements Environment {
     private int xState;
     private int yState;
     private GridWorldState currentState;
+    
+    /**
+     * More positive in the Y direction (away from zero)
+     */
+    private final Up UP = new Up(this);
+    
+    /**
+     * Less positive in the Y direction (toward zero)
+     */
+    private final Down DOWN = new Down(this);
+    
+    /**
+     * Less positive in the X direction (toward zero)
+     */
+    private final Left LEFT = new Left(this);
+    
+    /**
+     * More positive in the X direction (away from zero)
+     */
+    private final Right RIGHT = new Right(this);
 
     public GridWorldEnvironment(int sizeX, int sizeY, int startX, int startY, int goalX, int goalY) {
         this.maxX = sizeX;
@@ -100,12 +126,12 @@ public class GridWorldEnvironment implements Environment {
                     rewardValue = -1;
                 }
 
-                Set<Runnable> actions = new HashSet<>(4);
+                Set<Action> actions = new HashSet<>(4);
 
-                if (x > minX) { actions.add(this::moveLeft); }
-                if (x < maxX) { actions.add(this::moveRight); }
-                if (y > minY) { actions.add(this::moveDown); }
-                if (y < maxY) {  actions.add(this::moveUp); }
+                if (x > minX) { actions.add(LEFT); }
+                if (x < maxX) { actions.add(RIGHT); }
+                if (y > minY) { actions.add(DOWN); }
+                if (y < maxY) {  actions.add(UP); }
 
                 GridWorldState state = new GridWorldState(x, y, new Reward(rewardValue), actions);
                 states[x][y] = state;

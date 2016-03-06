@@ -23,7 +23,8 @@ package qlearning;
  */
 
 import java.util.Set;
-import java.util.TreeSet;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 import qlearning.agent.Agent;
 import qlearning.domain.Reward;
@@ -41,9 +42,7 @@ import qlearning.domain.Reward;
  * seen as equivalent, then the system will not work correctly.
  * <p>
  */
-public interface State {
-    public static State NULL = new State() { /* default implementations */};
-
+public abstract class State {
     /**
      * Get the desirability of the current state. Higher values will make the {@link Agent} prefer this state, and lower
      * values will make it avoid this state. It is best to choose rewards based on the desirability of the outcome, not
@@ -52,16 +51,18 @@ public interface State {
      * 
      * @return the score of this state's desirability
      */
-    default Reward getReward() {
-        return new Reward(0);
-    }
+    public abstract Reward getReward();
 
     /**
      * Get all {@link Action}s that is possible to perform while in this state
      * 
      * @return all actions that can be taken
      */
-    default Set<Runnable> getActions() {
-        return new TreeSet<>();
-    }
+    public abstract Set<Action> getActions();
+    
+    @Override
+    public abstract int hashCode();
+    
+    @Override
+    public abstract boolean equals(@Nullable Object other);
 }

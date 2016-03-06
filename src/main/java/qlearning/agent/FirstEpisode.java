@@ -23,13 +23,9 @@ package qlearning.agent;
  */
 
 import qlearning.Action;
-import qlearning.ExplorationStrategy;
 import qlearning.State;
-import qlearning.domain.DiscountFactor;
-import qlearning.domain.LearningRate;
+import qlearning.agent.Agent.AgentBuilder;
 import qlearning.quality.Quality;
-import qlearning.quality.map.QualityMap;
-import qlearning.quality.strategy.QualityUpdateStrategy;
 
 /**
  * An iteration of the q-learning algorithm that does not have a {@link State} or {@link Action}
@@ -46,29 +42,23 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
      * Create an {@code Episode} that does not have a previous {@link State} or {@link Action}
      * from which to build a {@link Quality} value.
      * 
-     * @param explorationStrategy
-     *          The {@link ExplorationStrategy} that this and future {@code Episode} objects will use
-     *          to determine when to explore
-     * @param learningRate
-     *          The {@link LearningRate} that this and future {@code Episode} objects will use
-     *          to update {@code Quality} values
-     * @param discountFactor The {@link DiscountFactor} that this and future {@code Episode} objects will use
-     *          to update {@code Quality} values
-     * @param qualityMap The {@link QualityMap} that this and future {@code Episode} objects will use
-     *          to get and update {@code Quality} values
+     * @param builder the builder containing the Agent's configuration values
      */
-    public FirstEpisode(
-            ExplorationStrategy explorationStrategy,
-            QualityUpdateStrategy qualityUpdateStrategy,
-            LearningRate learningRate,
-            DiscountFactor discountFactor,
-            QualityMap qualityMap) {
-        super(explorationStrategy, qualityUpdateStrategy, learningRate, discountFactor, qualityMap);
+    public FirstEpisode(AgentBuilder builder) {
+        super(builder);
     }
     
     @Override
     protected Episode getNextEpisode() {
-        return new LaterEpisode(currentState, chosenNextAction, explorationStrategy, qualityUpdateStrategy, learningRate, discountFactor, qualityMap);
+        Action nextAction = chosenNextAction;
+        State currentState = this.currentState;
+        if(nextAction == null) {
+            throw new NullPointerException("Chosen next action was null");
+        }
+        if(currentState == null) {
+            throw new NullPointerException("Chosen next action was null");
+        }
+        return new LaterEpisode(currentState, nextAction, builder);
     }
 
     @Override

@@ -55,8 +55,9 @@ public class QualityHashMapTest {
     Quality lowestQuality = new Quality(-1.0);
     Quality middleQuality = new Quality(0.0);
     Quality highestQuality = new Quality(1.0);
+    Quality defaultQuality = map.getDefaultQuality();
     
-    Set<Runnable> actions = new HashSet<>();
+    Set<Action> actions = new HashSet<>();
     
     @Before
     public void setUp() {
@@ -65,23 +66,58 @@ public class QualityHashMapTest {
         actions.add(highestAction);
         
         when(state.getActions()).thenReturn(actions);
-        
+    }
+    
+    public void fillMap() {
         map.put(state, highestAction, lowestQuality);
         map.put(state, middleAction, middleQuality);
         map.put(state, highestAction, highestQuality);
     }
 
     @Test
-    public void testPutValueCanBeRetrieved() {
+    public void storesQuality() {
+        fillMap();
+        
         Quality gotQuality = map.get(state, highestAction);
         
         assertThat(gotQuality, is(highestQuality));
     }
     
     @Test
-    public void getBestQualityForState() {
+    public void returnsDefaultQualityForBestWhenEmpty() {
+        Quality actualQuality = map.getBestQuality(state);
+        
+        assertThat(actualQuality, is(defaultQuality));
+    }
+    
+    @Test
+    public void returnsDefaultQualityForActionWhenEmpty() {
+        Quality actualQuality = map.get(state, highestAction);
+        
+        assertThat(actualQuality, is(defaultQuality));
+    }
+    
+    @Test
+    public void getsHighestQualityForBest() {
+        fillMap();
+        
         Quality actualQuality = map.getBestQuality(state);
         
         assertThat(actualQuality, is(highestQuality));
+    }
+    
+    @Test
+    public void willNotDeleteDuplicateQualities() {
+        fillMap();
+        
+        map.put(state, highestAction, middleQuality);
+        map.put(state, middleAction, middleQuality);
+        
+        assertThat(map.getBestQuality(state), is(middleQuality));
+
+        map.put(state, highestAction, highestQuality);
+        map.put(state, middleAction, middleQuality); 
+        
+        assertThat(map.getBestQuality(state), is(highestQuality));
     }
 }

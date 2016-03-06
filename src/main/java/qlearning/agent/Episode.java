@@ -26,14 +26,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.Executor;
 
 import org.apache.commons.lang3.Validate;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import qlearning.Action;
 import qlearning.ExplorationStrategy;
 import qlearning.State;
+import qlearning.agent.Agent.AgentBuilder;
 import qlearning.domain.DiscountFactor;
 import qlearning.domain.LearningRate;
 import qlearning.domain.StateActionQuality;
@@ -53,48 +56,34 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
 /* package-private */ abstract class Episode {
     @SuppressWarnings("null")
     protected Logger logger = LoggerFactory.getLogger(getClass());
-
+    
+    protected final AgentBuilder builder;
+    
     protected final ExplorationStrategy explorationStrategy;
     protected final QualityUpdateStrategy qualityUpdateStrategy;
     protected final LearningRate learningRate;
     protected final DiscountFactor discountFactor;
     protected final QualityMap qualityMap;
+
+    protected final Executor actionExecutor;
     
-    protected State currentState = State.NULL;
-    protected Set<Runnable> possibleNextActions = new TreeSet<>();
-    protected Runnable chosenNextAction = new Runnable() {
-        @Override
-        public void run() {
-            // Do nothing
-        }
-    };
+    protected Set<Action> possibleNextActions = new TreeSet<>();
+    @Nullable protected State currentState;
+    @Nullable protected Action chosenNextAction;
     
     /**
      * Create an {@code Episode} that represents one iteration of the q-learning algorithm.
      * 
-     * @param explorationStrategy
-     *          The {@link ExplorationStrategy} that this and future {@code Episode} objects will use
-     *          to determine when to explore
-     * @param learningRate
-     *          The {@link LearningRate} that this and future {@code Episode} objects will use
-     *          to update {@code Quality} values
-     * @param discountFactor The {@link DiscountFactor} that this and future {@code Episode} objects will use
-     *          to update {@code Quality} values
-     * @param qualityMap The {@link QualityMap} that this and future {@code Episode} objects will use
-     *          to get and update {@code Quality} values
+     * @param builder the builder containing the Agent's configuration values
      */
-    protected Episode(
-            ExplorationStrategy explorationStrategy,
-            QualityUpdateStrategy qualityUpdateStrategy,
-            LearningRate learningRate,
-            DiscountFactor discountFactor,
-            QualityMap qualityMap) {
-        
-        this.explorationStrategy = Validate.notNull(explorationStrategy, "LearningRate cannot be null");
-        this.qualityUpdateStrategy = Validate.notNull(qualityUpdateStrategy, "QualityUpdateStrategy cannot be null");
-        this.learningRate = Validate.notNull(learningRate, "DiscountFactor cannot be null");
-        this.discountFactor = Validate.notNull(discountFactor, "ExplorationStrategy cannot be null");
-        this.qualityMap = Validate.notNull(qualityMap, "QualityMap cannot be null");
+    protected Episode(AgentBuilder agentBuilder) {
+        this.builder = agentBuilder;
+        this.explorationStrategy = Validate.notNull(agentBuilder.getExplorationStrategy(), "LearningRate cannot be null");
+        this.qualityUpdateStrategy = Validate.notNull(agentBuilder.getQualityUpdateStrategy(), "QualityUpdateStrategy cannot be null");
+        this.learningRate = Validate.notNull(agentBuilder.getLearningRate(), "DiscountFactor cannot be null");
+        this.discountFactor = Validate.notNull(agentBuilder.getDiscountFactor(), "ExplorationStrategy cannot be null");
+        this.qualityMap = Validate.notNull(agentBuilder.getQualityMap(), "QualityMap cannot be null");
+        this.actionExecutor = Validate.notNull(agentBuilder.getActionExecutor(), "Executor cannot be null");
     }
     
     /**
@@ -110,11 +99,11 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
         
         Collection<StateActionQuality> potentialQualities = buildTriplets(currentState, possibleNextActions);
         
-        chosenNextAction = validateNextAction(explorationStrategy.getNextAction(potentialQualities));
+        chosenNextAction = explorationStrategy.getNextAction(potentialQualities);
         
         updateQuality();
         
-        chosenNextAction.run();
+        actionExecutor.execute(chosenNextAction);
 
         return getNextEpisode();
     }
@@ -130,13 +119,13 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
      */
     protected abstract Episode getNextEpisode(); 
     
-    private Collection<StateActionQuality> buildTriplets(State state, Set<Runnable> possibleActions) {
+    private Collection<StateActionQuality> buildTriplets(State state, Set<Action> possibleActions) {
     	assert(state != null) : "state must not be null";
     	assert(possibleActions != null) : "possibleActions must not be null";
     	
         Collection<StateActionQuality> pairs = new ArrayList<>(possibleActions.size());
         
-        for(Runnable action : possibleActions) {
+        for(Action action : possibleActions) {
             Quality quality = qualityMap.get(state, action);
             
             pairs.add(new StateActionQuality(state, action, quality));
@@ -150,7 +139,7 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
         return Validate.notNull(state, "Current state cannot be null");
     }
     
-    private static Set<Runnable> validatePossibleNextActions(Set<Runnable> nextActions) {
+    private static Set<Action> validatePossibleNextActions(Set<Action> nextActions) {
         Validate.notNull(nextActions,
                 "The list of possible actions from a state cannot be null. " +
                 "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
@@ -158,19 +147,5 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
                 "The list of possible actions from a state cannot be empty. " +
                 "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
         return nextActions;
-    }
-    
-    /**
-     * Validate the given {@link Action} as an action that will be taken in the next iteration
-     * @param nextAction the {@code Action} to validate
-     * @return the {@code Action} that was validated
-     * 
-     * @throws NullPointerException of the given {@code Action} is null
-     */
-    private static Runnable validateNextAction(Runnable nextAction) {
-        Validate.notNull(nextAction, 
-                "The action returned by the ExplorationStrategy cannot be null." +
-                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
-        return nextAction;
     }
 }
