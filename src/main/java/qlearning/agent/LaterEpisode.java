@@ -49,7 +49,7 @@ import qlearning.quality.Quality;
     protected void updateQuality() {
         State currentState = this.currentState;
         if(currentState == null) {
-            throw new NullPointerException("Chosen next action was null");
+            throw new NullPointerException("Current state was null");
         }
         
         Quality oldQuality = qualityMap.get(this.previousState, this.previousAction);
