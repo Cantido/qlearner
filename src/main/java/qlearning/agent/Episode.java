@@ -92,9 +92,9 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
      * @return an {@code Episode} that represents the next iteration
      */
     public Episode proceed(final State currentState) {
-        this.currentState = validateCurrentState(currentState);
+        this.currentState = currentState;
         
-        possibleNextActions = validatePossibleNextActions(this.currentState.getActions());
+        possibleNextActions = this.currentState.getActions();
         
         SortedSet<StateActionQuality> potentialQualities = buildTriplets(currentState, possibleNextActions);
         
@@ -132,19 +132,5 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
             logger.debug("Potential action: {}, quality: {}", action, quality);
         }
         return pairs;
-    }
-    
-    private static State validateCurrentState(State state) {
-        return Validate.notNull(state, "Current state cannot be null");
-    }
-    
-    private static Set<Action> validatePossibleNextActions(Set<Action> nextActions) {
-        Validate.notNull(nextActions,
-                "The list of possible actions from a state cannot be null. " +
-                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
-        Validate.isTrue(!nextActions.isEmpty(),
-                "The list of possible actions from a state cannot be empty. " +
-                "If it is possible for the agent to take no action, consider creating a \"Wait\" action.");
-        return nextActions;
     }
 }
