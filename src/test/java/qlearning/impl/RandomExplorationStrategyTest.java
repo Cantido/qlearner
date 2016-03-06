@@ -26,9 +26,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.hamcrest.Matchers.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Random;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.Before;
@@ -65,7 +65,7 @@ public class RandomExplorationStrategyTest {
     StateActionQuality goodTriplet;
     StateActionQuality badTriplet;
     
-    Collection<StateActionQuality> stateActionQualities;
+    SortedSet<StateActionQuality> stateActionQualities;
     
     
     @Before
@@ -76,7 +76,7 @@ public class RandomExplorationStrategyTest {
         goodTriplet = new StateActionQuality(state, goodAction, goodQuality);
         badTriplet = new StateActionQuality(state, badAction, badQuality);
         
-        stateActionQualities = new ArrayList<>();
+        stateActionQualities = new TreeSet<>();
         stateActionQualities.add(goodTriplet);
         stateActionQualities.add(badTriplet);
     }

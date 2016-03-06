@@ -22,7 +22,7 @@ package qlearning;
  * #L%
  */
 
-import java.util.Collection;
+import java.util.SortedSet;
 
 import qlearning.domain.StateActionQuality;
 import qlearning.quality.Quality;
@@ -37,5 +37,5 @@ public interface ExplorationStrategy {
      * @param stateActionQualities {@link State}-{@link Action} pairs and their associated {@link Quality Qualities}
      * @return the chosen action
      */
-    public Action getNextAction(Collection<StateActionQuality> stateActionQualities);
+    public Action getNextAction(SortedSet<StateActionQuality> stateActionQualities);
 }

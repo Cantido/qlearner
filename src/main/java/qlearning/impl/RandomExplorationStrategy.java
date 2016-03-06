@@ -22,9 +22,8 @@ package qlearning.impl;
  * #L%
  */
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Random;
+import java.util.SortedSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.lang3.Validate;
@@ -79,7 +78,7 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
      * @see RandomExplorationStrategy#setExplorationFactor(ExplorationFactor)
      */
     @Override
-    public Action getNextAction(Collection<StateActionQuality> stateActionQualities) {
+    public Action getNextAction(SortedSet<StateActionQuality> stateActionQualities) {
         
         Action nextAction;
         
@@ -97,14 +96,14 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
     }
     
     
-    private Action getBestAction(Collection<StateActionQuality> stateActionQualities) {
+    private Action getBestAction(SortedSet<StateActionQuality> stateActionQualities) {
     	assert(stateActionQualities != null) : "stateActionQualities must not be null";
     	
         logger.debug("Determining best action from possible actions: {}", stateActionQualities);
-        return Collections.max(stateActionQualities).getAction();
+        return stateActionQualities.last().getAction();
     }
 
-    private Action getRandomAction(Collection<StateActionQuality> stateActionQualities) {
+    private Action getRandomAction(SortedSet<StateActionQuality> stateActionQualities) {
     	assert(stateActionQualities != null) : "stateActionQualities must not be null";
     	
         Integer randomIndex = random.nextInt(stateActionQualities.size());
