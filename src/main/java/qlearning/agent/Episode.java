@@ -22,9 +22,8 @@ package qlearning.agent;
  * #L%
  */
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.Executor;
 
@@ -97,7 +96,7 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
         
         possibleNextActions = validatePossibleNextActions(this.currentState.getActions());
         
-        Collection<StateActionQuality> potentialQualities = buildTriplets(currentState, possibleNextActions);
+        SortedSet<StateActionQuality> potentialQualities = buildTriplets(currentState, possibleNextActions);
         
         chosenNextAction = explorationStrategy.getNextAction(potentialQualities);
         
@@ -119,11 +118,11 @@ import qlearning.quality.strategy.QualityUpdateStrategy;
      */
     protected abstract Episode getNextEpisode(); 
     
-    private Collection<StateActionQuality> buildTriplets(State state, Set<Action> possibleActions) {
+    private SortedSet<StateActionQuality> buildTriplets(State state, Set<Action> possibleActions) {
     	assert(state != null) : "state must not be null";
     	assert(possibleActions != null) : "possibleActions must not be null";
     	
-        Collection<StateActionQuality> pairs = new ArrayList<>(possibleActions.size());
+        SortedSet<StateActionQuality> pairs = new TreeSet<>();
         
         for(Action action : possibleActions) {
             Quality quality = qualityMap.get(state, action);
