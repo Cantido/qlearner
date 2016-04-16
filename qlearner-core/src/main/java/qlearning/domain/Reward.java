@@ -22,17 +22,33 @@ package qlearning.domain;
  * #L%
  */
 
-public class Reward {
+public class Reward extends Number {
     private final Double value;
     
     public Reward(double value) {
         this.value = value;
     }
-    
-    public Double toDouble() {
+
+    @Override
+    public int intValue() {
+        return value.intValue();
+    }
+
+    @Override
+    public long longValue() {
+        return value.longValue();
+    }
+
+    @Override
+    public float floatValue() {
+        return value.floatValue();
+    }
+
+    @Override
+    public double doubleValue() {
         return value;
     }
-    
+
     @SuppressWarnings("null")
     @Override
     public String toString() {

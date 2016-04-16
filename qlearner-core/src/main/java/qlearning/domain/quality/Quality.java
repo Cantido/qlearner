@@ -36,7 +36,7 @@ import qlearning.domain.Reward;
 /**
  * The learned value of a {@link State}-{@link Action} pair's potential for future {@link Reward}s
  */
-public class Quality implements Comparable<Quality> {
+public class Quality extends Number implements Comparable<Quality> {
     private static class ReverseOrder implements Comparator<Quality> {
         @Override
         public int compare(@NonNull Quality o1, @NonNull Quality o2) {
@@ -58,15 +58,33 @@ public class Quality implements Comparable<Quality> {
     public static final Quality MAX = new Quality(Double.POSITIVE_INFINITY);
     
     private final double value;
+    private final int hashCode;
     
     public Quality(double value) {
         if(Double.isNaN(value)) {
             throw new IllegalArgumentException("Cannot create a Quality from NaN");
         }
         this.value = value;
+        this.hashCode = calculateHashCode(value);
     }
-    
-    public double toDouble() {
+
+    @Override
+    public int intValue() {
+        return Double.valueOf(value).intValue();
+    }
+
+    @Override
+    public long longValue() {
+        return Double.valueOf(value).longValue();
+    }
+
+    @Override
+    public float floatValue() {
+        return Double.valueOf(value).floatValue();
+    }
+
+    @Override
+    public double doubleValue() {
         return value;
     }
     
@@ -83,9 +101,12 @@ public class Quality implements Comparable<Quality> {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(19, 61).
-                append(toDouble()).
-                toHashCode();
+        return hashCode;
+    }
+
+    private int calculateHashCode(double value) {
+        long temp = Double.doubleToLongBits(value);
+        return (int) (temp ^ (temp >>> 32));
     }
 
     @Override

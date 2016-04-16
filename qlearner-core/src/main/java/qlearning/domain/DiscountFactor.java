@@ -34,7 +34,7 @@ import org.apache.commons.lang3.Validate;
  * quality values may diverge.
  * </p>
  */
-public class DiscountFactor {
+public class DiscountFactor extends Number {
     private final Double value;
     
     /**
@@ -53,10 +53,26 @@ public class DiscountFactor {
         this.value = value;
     }
     
-    public Double toDouble() {
+    @Override
+    public int intValue() {
+        return value.intValue();
+    }
+
+    @Override
+    public long longValue() {
+        return value.longValue();
+    }
+
+    @Override
+    public float floatValue() {
+        return value.floatValue();
+    }
+
+    @Override
+    public double doubleValue() {
         return value;
     }
-    
+
     @SuppressWarnings("null")
     @Override
     public String toString() {

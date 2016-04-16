@@ -42,7 +42,7 @@ import org.apache.commons.lang3.Validate;
  * The default learning rate is 1.
  * </p>
  */
-public class LearningRate {
+public class LearningRate extends Number {
     private final double value;
     
    /**
@@ -64,14 +64,31 @@ public class LearningRate {
                 "Learning rate must be between zero and one (inclusive)");
         this.value = value;
     }
-    
-    public Double toDouble() {
+
+    @Override
+    public int intValue() {
+        return Double.valueOf(value).intValue();
+    }
+
+    @Override
+    public long longValue() {
+        return Double.valueOf(value).longValue();
+    }
+
+    @Override
+    public float floatValue() {
+        return Double.valueOf(value).floatValue();
+    }
+
+    @Override
+    public double doubleValue() {
         return value;
     }
-    
+
     @SuppressWarnings("null")
     @Override
     public String toString() {
         return String.format("LearningRate[%f]", value);
     }
+
 }

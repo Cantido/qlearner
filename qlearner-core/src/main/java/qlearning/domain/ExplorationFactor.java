@@ -27,7 +27,7 @@ import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ZERO;
 
 import org.apache.commons.lang3.Validate;
 
-public class ExplorationFactor {
+public class ExplorationFactor extends Number {
     private final Double value;
     
     public ExplorationFactor(double value) {
@@ -52,14 +52,31 @@ public class ExplorationFactor {
         Validate.isTrue(!DOUBLE_ONE.equals(checkValue), "Test value must be within [0,1). Given value: %f", checkValue);
         Validate.inclusiveBetween(DOUBLE_ZERO, DOUBLE_ONE, checkValue, "Test value must be within [0,1). Given value: %f", checkValue);
     }
-    
-    public Double toDouble() {
+
+    @Override
+    public int intValue() {
+        return value.intValue();
+    }
+
+    @Override
+    public long longValue() {
+        return value.longValue();
+    }
+
+    @Override
+    public float floatValue() {
+        return value.floatValue();
+    }
+
+    @Override
+    public double doubleValue() {
         return value;
     }
-    
+
     @SuppressWarnings("null")
     @Override
     public String toString() {
         return String.format("ExplorationFactor[%f]", value);
     }
+
 }

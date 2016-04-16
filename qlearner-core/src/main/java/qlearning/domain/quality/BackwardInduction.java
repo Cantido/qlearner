@@ -38,19 +38,19 @@ public class BackwardInduction implements QualityUpdateStrategy {
 	@Override
 	public Quality next(Quality oldQuality, LearningRate learningRate, Reward reward, DiscountFactor discountFactor,
 			Quality optimalFutureValueEstimate) {
-		
+
         Validate.notNull(oldQuality, "Quality cannot be null");
         Validate.notNull(reward, "Reward cannot be null");
         Validate.notNull(optimalFutureValueEstimate, "Optimal future value estimate cannot be null");
         Validate.notNull(learningRate, "LearningRate cannot be null");
         Validate.notNull(discountFactor, "DiscountFactor cannot be null");
-        
-        double qualityValue = oldQuality.toDouble()
-                				+ (learningRate.toDouble()
-                						* (reward.toDouble()
-                								+ discountFactor.toDouble() * optimalFutureValueEstimate.toDouble()
-                								- oldQuality.toDouble()));
-        
+
+        double qualityValue = oldQuality.doubleValue()
+                				+ (learningRate.doubleValue()
+                						* (reward.doubleValue()
+                								+ discountFactor.doubleValue() * optimalFutureValueEstimate.doubleValue()
+                								- oldQuality.doubleValue()));
+
         return new Quality(qualityValue);
 	}
 }
