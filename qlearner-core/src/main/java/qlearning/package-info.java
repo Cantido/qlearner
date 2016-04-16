@@ -1,5 +1,7 @@
 /**
  * A framework for applying the Q-learning technique to a problem space.
+ *
+ * @see <a href="https://en.wikipedia.org/wiki/Q-learning">Q-learning on Wikipedia</a>
  */
 @NonNullByDefault
 package qlearning;

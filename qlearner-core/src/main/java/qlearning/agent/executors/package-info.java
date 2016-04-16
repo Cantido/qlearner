@@ -1,3 +1,7 @@
+/**
+ * Strategies for a {@link qlearning.agent.Agent Agent} to execute
+ * {@link qlearning.client.Action Actions}.
+ */
 @NonNullByDefault
 package qlearning.agent.executors;
 

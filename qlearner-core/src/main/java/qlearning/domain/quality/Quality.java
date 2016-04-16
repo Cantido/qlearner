@@ -29,6 +29,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import qlearning.client.Action;
+import qlearning.client.State;
 import qlearning.domain.Reward;
 
 /**

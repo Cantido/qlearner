@@ -1,3 +1,6 @@
+/**
+ * Domain variables used in operation of the Q-Learning algorithm
+ */
 @NonNullByDefault
 package qlearning.domain;
 

@@ -1,5 +1,10 @@
 /**
- * Implementations of some common utilities for Q-Learning
+ * Objects supporting the exploration of the problem space.
+ * <p>
+ * Exploration usually means taking actions that are not the most
+ * immediately profitable with the intent to escape local maxima
+ * and find global maxima.
+ * </p>
  */
 @NonNullByDefault
 package qlearning.domain.exploration;
