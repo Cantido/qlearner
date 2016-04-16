@@ -39,7 +39,7 @@ import qlearning.domain.quality.BackwardInduction;
 import qlearning.domain.quality.QualityUpdateStrategy;
 
 public class GridWorldPerformanceTest {
-    private static final int MAX_SUCCESS_COUNT = 50000;
+    private static final int MAX_SUCCESS_COUNT = 500000;
 
     public static void main(String[] args) {
         GridWorldEnvironment environment = new GridWorldEnvironment(10, 10, 0, 0, 10, 10);
@@ -70,7 +70,7 @@ public class GridWorldPerformanceTest {
             }
 
             environment.reset();
-            agent.resetState();
+            agent.reset();
         }
         
         Instant end = Instant.now();

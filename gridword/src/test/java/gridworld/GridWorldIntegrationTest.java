@@ -108,9 +108,7 @@ public class GridWorldIntegrationTest {
 	 * 
 	 * This will run the agent until it reaches the goal a certain number of
 	 * times ({@link #MAX_SUCCESS_COUNT}), and will calculate the average number
-	 * of steps it took to reach the goal state. The average number of steps
-	 * that it takes to reach the goal state must end up under
-	 * {@link #MAX_AVERAGE_STEPS_PER_SUCCESS}.
+	 * of steps it took to reach the goal state.
 	 * 
 	 * There is the potential for the agent to never find the goal state, and
 	 * for this test to take an infinite amount of time. For that reason,
@@ -124,9 +122,8 @@ public class GridWorldIntegrationTest {
 		// if I ever write tests for that.
 
 		double[] stepCounts = new double[MAX_SUCCESS_COUNT];
-		int successCount = 0;
 
-		for (successCount = 0; successCount < MAX_SUCCESS_COUNT; successCount++) {
+		for (int successCount = 0; successCount < MAX_SUCCESS_COUNT; successCount++) {
 			int stepCount = 0;
 
 			while (!environment.isAtGoalState()) {
@@ -136,7 +133,7 @@ public class GridWorldIntegrationTest {
 
 			stepCounts[successCount] = stepCount;
 			environment.reset();
-			agent.resetState();
+			agent.reset();
 		}
 
 		assertThat(percentile(stepCounts, CONVERGENCE_PERCENTAGE), lessThanOrEqualTo(EXACT_SOLUTION));

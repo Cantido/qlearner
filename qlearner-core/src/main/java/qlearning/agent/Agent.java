@@ -1,7 +1,7 @@
 package qlearning.agent;
 
+import java.util.*;
 import java.util.concurrent.Executor;
-
 /*
  * #%L
  * QLearner
@@ -24,6 +24,9 @@ import java.util.concurrent.Executor;
  * #L%
  */
 
+import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qlearning.client.Action;
 import qlearning.client.Environment;
 import qlearning.domain.exploration.ExplorationStrategy;
@@ -33,10 +36,8 @@ import qlearning.domain.learning.DiscountFactor;
 import qlearning.domain.exploration.ExplorationFactor;
 import qlearning.domain.learning.LearningRate;
 import qlearning.domain.exploration.RandomExplorationStrategy;
-import qlearning.domain.quality.QualityHashMap;
-import qlearning.domain.quality.QualityMap;
-import qlearning.domain.quality.BackwardInduction;
-import qlearning.domain.quality.QualityUpdateStrategy;
+import qlearning.domain.learning.Reward;
+import qlearning.domain.quality.*;
 
 /**
  * Performs {@link Action}s that will lead to changes in the {@link Environment}'s current {@link State}.
@@ -141,40 +142,94 @@ public class Agent {
     }
     
     private final Environment environment;
-    
-    private final AgentBuilder builder;
-    
-    private Episode currentEpisode;
-    
-    private Agent(AgentBuilder agentBuilder) {
-        this.builder = agentBuilder;
-        
-        this.environment = agentBuilder.environment;
-        this.currentEpisode = new FirstEpisode(builder);
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
+    private final ExplorationStrategy explorationStrategy;
+    private final QualityMap qualityMap;
+    private final Executor actionExecutor;
+    private final QualityUpdater updater;
+
+    private Step lastStep;
+
+    private Agent(Agent.AgentBuilder agentBuilder) {
+        this.environment = agentBuilder.getEnvironment();
+        this.explorationStrategy = Validate.notNull(agentBuilder.getExplorationStrategy(), "LearningRate cannot be null");
+        this.qualityMap = Validate.notNull(agentBuilder.getQualityMap(), "QualityMap cannot be null");
+        this.actionExecutor = Validate.notNull(agentBuilder.getActionExecutor(), "Executor cannot be null");
+
+        updater = new QualityUpdater(
+                qualityMap,
+                agentBuilder.getQualityUpdateStrategy(),
+                agentBuilder.getLearningRate(),
+                agentBuilder.getDiscountFactor());
+    }
+
+    public void reset() {
+        this.lastStep = null;
     }
 
     /**
-     * Reset memory of the previous and current states, so we can "pick up the piece and put it elsewhere."
-     * <p>
-     * Call this method when there will be a change in the current {@code State} that you don't want this {@code Agent}
-     * learning from. In some systems (like our {@link qlearning.example.gridworld} example), you must call this method
-     * when you have reached the goal state and wish to move back to the start state without messing up your hard-earned
-     * Quality values.
-     * </p>
-     */
-    public void resetState() {
-        this.currentEpisode = new FirstEpisode(builder);
-    }
-
-    /**
-     * Determine the next {@link Action} to take, and then call its {@link Action#execute()} method.
+     * Determine the next {@link Action} to take, and then call its {@link Action#run()} method.
      * <p>
      * This {@code Agent} will also update the Quality value of the previous {@link State} and the {@code Action} that
      * got us from there to here, based on the current {@code State}'s reward value.
      * </p>
      */
     public void takeNextAction() {
-        State currentState = environment.getState();        
-        currentEpisode = currentEpisode.proceed(currentState);
+        State currentState = environment.getState();
+        SortedSet<StateActionQuality> potentialQualities = buildTriplets(currentState);
+        Action nextAction = explorationStrategy.getNextAction(potentialQualities);
+
+        if(lastStep != null) {
+            updater.updateQuality(lastStep, currentState);
+        }
+
+        lastStep = new Step(currentState, nextAction);
+
+        actionExecutor.execute(nextAction);
+    }
+
+    private SortedSet<StateActionQuality> buildTriplets(State state) {
+        assert(state != null) : "state must not be null";
+        SortedSet<StateActionQuality> pairs = new TreeSet<>();
+
+        // Using streams is not as fast as this plain ol' iteration
+        for(Action action : state.getActions()) {
+            pairs.add(buildTriplet(state, action));
+        }
+        return pairs;
+    }
+
+    private StateActionQuality buildTriplet(State state, Action action) {
+        return new StateActionQuality(state, action, qualityMap.get(state, action));
+    }
+
+    private static class QualityUpdater {
+        private final QualityMap qualityMap;
+        private final QualityUpdateStrategy strategy;
+        private final LearningRate learningRate;
+        private final DiscountFactor discountFactor;
+
+        public QualityUpdater(QualityMap qualityMap, QualityUpdateStrategy strategy, LearningRate learningRate, DiscountFactor discountFactor) {
+            this.qualityMap = qualityMap;
+            this.strategy = strategy;
+            this.learningRate = learningRate;
+            this.discountFactor = discountFactor;
+        }
+
+        public void updateQuality(Step stepTaken, State resultingState) {
+            State previousState = stepTaken.getStartingState();
+            Action actionTaken = stepTaken.getLeavingAction();
+
+            Quality oldQuality = qualityMap.get(previousState, actionTaken);
+
+            Reward reward = resultingState.getReward();
+            Quality optimalFutureValueEstimate = qualityMap.getBestQuality(resultingState);
+
+            Quality newQuality = this.strategy.next(oldQuality, learningRate, reward, discountFactor, optimalFutureValueEstimate);
+
+            qualityMap.put(previousState, actionTaken, newQuality);
+        }
     }
 }
