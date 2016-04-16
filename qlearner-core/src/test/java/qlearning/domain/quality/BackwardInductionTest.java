@@ -30,12 +30,9 @@ import org.junit.Test;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import qlearning.domain.DiscountFactor;
-import qlearning.domain.LearningRate;
-import qlearning.domain.Reward;
-import qlearning.domain.quality.Quality;
-import qlearning.domain.quality.BackwardInduction;
-import qlearning.domain.quality.QualityUpdateStrategy;
+import qlearning.domain.learning.DiscountFactor;
+import qlearning.domain.learning.LearningRate;
+import qlearning.domain.learning.Reward;
 
 public class BackwardInductionTest {
 	@SuppressWarnings("null")

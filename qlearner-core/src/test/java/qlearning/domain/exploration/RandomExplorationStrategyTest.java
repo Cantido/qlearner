@@ -41,9 +41,7 @@ import org.mockito.junit.MockitoRule;
 
 import qlearning.client.Action;
 import qlearning.client.State;
-import qlearning.domain.ExplorationFactor;
-import qlearning.domain.StateActionQuality;
-import qlearning.domain.exploration.RandomExplorationStrategy;
+import qlearning.domain.quality.StateActionQuality;
 import qlearning.domain.quality.Quality;
 
 @SuppressWarnings("null")

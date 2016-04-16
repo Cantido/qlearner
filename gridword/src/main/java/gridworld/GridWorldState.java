@@ -26,7 +26,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import qlearning.client.Action;
 import qlearning.client.State;
-import qlearning.domain.Reward;
+import qlearning.domain.learning.Reward;
 
 public class GridWorldState extends State {
     private final int x, y;

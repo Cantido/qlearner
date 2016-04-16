@@ -26,7 +26,7 @@ import java.util.SortedSet;
 
 import qlearning.client.Action;
 import qlearning.client.State;
-import qlearning.domain.StateActionQuality;
+import qlearning.domain.quality.StateActionQuality;
 import qlearning.domain.quality.Quality;
 
 /**

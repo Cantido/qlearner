@@ -24,11 +24,9 @@ package qlearning.domain.quality;
 
 import org.apache.commons.lang3.Validate;
 
-import qlearning.domain.DiscountFactor;
-import qlearning.domain.LearningRate;
-import qlearning.domain.Reward;
-import qlearning.domain.quality.Quality;
-import qlearning.domain.quality.QualityUpdateStrategy;
+import qlearning.domain.learning.DiscountFactor;
+import qlearning.domain.learning.LearningRate;
+import qlearning.domain.learning.Reward;
 
 /**
  * A strategy for updating {@link Quality} values by looking at backwards at

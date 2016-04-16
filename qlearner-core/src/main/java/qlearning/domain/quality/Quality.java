@@ -25,13 +25,12 @@ import java.util.PriorityQueue;
  * #L%
  */
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import qlearning.client.Action;
 import qlearning.client.State;
-import qlearning.domain.Reward;
+import qlearning.domain.learning.Reward;
 
 /**
  * The learned value of a {@link State}-{@link Action} pair's potential for future {@link Reward}s

@@ -38,7 +38,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import qlearning.domain.ExplorationFactor;
+import qlearning.domain.exploration.ExplorationFactor;
 
 @NonNullByDefault({})
 @RunWith(Theories.class)

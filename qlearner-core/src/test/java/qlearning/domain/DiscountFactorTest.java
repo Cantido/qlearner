@@ -36,7 +36,7 @@ import org.junit.experimental.theories.Theory;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import qlearning.domain.DiscountFactor;
+import qlearning.domain.learning.DiscountFactor;
 
 
 @NonNullByDefault({})

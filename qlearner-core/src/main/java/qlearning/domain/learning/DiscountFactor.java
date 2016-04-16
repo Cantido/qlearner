@@ -1,4 +1,4 @@
-package qlearning.domain;
+package qlearning.domain.learning;
 
 /*
  * #%L

@@ -25,7 +25,7 @@ package qlearning.agent;
 import qlearning.client.Action;
 import qlearning.client.State;
 import qlearning.agent.Agent.AgentBuilder;
-import qlearning.domain.Reward;
+import qlearning.domain.learning.Reward;
 import qlearning.domain.quality.Quality;
 
 /**

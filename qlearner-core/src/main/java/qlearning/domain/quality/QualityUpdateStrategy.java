@@ -24,9 +24,9 @@ package qlearning.domain.quality;
 
 import qlearning.client.Action;
 import qlearning.client.State;
-import qlearning.domain.DiscountFactor;
-import qlearning.domain.LearningRate;
-import qlearning.domain.Reward;
+import qlearning.domain.learning.DiscountFactor;
+import qlearning.domain.learning.LearningRate;
+import qlearning.domain.learning.Reward;
 
 /**
  * A strategy for getting the next {@link Quality} value after one learning iteration.

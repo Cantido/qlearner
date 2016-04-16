@@ -27,8 +27,7 @@ import java.util.Set;
 import org.eclipse.jdt.annotation.Nullable;
 
 import qlearning.agent.Agent;
-import qlearning.client.Action;
-import qlearning.domain.Reward;
+import qlearning.domain.learning.Reward;
 
 /**
  * A condition that you want to reward or discourage the system from arriving at, and all of the gridworld.actions that it is

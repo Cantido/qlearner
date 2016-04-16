@@ -31,8 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import qlearning.client.Action;
-import qlearning.domain.ExplorationFactor;
-import qlearning.domain.StateActionQuality;
+import qlearning.domain.quality.StateActionQuality;
 
 /**
  * A simple {@link ExplorationStrategy} which will choose a random {@link Action} some of the time.

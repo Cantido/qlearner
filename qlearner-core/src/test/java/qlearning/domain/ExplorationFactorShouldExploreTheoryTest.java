@@ -38,6 +38,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import qlearning.domain.exploration.ExplorationFactor;
 
 @NonNullByDefault({})
 @RunWith(Theories.class)

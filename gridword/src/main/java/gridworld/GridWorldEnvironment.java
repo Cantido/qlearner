@@ -30,7 +30,7 @@ import qlearning.client.Action;
 import qlearning.client.Environment;
 import qlearning.client.State;
 import qlearning.agent.Agent;
-import qlearning.domain.Reward;
+import qlearning.domain.learning.Reward;
 import gridworld.actions.Down;
 import gridworld.actions.Left;
 import gridworld.actions.Right;

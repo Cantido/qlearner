@@ -1,4 +1,4 @@
-package qlearning.domain;
+package qlearning.domain.quality;
 
 /*
  * #%L
@@ -26,7 +26,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import qlearning.client.Action;
 import qlearning.client.State;
-import qlearning.domain.quality.Quality;
 
 /**
  * A triplet of a {@link State}, {@link Action}, and {@link Quality} of that pair
