@@ -46,8 +46,6 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
     /**
      * Create a new {@link RandomExplorationStrategy} with the given exploration factor.
      * 
-     * @see #setExplorationFactor(double)
-     * 
      * @param explorationFactor the exploration factor to set
      */
     @SuppressWarnings("null")
@@ -73,7 +71,7 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
     /**
      * Choose either the best possible action, or a random action.
      *
-     * @see RandomExplorationStrategy#setExplorationFactor(ExplorationFactor)
+     * @see RandomExplorationStrategy
      */
     @Override
     public Action getNextAction(SortedSet<StateActionQuality> stateActionQualities) {
