@@ -28,12 +28,15 @@ import java.util.PriorityQueue;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qlearning.client.Action;
 import qlearning.client.State;
 import qlearning.domain.quality.Quality;
 import qlearning.domain.quality.QualityMap;
 
 public class QualityHashMap implements QualityMap {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final int EXPECTED_AVERAGE_ACTIONS_PER_STATE;
     
     /**
@@ -88,6 +91,8 @@ public class QualityHashMap implements QualityMap {
             queueToUpdate = new PriorityQueue<>(EXPECTED_AVERAGE_ACTIONS_PER_STATE, Quality.DESCENDING_ORDER);
             bestQualities.put(state, queueToUpdate);
         }
+
+        logger.debug("Updating quality for [{}, {}] to {}", state, action, quality);
         
         queueToUpdate.add(quality);
     }
