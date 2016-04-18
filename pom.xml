@@ -25,6 +25,7 @@
     <modules>
         <module>gridword</module>
         <module>qlearner-core</module>
+        <module>blackbox</module>
     </modules>
     <name>QLearner</name>
     <description>A simple implementation of the q-learning algorithm</description>
