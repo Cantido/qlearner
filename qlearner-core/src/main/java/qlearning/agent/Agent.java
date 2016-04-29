@@ -200,6 +200,10 @@ public class Agent {
         return new StateActionQuality(state, action, qualityMap.get(state, action));
     }
 
+    public Step getLastStep() {
+        return lastStep;
+    }
+
     private static class QualityUpdater {
         private final QualityMap qualityMap;
         private final QualityUpdateStrategy strategy;
