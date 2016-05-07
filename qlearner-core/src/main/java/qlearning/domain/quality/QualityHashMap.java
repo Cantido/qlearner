@@ -34,7 +34,7 @@ import qlearning.domain.quality.Quality;
 import qlearning.domain.quality.QualityMap;
 
 public class QualityHashMap implements QualityMap {
-    @SuppressWarnings("null")
+	@SuppressWarnings("null")
 	@Nonnull private static final Logger logger = LoggerFactory.getLogger(QualityHashMap.class);
     @Nonnegative private final int EXPECTED_AVERAGE_ACTIONS_PER_STATE;
     
@@ -51,10 +51,10 @@ public class QualityHashMap implements QualityMap {
      * we would lose that quality for all gridworld.actions.
      */
     @Nonnull private final Map<State, PriorityQueue<Quality>> bestQualities;
-	@SuppressWarnings("null")
+    @SuppressWarnings("null")
 	@Nonnull private Quality defaultQuality = Quality.ZERO;
     
-    public QualityHashMap() {
+	public QualityHashMap() {
         // Will just match the default PriorityQueue size
         EXPECTED_AVERAGE_ACTIONS_PER_STATE = 11;
         actionQualities = new HashMap<>();
