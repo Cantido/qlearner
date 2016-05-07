@@ -71,33 +71,20 @@
 				<artifactId>site-maven-plugin</artifactId>
 				<version>0.12</version>
 				<configuration>
+					<server>github</server>
 					<message>Creating site for ${project.version}</message>
-					<dryRun>true</dryRun>
+					<merge>true</merge>
 				</configuration>
 				<executions>
 					<execution>
 						<goals>
 							<goal>site</goal>
 						</goals>
-						<phase>site-deploy</phase>
+						<phase>site</phase>
 					</execution>
 				</executions>
 			</plugin>
-			<!-- disable maven-site-plugin's site-deploy, because we're using GitHub's -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<version>3.3</version>
-				<configuration>
-					<skipDeploy>true</skipDeploy>
-				</configuration>
-			</plugin>
 		</plugins>
-		<pluginManagement>
-			<plugins>
-
-			</plugins>
-		</pluginManagement>
 	</build>
 	<reporting>
 		<plugins>
