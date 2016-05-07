@@ -34,5 +34,5 @@ public interface ExplorationStrategy {
      * @param stateActionQualities {@link State}-{@link Action} pairs and their associated {@link Quality Qualities}
      * @return the chosen action
      */
-    public Action getNextAction(SortedSet<StateActionQuality> stateActionQualities);
+    Action getNextAction(SortedSet<StateActionQuality> stateActionQualities);
 }

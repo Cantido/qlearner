@@ -23,7 +23,6 @@ import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assume.assumeThat;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.FromDataPoints;
 import org.junit.experimental.theories.Theories;
@@ -35,7 +34,6 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import qlearning.domain.exploration.ExplorationFactor;
 
-@NonNullByDefault({})
 @RunWith(Theories.class)
 public class ExplorationFactorShouldExploreTheoryTest {
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();

@@ -19,7 +19,7 @@
  * Strategies for a {@link qlearning.agent.Agent Agent} to execute
  * {@link qlearning.client.Action Actions}.
  */
-@NonNullByDefault
+@ParametersAreNonnullByDefault
 package qlearning.agent.executors;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import javax.annotation.ParametersAreNonnullByDefault;

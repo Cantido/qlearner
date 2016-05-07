@@ -21,6 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import org.slf4j.Logger;
@@ -31,13 +34,14 @@ import qlearning.domain.quality.Quality;
 import qlearning.domain.quality.QualityMap;
 
 public class QualityHashMap implements QualityMap {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final int EXPECTED_AVERAGE_ACTIONS_PER_STATE;
+    @SuppressWarnings("null")
+	@Nonnull private static final Logger logger = LoggerFactory.getLogger(QualityHashMap.class);
+    @Nonnegative private final int EXPECTED_AVERAGE_ACTIONS_PER_STATE;
     
     /**
      * Mapping of State-Action pairs to their Quality value
      */
-    private final Map<ImmutablePair<State, Runnable>, Quality> actionQualities;
+    private final Map<ImmutablePair<State, Action>, Quality> actionQualities;
     /**
      * An optimization; stores the best quality for each state
      * 
@@ -46,8 +50,9 @@ public class QualityHashMap implements QualityMap {
      * and then when we update any of the gridworld.actions with that quality,
      * we would lose that quality for all gridworld.actions.
      */
-    private final Map<State, PriorityQueue<Quality>> bestQualities;
-    private Quality defaultQuality = Quality.ZERO;
+    @Nonnull private final Map<State, PriorityQueue<Quality>> bestQualities;
+	@SuppressWarnings("null")
+	@Nonnull private Quality defaultQuality = Quality.ZERO;
     
     public QualityHashMap() {
         // Will just match the default PriorityQueue size
@@ -56,7 +61,10 @@ public class QualityHashMap implements QualityMap {
         bestQualities = new HashMap<>();
     }
     
-    public QualityHashMap(int expectedStates, int actionsPerState) {
+    public QualityHashMap(@Nonnegative int expectedStates, @Nonnegative int actionsPerState) {
+    	if(expectedStates < 0) throw new IllegalArgumentException("Was given a negative expectedStates number, which is invalid.");
+    	if(actionsPerState < 0) throw new IllegalArgumentException("Was given a negative actionsPerState number, which is invalid.");
+    	
         EXPECTED_AVERAGE_ACTIONS_PER_STATE = actionsPerState;
         actionQualities = new HashMap<>(expectedStates * actionsPerState);
         bestQualities = new HashMap<>(expectedStates);
@@ -92,7 +100,6 @@ public class QualityHashMap implements QualityMap {
         queueToUpdate.add(quality);
     }
 
-    @SuppressWarnings({ "unused", "null" })
     @Override
     public Quality get(State state, Action action) {
         Quality quality = actionQualities.get(new ImmutablePair<>(state, action));
@@ -106,9 +113,20 @@ public class QualityHashMap implements QualityMap {
     
     @Override
     public Quality getBestQuality(State state) {
+    	Quality bestQuality = defaultQuality;
+    	
         if(bestQualities.containsKey(state)) {
-            return bestQualities.get(state).peek();
+        	bestQuality = bestQualities.get(state).peek();
         }
-        return defaultQuality;
+        if(bestQuality == null) {
+        	return defaultQuality;
+        }
+        
+        return bestQuality;
+    }
+    
+    @Override
+    public StateActionQuality getTriplet(State state, Action action) {
+        return new StateActionQuality(state, action, this.get(state, action));
     }
 }

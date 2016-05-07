@@ -17,10 +17,9 @@
 
 package qlearning.domain.quality;
 
-import org.apache.commons.lang3.Validate;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import qlearning.domain.learning.DiscountFactor;
 import qlearning.domain.learning.LearningRate;
 import qlearning.domain.learning.Reward;
@@ -32,14 +31,12 @@ import qlearning.domain.learning.Reward;
 public class BackwardInduction implements QualityUpdateStrategy {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Override
-	public Quality next(Quality oldQuality, LearningRate learningRate, Reward reward, DiscountFactor discountFactor,
+	public Quality next(
+			Quality oldQuality,
+			LearningRate learningRate,
+			Reward reward,
+			DiscountFactor discountFactor,
 			Quality optimalFutureValueEstimate) {
-
-        Validate.notNull(oldQuality, "Quality cannot be null");
-        Validate.notNull(reward, "Reward cannot be null");
-        Validate.notNull(optimalFutureValueEstimate, "Optimal future value estimate cannot be null");
-        Validate.notNull(learningRate, "LearningRate cannot be null");
-        Validate.notNull(discountFactor, "DiscountFactor cannot be null");
 
 		logger.debug(
 				"Creating new quality using the following values: (Qt: {}), (a: {}), (Rt+1: {}), (d: {}), (maxQt: {})",

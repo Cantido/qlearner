@@ -20,7 +20,7 @@
  *
  * @see <a href="https://en.wikipedia.org/wiki/Q-learning">Q-learning on Wikipedia</a>
  */
-@NonNullByDefault
+@ParametersAreNonnullByDefault
 package qlearning;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import javax.annotation.ParametersAreNonnullByDefault;

@@ -17,9 +17,8 @@
 
 package qlearning.domain.learning;
 
-import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ZERO;
-
-import org.apache.commons.lang3.Validate;
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
 
 /**
  * The discount factor determines the importance of future rewards.
@@ -30,8 +29,10 @@ import org.apache.commons.lang3.Validate;
  * </p>
  */
 public class DiscountFactor extends Number {
-    private final Double value;
-    
+	private static final long serialVersionUID = 743132734230321555L;
+	
+	@Nonnull @Nonnegative private final Double value;
+	
     /**
      * Create a new {@code DiscountFactor} with the given value
      * <p>
@@ -43,8 +44,8 @@ public class DiscountFactor extends Number {
      * @param value the value of the new discount factor, in the range [0, &infin;)
      */
     public DiscountFactor(double value) {
-        Validate.inclusiveBetween(DOUBLE_ZERO, Double.POSITIVE_INFINITY, value,
-                "Discount factor must be greater than or equal to zero");
+        if(value < 0.0) throw new IllegalArgumentException("Discount factor must be greater than or equal to zero");
+
         this.value = value;
     }
     
@@ -68,9 +69,8 @@ public class DiscountFactor extends Number {
         return value;
     }
 
-    @SuppressWarnings("null")
     @Override
     public String toString() {
-        return String.format("DiscountFactor[%f]", value);
+        return "DiscountFactor["+value+"]";
     }
 }

@@ -19,7 +19,7 @@ package qlearning.client;
 
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.Nullable;
+import javax.annotation.Nullable;
 
 import qlearning.agent.Agent;
 import qlearning.domain.learning.Reward;
@@ -30,12 +30,11 @@ import qlearning.domain.learning.Reward;
  * <p>
  * The desirability of this condition is determined by the reward provided by {@link #getReward}. Higher values will
  * make the system prefer this state. Possible gridworld.actions are provided by {@link #getActions}.
- * <p>
- * <p>
+ * </p><p>
  * Note: This class <strong>must</strong> implement {@link #hashCode()} and {@link #equals(Object)}! The system uses
  * these comparisons to look up the quality values of {@code State-Action} pairs, so if two different {@code State}s are
  * seen as equivalent, then the system will not work correctly.
- * <p>
+ * </p>
  */
 public abstract class State {
     /**

@@ -19,4 +19,7 @@
  * Classes for representing and manipulating
  * {@link qlearning.domain.quality.Quality Quality} values
  */
+@ParametersAreNonnullByDefault
 package qlearning.domain.quality;
+
+import javax.annotation.ParametersAreNonnullByDefault;

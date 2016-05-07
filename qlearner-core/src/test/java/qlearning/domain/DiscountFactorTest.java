@@ -23,7 +23,6 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assume.assumeThat;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.Rule;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
@@ -34,7 +33,6 @@ import org.junit.runner.RunWith;
 import qlearning.domain.learning.DiscountFactor;
 
 
-@NonNullByDefault({})
 @RunWith(Theories.class)
 public class DiscountFactorTest {
 
@@ -53,7 +51,6 @@ public class DiscountFactorTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-    @SuppressWarnings("unused")
     @Theory
     public void discountFactorBelowZeroIsIllegal(double discountFactor) {
         assumeThat(discountFactor, lessThan(DOUBLE_ZERO));
@@ -62,7 +59,6 @@ public class DiscountFactorTest {
         new DiscountFactor(discountFactor);
     }
 
-    @SuppressWarnings("unused")
     @Theory
     public void discountFactorAboveZeroIsLegal(double discountFactor) {
         assumeThat(discountFactor, greaterThan(DOUBLE_ZERO));

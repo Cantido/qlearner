@@ -18,7 +18,8 @@
 package qlearning.domain.learning;
 
 public class Reward extends Number {
-    private final Double value;
+	private static final long serialVersionUID = 8968547494739709536L;
+	private final double value;
     
     public Reward(double value) {
         this.value = value;
@@ -26,17 +27,17 @@ public class Reward extends Number {
 
     @Override
     public int intValue() {
-        return value.intValue();
+        return Double.valueOf(value).intValue();
     }
 
     @Override
     public long longValue() {
-        return value.longValue();
+        return Double.valueOf(value).longValue();
     }
 
     @Override
     public float floatValue() {
-        return value.floatValue();
+        return Double.valueOf(value).floatValue();
     }
 
     @Override
@@ -44,9 +45,8 @@ public class Reward extends Number {
         return value;
     }
 
-    @SuppressWarnings("null")
     @Override
     public String toString() {
-        return value.toString();
+        return "Reward["+value+"]";
     }
 }

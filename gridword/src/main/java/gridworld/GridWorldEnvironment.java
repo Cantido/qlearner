@@ -40,6 +40,9 @@ package gridworld;/*
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,47 +67,45 @@ import gridworld.actions.Up;
  * </p>
  */
 public class GridWorldEnvironment implements Environment {
-    @SuppressWarnings("null")
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = LoggerFactory.getLogger(GridWorldEnvironment.class);
     
+    @Nonnegative private final int maxX;
+    @Nonnegative private final int maxY;
 
-    private final int maxX;
-    private final int maxY;
+    @Nonnegative private final int minX = 0;
+    @Nonnegative private final int minY = 0;
 
-    private final int minX = 0;
-    private final int minY = 0;
+    @Nonnegative private final int startX;
+    @Nonnegative private final int startY;
 
-    private final int startX;
-    private final int startY;
+    @Nonnegative private final int goalX;
+    @Nonnegative private final int goalY;
 
-    private final int goalX;
-    private final int goalY;
-
-    private final GridWorldState [][] states;
+    @Nonnull private final GridWorldState [][] states;
     
-    private int xState;
-    private int yState;
-    private GridWorldState currentState;
+    @Nonnegative private int xState;
+    @Nonnegative private int yState;
+    @Nonnull private GridWorldState currentState;
     
     /**
      * More positive in the Y direction (away from zero)
      */
-    private final Up UP = new Up(this);
+    @Nonnull private final Up UP = new Up(this);
     
     /**
      * Less positive in the Y direction (toward zero)
      */
-    private final Down DOWN = new Down(this);
+    @Nonnull private final Down DOWN = new Down(this);
     
     /**
      * Less positive in the X direction (toward zero)
      */
-    private final Left LEFT = new Left(this);
+    @Nonnull private final Left LEFT = new Left(this);
     
     /**
      * More positive in the X direction (away from zero)
      */
-    private final Right RIGHT = new Right(this);
+    @Nonnull private final Right RIGHT = new Right(this);
 
     public GridWorldEnvironment(int sizeX, int sizeY, int startX, int startY, int goalX, int goalY) {
         this.maxX = sizeX;
@@ -223,13 +224,14 @@ public class GridWorldEnvironment implements Environment {
         return currentState;
     }
 
-    @SuppressWarnings("null")
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("GridWorldEnvironment[Current state: ")
                .append(currentState)
                .append("]");
-        return builder.toString();
+        String stringValue = builder.toString();
+        if(stringValue == null) { throw new NullPointerException("StringBuilder.toString returned null."); }
+        return stringValue;
     }
 }

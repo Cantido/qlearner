@@ -17,30 +17,26 @@
 
 package qlearning.domain.quality;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
-import static org.hamcrest.Matchers.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import qlearning.client.Action;
 import qlearning.client.State;
-import qlearning.domain.quality.Quality;
-import qlearning.domain.quality.QualityHashMap;
-import qlearning.domain.quality.QualityMap;
 
 @SuppressWarnings("null")
-@NonNullByDefault({})
-@RunWith(MockitoJUnitRunner.class)
 public class QualityHashMapTest {
+	@Rule public MockitoRule mockito = MockitoJUnit.rule();
     
     QualityMap map = new QualityHashMap();
     @Mock State state;
@@ -63,7 +59,7 @@ public class QualityHashMapTest {
         when(state.getActions()).thenReturn(actions);
     }
     
-    public void fillMap() {
+	public void fillMap() {
         map.put(state, highestAction, lowestQuality);
         map.put(state, middleAction, middleQuality);
         map.put(state, highestAction, highestQuality);

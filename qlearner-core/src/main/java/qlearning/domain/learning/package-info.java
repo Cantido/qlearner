@@ -16,6 +16,9 @@
  */
 
 /**
- * Values that influence how quickly the system learns & forgets
+ * Values that influence how quickly the system learns and forgets
  */
+@ParametersAreNonnullByDefault
 package qlearning.domain.learning;
+
+import javax.annotation.ParametersAreNonnullByDefault;

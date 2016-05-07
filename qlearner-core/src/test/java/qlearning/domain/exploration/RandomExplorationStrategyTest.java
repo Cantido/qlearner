@@ -25,7 +25,6 @@ import java.util.Random;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,7 +39,6 @@ import qlearning.domain.quality.StateActionQuality;
 import qlearning.domain.quality.Quality;
 
 @SuppressWarnings("null")
-@NonNullByDefault({})
 public class RandomExplorationStrategyTest {
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
     
@@ -63,7 +61,7 @@ public class RandomExplorationStrategyTest {
     SortedSet<StateActionQuality> stateActionQualities;
     
     
-    @Before
+	@Before
     public void setUp() {
         goodQuality = new Quality(1.0);
         badQuality = new Quality(0.0);

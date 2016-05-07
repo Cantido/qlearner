@@ -23,7 +23,7 @@
  * and find global maxima.
  * </p>
  */
-@NonNullByDefault
+@ParametersAreNonnullByDefault
 package qlearning.domain.exploration;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import javax.annotation.ParametersAreNonnullByDefault;

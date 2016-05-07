@@ -20,10 +20,13 @@ package qlearning.client;
 /**
  * The space in which {@link Action}s can be performed.
  * <p>
- * This library assumes that taking gridworld.actions using {@link Action#execute()} somehow changes the state of the environment.
- * This relationship could be implemented in code, as in our Gridworld example, or in meatspace, as in a learning robot
- * or smart home thermostat system. In other words, the {@code Environment} encapsulates the input to this system, while
- * the Actions encapsulate the output.
+ * This library assumes that taking gridworld.actions using
+ * {@link Action#run()} somehow changes the state of the environment. This
+ * relationship could be implemented in code, as in our Gridworld example, or
+ * in meat-space, as in a learning robot or smart home thermostat system. In
+ * other words, the {@code Environment} encapsulates the input to this
+ * system, while the Actions encapsulate the output.
+ * </p>
  */
 public interface Environment {
     /**
@@ -33,5 +36,5 @@ public interface Environment {
      * 
      * @return the environment's current state
      */
-	public State getState();
+	State getState();
 }

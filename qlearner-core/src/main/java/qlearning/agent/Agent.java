@@ -17,22 +17,21 @@
 
 package qlearning.agent;
 
-import java.util.*;
+import java.util.Optional;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.Executor;
-import org.apache.commons.lang3.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import qlearning.client.Action;
 import qlearning.client.Environment;
-import qlearning.domain.exploration.ExplorationStrategy;
 import qlearning.client.State;
-import qlearning.agent.executors.DirectExecutor;
-import qlearning.domain.learning.DiscountFactor;
-import qlearning.domain.exploration.ExplorationFactor;
-import qlearning.domain.learning.LearningRate;
-import qlearning.domain.exploration.RandomExplorationStrategy;
-import qlearning.domain.learning.Reward;
-import qlearning.domain.quality.*;
+import qlearning.domain.exploration.ExplorationStrategy;
+import qlearning.domain.quality.QualityMap;
+import qlearning.domain.quality.QualityUpdater;
+import qlearning.domain.quality.StateActionQuality;
 
 /**
  * Performs {@link Action}s that will lead to changes in the {@link Environment}'s current {@link State}.
@@ -41,123 +40,27 @@ import qlearning.domain.quality.*;
  * Q-learning algorithm to pick the optimal {@code Action} to take while in each {@code State}.
  */
 public class Agent {
-    /**
-     * Builds {@link Agent} objects using the Builder pattern:
-     * 
-     * <pre>
-     * Agent agent = 
-     *  new AgentBuilder()
-     *        .setEnvironment(environment)
-     *        .setExplorationStrategy(EXPLORATION_STRATEGY)
-     *        .setLearningRate(LEARNING_RATE)
-     *        .setDiscountFactor(DISCOUNT_FACTOR)
-     *        .setQualityMap(qualityMap)
-     *        .getAgent();
-     * </pre>
-     */
-    public static class AgentBuilder {
-        private static final ExplorationFactor DEFAULT_EXPLORATION_FACTOR = new ExplorationFactor(0.2);
-        
-        private Environment environment;
-        private Executor actionExecutor = new DirectExecutor();
-        private DiscountFactor discountFactor = new DiscountFactor(1);
-        private ExplorationStrategy explorationStrategy = new RandomExplorationStrategy(DEFAULT_EXPLORATION_FACTOR);
-        private LearningRate learningRate = new LearningRate(1);
-        private QualityMap qualityMap = new QualityHashMap();
-        private QualityUpdateStrategy qualityUpdateStrategy = new BackwardInduction();
+    @Nonnull private final Environment environment;
 
-        public AgentBuilder(Environment environment) {
-            this.environment = environment;
-        }
+    @Nonnull private final ExplorationStrategy explorationStrategy;
+    @Nonnull private final QualityMap qualityMap;
+    @Nonnull private final Executor actionExecutor;
+    @Nonnull private final QualityUpdater updater;
 
-        public Executor getActionExecutor() {
-            return actionExecutor;
-        }
-        public Agent getAgent() {
-            return new Agent(this);
-        }
-        public DiscountFactor getDiscountFactor() {
-            return discountFactor;
-        }
-        public Environment getEnvironment() {
-            return environment;
-        }
-        public ExplorationStrategy getExplorationStrategy() {
-            return explorationStrategy;
-        }
-        public LearningRate getLearningRate() {
-            return learningRate;
-        }
-        public QualityMap getQualityMap() {
-            return qualityMap;
-        }
-        
-        public QualityUpdateStrategy getQualityUpdateStrategy() {
-            return qualityUpdateStrategy;
-        }
-        
-        public void setActionExecutor(Executor actionExecutor) {
-            this.actionExecutor = actionExecutor;
-        }
+    @Nullable private Step lastStep;
 
-        public AgentBuilder setDiscountFactor(DiscountFactor discountFactor) {
-            this.discountFactor = discountFactor;
-            return this;
-        }
-
-        public AgentBuilder setEnvironment(Environment environment) {
-            this.environment = environment;
-            return this;
-        }
-
-        public AgentBuilder setExecutor(Executor executor) {
-            this.actionExecutor = executor;
-            return this;
-        }
-
-        public AgentBuilder setExplorationStrategy(ExplorationStrategy explorationStrategy) {
-            this.explorationStrategy = explorationStrategy;
-            return this;
-        }
-
-        public AgentBuilder setLearningRate(LearningRate learningRate) {
-            this.learningRate = learningRate;
-            return this;
-        }
-        
-        public AgentBuilder setQualityMap(QualityMap qualityMap) {
-            this.qualityMap = qualityMap;
-            return this;
-        }
-
-        public AgentBuilder setQualityUpdateStrategy(QualityUpdateStrategy qualityUpdateStrategy) {
-            this.qualityUpdateStrategy = qualityUpdateStrategy;
-            return this;
-        }
-    }
-    
-    private final Environment environment;
-
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
-    private final ExplorationStrategy explorationStrategy;
-    private final QualityMap qualityMap;
-    private final Executor actionExecutor;
-    private final QualityUpdater updater;
-
-    private Step lastStep;
-
-    private Agent(Agent.AgentBuilder agentBuilder) {
-        this.environment = agentBuilder.getEnvironment();
-        this.explorationStrategy = Validate.notNull(agentBuilder.getExplorationStrategy(), "LearningRate cannot be null");
-        this.qualityMap = Validate.notNull(agentBuilder.getQualityMap(), "QualityMap cannot be null");
-        this.actionExecutor = Validate.notNull(agentBuilder.getActionExecutor(), "Executor cannot be null");
-
-        updater = new QualityUpdater(
-                qualityMap,
-                agentBuilder.getQualityUpdateStrategy(),
-                agentBuilder.getLearningRate(),
-                agentBuilder.getDiscountFactor());
+    public Agent(
+    		Environment environment,
+    	    ExplorationStrategy explorationStrategy,
+    	    QualityMap qualityMap,
+    	    Executor actionExecutor,
+    	    QualityUpdater updater
+    		) {
+        this.environment = environment;
+        this.explorationStrategy = explorationStrategy;
+        this.qualityMap = qualityMap;
+        this.actionExecutor = actionExecutor;
+        this.updater = updater;
     }
 
     public void reset() {
@@ -191,44 +94,15 @@ public class Agent {
 
         // Using streams is not as fast as this plain ol' iteration
         for(Action action : state.getActions()) {
-            pairs.add(buildTriplet(state, action));
+        	if(action == null) continue;
+            pairs.add(qualityMap.getTriplet(state, action));
         }
         return pairs;
     }
 
-    private StateActionQuality buildTriplet(State state, Action action) {
-        return new StateActionQuality(state, action, qualityMap.get(state, action));
-    }
-
-    public Step getLastStep() {
-        return lastStep;
-    }
-
-    private static class QualityUpdater {
-        private final QualityMap qualityMap;
-        private final QualityUpdateStrategy strategy;
-        private final LearningRate learningRate;
-        private final DiscountFactor discountFactor;
-
-        public QualityUpdater(QualityMap qualityMap, QualityUpdateStrategy strategy, LearningRate learningRate, DiscountFactor discountFactor) {
-            this.qualityMap = qualityMap;
-            this.strategy = strategy;
-            this.learningRate = learningRate;
-            this.discountFactor = discountFactor;
-        }
-
-        public void updateQuality(Step stepTaken, State resultingState) {
-            State previousState = stepTaken.getStartingState();
-            Action actionTaken = stepTaken.getLeavingAction();
-
-            Quality oldQuality = qualityMap.get(previousState, actionTaken);
-
-            Reward reward = resultingState.getReward();
-            Quality optimalFutureValueEstimate = qualityMap.getBestQuality(resultingState);
-
-            Quality newQuality = this.strategy.next(oldQuality, learningRate, reward, discountFactor, optimalFutureValueEstimate);
-
-            qualityMap.put(previousState, actionTaken, newQuality);
-        }
+    public Optional<Step> getLastStep() {
+    	Optional<Step> optional = Optional.of(lastStep);
+    	if(optional == null) throw new AssertionError("Optional.of returned null.");
+        return optional;
     }
 }

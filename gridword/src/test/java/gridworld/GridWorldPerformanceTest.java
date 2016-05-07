@@ -20,16 +20,16 @@ package gridworld;
 import java.time.Duration;
 import java.time.Instant;
 
-import qlearning.domain.exploration.ExplorationStrategy;
 import qlearning.agent.Agent;
-import qlearning.agent.Agent.AgentBuilder;
-import qlearning.domain.learning.DiscountFactor;
+import qlearning.agent.AgentBuilder;
 import qlearning.domain.exploration.ExplorationFactor;
-import qlearning.domain.learning.LearningRate;
+import qlearning.domain.exploration.ExplorationStrategy;
 import qlearning.domain.exploration.RandomExplorationStrategy;
+import qlearning.domain.learning.DiscountFactor;
+import qlearning.domain.learning.LearningRate;
+import qlearning.domain.quality.BackwardInduction;
 import qlearning.domain.quality.QualityHashMap;
 import qlearning.domain.quality.QualityMap;
-import qlearning.domain.quality.BackwardInduction;
 import qlearning.domain.quality.QualityUpdateStrategy;
 
 public class GridWorldPerformanceTest {

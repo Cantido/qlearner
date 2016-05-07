@@ -27,11 +27,6 @@ import qlearning.domain.learning.Reward;
  * A strategy for getting the next {@link Quality} value after one learning iteration.
  */
 public interface QualityUpdateStrategy {
-    /**
-     * A quality update strategy that always returns the original quality value
-     */
-    public static QualityUpdateStrategy NONE = new QualityUpdateStrategy() { /* Use default behavior */ };
-    
 	/**
 	 * Get the next {@link Quality} value
 	 * @param oldQuality the quality value of the previous {@link State}-{@link Action} pair
@@ -41,13 +36,10 @@ public interface QualityUpdateStrategy {
 	 * @param optimalFutureValueEstimate the highest expected {@code Quality} that we can get after transition to the next {@code State} 
 	 * @return the new {@code Quality} value for this {@code State}
 	 */
-	@SuppressWarnings("unused")
-    public default Quality next(
+    Quality next(
 			Quality oldQuality,
 			LearningRate learningRate,
 			Reward reward,
 			DiscountFactor discountFactor,
-			Quality optimalFutureValueEstimate) {
-	    return oldQuality;
-	}
+			Quality optimalFutureValueEstimate);
 }

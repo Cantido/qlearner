@@ -21,7 +21,8 @@ import java.util.Random;
 import java.util.SortedSet;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.apache.commons.lang3.Validate;
+import javax.annotation.Nonnull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,10 +34,10 @@ import qlearning.domain.quality.StateActionQuality;
  */
 public class RandomExplorationStrategy implements ExplorationStrategy {
     @SuppressWarnings("null")
-    private Logger logger =  LoggerFactory.getLogger(getClass());
+	@Nonnull private final Logger logger =  LoggerFactory.getLogger(getClass());
     
-    private final ExplorationFactor explorationFactor;
-    private final Random random;
+    @Nonnull private final ExplorationFactor explorationFactor;
+    @Nonnull private final Random random;
     
     /**
      * Create a new {@link RandomExplorationStrategy} with the given exploration factor.
@@ -44,13 +45,13 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
      * @param explorationFactor the exploration factor to set
      */
     @SuppressWarnings("null")
-    public RandomExplorationStrategy(ExplorationFactor explorationFactor) {
+	public RandomExplorationStrategy(ExplorationFactor explorationFactor) {
         this(explorationFactor, ThreadLocalRandom.current());
     }
     
     public RandomExplorationStrategy(ExplorationFactor explorationFactor, Random random) {
-        this.explorationFactor = Validate.notNull(explorationFactor);
-        this.random = Validate.notNull(random);
+        this.explorationFactor = explorationFactor;
+        this.random = random;
     }
     
     /**

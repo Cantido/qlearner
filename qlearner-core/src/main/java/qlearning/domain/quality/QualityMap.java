@@ -21,10 +21,10 @@ import qlearning.client.Action;
 import qlearning.client.State;
 import qlearning.domain.quality.Quality;
 
-@SuppressWarnings("unused")
 public interface QualityMap {
-    public void put(State state, Action action, Quality quality);
-    public Quality get(State state, Action action);
-    public Quality getBestQuality(State state);
-    public Quality getDefaultQuality();
+    void put(State state, Action action, Quality quality);
+    Quality get(State state, Action action);
+    Quality getBestQuality(State state);
+    Quality getDefaultQuality();
+    StateActionQuality getTriplet(State state, Action action);
 }

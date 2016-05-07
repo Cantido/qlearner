@@ -17,8 +17,10 @@
 
 package qlearning.domain.quality;
 
-import org.eclipse.jdt.annotation.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import qlearning.client.Action;
 import qlearning.client.State;
 
@@ -26,9 +28,9 @@ import qlearning.client.State;
  * A triplet of a {@link State}, {@link Action}, and {@link Quality} of that pair
  */
 public class StateActionQuality implements Comparable<StateActionQuality> {
-    private final State state;
-    private final Action action;
-    private final Quality quality;
+    @Nonnull private final State state;
+    @Nonnull private final Action action;
+    @Nonnull private final Quality quality;
     
     public StateActionQuality(State state, Action action, Quality quality) {
         this.state = state;
@@ -62,27 +64,29 @@ public class StateActionQuality implements Comparable<StateActionQuality> {
         result = prime * result + state.hashCode();
         return result;
     }
-
+    
+    @SuppressFBWarnings(
+    		value = "NP_METHOD_PARAMETER_TIGHTENS_ANNOTATION",
+    		justification = "We are overriding equals, which is defined " +
+    						"as @Nullable. This is a false positive.")
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         StateActionQuality other = (StateActionQuality) obj;
-        if (!action.equals(other.action))
-            return false;
-        if (!quality.equals(other.quality))
-            return false;
-        if (!state.equals(other.state))
-            return false;
-        return true;
+        if (!action.equals(other.action)) return false;
+        if (!quality.equals(other.quality)) return false;
+        return state.equals(other.state);
     }
 
+    @SuppressFBWarnings(
+    		value = "NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE",
+    		justification = "We are overriding compareTo, which is defined " +
+    						"as @Nullable. This is a false positive.")
     @Override
-    public int compareTo(StateActionQuality o) {
+    public int compareTo(@Nullable StateActionQuality o) {
+    	if(o == null) throw new NullPointerException("Tried to compare this value to null.");
         return quality.compareTo(o.quality);
     }
 }

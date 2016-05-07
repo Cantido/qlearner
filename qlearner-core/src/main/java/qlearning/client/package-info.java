@@ -18,4 +18,7 @@
 /**
  * Base classes that must be implemented by this library's clients
  */
+@ParametersAreNonnullByDefault
 package qlearning.client;
+
+import javax.annotation.ParametersAreNonnullByDefault;

@@ -17,10 +17,11 @@
 
 package gridworld.actions;
 
-import org.eclipse.jdt.annotation.Nullable;
 
-import qlearning.client.Action;
+import javax.annotation.Nullable;
+
 import gridworld.GridWorldEnvironment;
+import qlearning.client.Action;
 
 /* package-private */ abstract class GridWorldAction extends Action {
 

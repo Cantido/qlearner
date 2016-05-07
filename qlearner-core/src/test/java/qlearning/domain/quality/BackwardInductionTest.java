@@ -30,7 +30,6 @@ import qlearning.domain.learning.LearningRate;
 import qlearning.domain.learning.Reward;
 
 public class BackwardInductionTest {
-	@SuppressWarnings("null")
     @Rule public MockitoRule mockito = MockitoJUnit.rule();
 	
 	private final QualityUpdateStrategy backwardInduction = new BackwardInduction();

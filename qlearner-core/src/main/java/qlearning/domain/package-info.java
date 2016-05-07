@@ -18,7 +18,7 @@
 /**
  * Domain variables used in operation of the Q-Learning algorithm
  */
-@NonNullByDefault
+@ParametersAreNonnullByDefault
 package qlearning.domain;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import javax.annotation.ParametersAreNonnullByDefault;

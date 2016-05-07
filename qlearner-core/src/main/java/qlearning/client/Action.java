@@ -17,25 +17,24 @@
 
 package qlearning.client;
 
-import org.eclipse.jdt.annotation.Nullable;
+import javax.annotation.Nullable;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import qlearning.agent.Agent;
 
 /**
  * An act that can be performed that will lead to a change in the {@link Environment}'s current {@link State}.
  * <p>
- * The {@link Agent} assumes that taking gridworld.actions using {@link #execute()} somehow changes the state of the
+ * The {@link Agent} assumes that taking gridworld.actions using {@link Action#run()} somehow changes the state of the
  * {@link Environment}. Calling {@code execute()} on {@code Action}s is the "output" of this system. This could drive
  * motors, change an HVAC's set temperature, move a game piece, and so on. As long as this has a chance of changing what
  * we get from {@link Environment#getState()}, then the system can learn to optimize its choices.
- * </p>
- * <p>
+ * </p><p>
  * Note: This class <strong>must</strong> implement {@link #hashCode()} and {@link #equals(Object)}! The system uses
  * these comparisons to look up the quality values of {@code State-Action} pairs, so if two different {@code Action}s
  * are seen as equivalent, then the system will not work correctly. For example, if you are moving a game piece on a
  * board, make sure that "up" means the same "up" everywhere!
- * <p>
- * <p>
+ * </p><p>
  * You can use this class to wrap your own {@code Runnable} classes. If your {@code Runnable}s spawn new threads, be careful of the QLearning
  * system interacting with the {@link Environment} is thread-safe, lest your Runnable manipulates the Environment
  * while the Agent is trying to get the next State from it.
@@ -51,6 +50,10 @@ public abstract class Action implements Runnable {
     @Override
     public abstract int hashCode();
     
+    @SuppressFBWarnings(
+    		value = "NP_METHOD_PARAMETER_TIGHTENS_ANNOTATION",
+    		justification = "We are overriding equals, which is defined " +
+    						"as @Nullable. This is a false positive.")
     @Override
     public abstract boolean equals(@Nullable Object other);
 }

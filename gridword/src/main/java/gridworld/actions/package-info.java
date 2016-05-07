@@ -15,7 +15,5 @@
  * along with QLearner.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@NonNullByDefault
+@javax.annotation.ParametersAreNonnullByDefault
 package gridworld.actions;
-
-import org.eclipse.jdt.annotation.NonNullByDefault;

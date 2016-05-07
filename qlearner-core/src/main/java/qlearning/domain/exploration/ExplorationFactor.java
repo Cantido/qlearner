@@ -20,10 +20,20 @@ package qlearning.domain.exploration;
 import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ONE;
 import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ZERO;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Signed;
+import javax.annotation.Syntax;
+
 import org.apache.commons.lang3.Validate;
 
 public class ExplorationFactor extends Number {
-    private final Double value;
+	private static final long serialVersionUID = -4745713414722996934L;
+	
+	@Syntax("StringFormat") @Nonnull
+	private static final String STRING_FORMAT = "ExplorationFactor[%f]";
+	
+	@Signed @Nonnull
+	private final Double value;
     
     public ExplorationFactor(double value) {
         validateFactorValue(value);
@@ -68,10 +78,9 @@ public class ExplorationFactor extends Number {
         return value;
     }
 
-    @SuppressWarnings("null")
     @Override
     public String toString() {
-        return String.format("ExplorationFactor[%f]", value);
+        return "ExplorationFactor["+value+"]";
     }
 
 }

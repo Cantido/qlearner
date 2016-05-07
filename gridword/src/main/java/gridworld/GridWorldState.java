@@ -15,45 +15,31 @@
  * along with QLearner.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package gridworld;/*
- * #%L
- * QLearner
- * %%
- * Copyright (C) 2012 - 2016 Robert Richter
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
+package gridworld;
 
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.Nullable;
+import javax.annotation.CheckForSigned;
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.Signed;
 
 import qlearning.client.Action;
 import qlearning.client.State;
 import qlearning.domain.learning.Reward;
 
 public class GridWorldState extends State {
-    private final int x, y;
-    private final Reward reward;
-    private final Set<Action> actions;
+    @Nonnegative private final int x, y;
+    @Nonnull private final Reward reward;
+    @Nonnull private final Set<Action> actions;
     
-    private final int hashCodeValue;
-    private final String toStringValue;
+    @Signed private final int hashCodeValue;
+    @Nonnull private final String toStringValue;
 
-    public GridWorldState(int x, int y, Reward reward, Set<Action> actions) {
+    public GridWorldState(@CheckForSigned int x, @CheckForSigned int y, Reward reward, Set<Action> actions) {
+    	if(x < 0) throw new IllegalArgumentException("Recieved a negative value for x: got "+x+ ", which is invalid.");
+    	if(y < 0) throw new IllegalArgumentException("Recieved a negative value for y: got "+y+ ", which is invalid.");
         this.x = x;
         this.y = y;
         this.reward = reward;
@@ -121,7 +107,6 @@ public class GridWorldState extends State {
         return toStringValue;
     }
     
-    @SuppressWarnings("null")
     public String computeToString() {
         StringBuilder builder = new StringBuilder();
         builder.append("GridWorldState[")
@@ -130,6 +115,8 @@ public class GridWorldState extends State {
                .append(", Reward: ").append(reward)
                .append(", Actions: ").append(actions)
                .append("]");
-        return builder.toString();
+        String stringValue = builder.toString();
+        if(stringValue == null) { throw new NullPointerException("StringBuilder.toString returned null."); }
+        return stringValue;
     }
 }

@@ -17,37 +17,33 @@
 
 package gridworld;
 
-import static org.junit.Assert.*;
+import static org.apache.commons.math3.stat.StatUtils.percentile;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.junit.Assert.assertThat;
 
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
-import static org.apache.commons.math3.stat.StatUtils.*;
-
-import static org.hamcrest.Matchers.*;
+import javax.annotation.Nonnull;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 
-import qlearning.domain.exploration.ExplorationStrategy;
 import qlearning.agent.Agent;
-import qlearning.agent.Agent.AgentBuilder;
-import qlearning.domain.learning.DiscountFactor;
+import qlearning.agent.AgentBuilder;
 import qlearning.domain.exploration.ExplorationFactor;
-import qlearning.domain.learning.LearningRate;
+import qlearning.domain.exploration.ExplorationStrategy;
 import qlearning.domain.exploration.RandomExplorationStrategy;
+import qlearning.domain.learning.DiscountFactor;
+import qlearning.domain.learning.LearningRate;
+import qlearning.domain.quality.BackwardInduction;
 import qlearning.domain.quality.QualityHashMap;
 import qlearning.domain.quality.QualityMap;
-import qlearning.domain.quality.BackwardInduction;
 import qlearning.domain.quality.QualityUpdateStrategy;
 
 /**
  * Tests that the {@link GridWorldEnvironment} implementation of this library
  * converges on the goal state.
  */
-@NonNullByDefault({})
 public class GridWorldIntegrationTest {
 
 	@Rule
@@ -55,14 +51,14 @@ public class GridWorldIntegrationTest {
 
 	private Agent agent;
 	
-	@NonNull private final GridWorldEnvironment environment = new GridWorldEnvironment(10, 10, 0, 0, 10, 10);
-	@NonNull private final QualityMap qualityMap = new QualityHashMap();
-	@NonNull private final QualityUpdateStrategy qualityUpdateStrategy = new BackwardInduction();
+	@Nonnull private final GridWorldEnvironment environment = new GridWorldEnvironment(10, 10, 0, 0, 10, 10);
+	@Nonnull private final QualityMap qualityMap = new QualityHashMap();
+	@Nonnull private final QualityUpdateStrategy qualityUpdateStrategy = new BackwardInduction();
 	
-	@NonNull private static final ExplorationFactor EXPLORATION_FACTOR = new ExplorationFactor(0.1);
-	@NonNull private static final ExplorationStrategy EXPLORATION_STRATEGY = new RandomExplorationStrategy(EXPLORATION_FACTOR);
-	@NonNull private static final DiscountFactor DISCOUNT_FACTOR = new DiscountFactor(1);
-	@NonNull private static final LearningRate LEARNING_RATE = new LearningRate(1);
+	@Nonnull private static final ExplorationFactor EXPLORATION_FACTOR = new ExplorationFactor(0.1);
+	@Nonnull private static final ExplorationStrategy EXPLORATION_STRATEGY = new RandomExplorationStrategy(EXPLORATION_FACTOR);
+	@Nonnull private static final DiscountFactor DISCOUNT_FACTOR = new DiscountFactor(1);
+	@Nonnull private static final LearningRate LEARNING_RATE = new LearningRate(1);
 
 	/**
 	 * We can reasonably expect the agent to learn the environment after this

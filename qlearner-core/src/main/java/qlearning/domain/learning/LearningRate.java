@@ -20,6 +20,8 @@ package qlearning.domain.learning;
 import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ONE;
 import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ZERO;
 
+import javax.annotation.Nonnegative;
+
 import org.apache.commons.lang3.Validate;
 
 /**
@@ -38,7 +40,8 @@ import org.apache.commons.lang3.Validate;
  * </p>
  */
 public class LearningRate extends Number {
-    private final double value;
+	private static final long serialVersionUID = -1492055404079602330L;
+	@Nonnegative private final double value;
     
    /**
     * Create a new {@code LearningRate} with the given value.
@@ -80,10 +83,8 @@ public class LearningRate extends Number {
         return value;
     }
 
-    @SuppressWarnings("null")
     @Override
     public String toString() {
-        return String.format("LearningRate[%f]", value);
+        return "LearningRate["+value+"]";
     }
-
 }
