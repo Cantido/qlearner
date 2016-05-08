@@ -53,10 +53,12 @@ public class GridWorldState extends State {
         this.toStringValue = computeToString();
     }
 
+    @Nonnegative
     public int getX() {
         return x;
     }
 
+    @Nonnegative
     public int getY() {
         return y;
     }
@@ -70,7 +72,8 @@ public class GridWorldState extends State {
     public Set<Action> getActions() {
         return this.actions;
     }
-
+    
+    @Signed
     private int computeHashCode() {
         final int prime = 31;
         int result = 1;
@@ -82,6 +85,7 @@ public class GridWorldState extends State {
     }
     
     @Override
+    @Signed
     public int hashCode() {
         return this.hashCodeValue;
     }

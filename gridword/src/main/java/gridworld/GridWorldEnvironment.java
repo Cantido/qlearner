@@ -71,7 +71,8 @@ import gridworld.actions.Up;
 
 @NotThreadSafe
 public class GridWorldEnvironment implements Environment {
-    private static final Logger logger = LoggerFactory.getLogger(GridWorldEnvironment.class);
+    @SuppressWarnings("null")
+	@Nonnull private static final Logger logger = LoggerFactory.getLogger(GridWorldEnvironment.class);
     
     @Nonnegative private final int maxX;
     @Nonnegative private final int maxY;
@@ -111,7 +112,13 @@ public class GridWorldEnvironment implements Environment {
      */
     @Nonnull private final Right RIGHT = new Right(this);
 
-    public GridWorldEnvironment(int sizeX, int sizeY, int startX, int startY, int goalX, int goalY) {
+    public GridWorldEnvironment(
+        @Nonnegative @CheckForSigned int sizeX,
+        @Nonnegative @CheckForSigned int sizeY,
+        @Nonnegative @CheckForSigned int startX,
+        @Nonnegative @CheckForSigned int startY,
+        @Nonnegative @CheckForSigned int goalX,
+        @Nonnegative @CheckForSigned int goalY) {
         this.maxX = sizeX;
         this.maxY = sizeY;
         
@@ -160,7 +167,7 @@ public class GridWorldEnvironment implements Environment {
         return states;
     }
     
-    private GridWorldState getState(int x, int y) {
+    private GridWorldState getState(@Nonnegative int x, @Nonnegative int y) {
         GridWorldState state = states[x][y];
         if(state == null){
             throw new NullPointerException("State at position (" + x + ", " + y + ") was null");
@@ -168,7 +175,7 @@ public class GridWorldEnvironment implements Environment {
         return state;
     }
     
-    private void setState(int x, int y) {
+    private void setState(@Nonnegative int x, @Nonnegative int y) {
         xState = x;
         yState = y;
         
@@ -179,7 +186,7 @@ public class GridWorldEnvironment implements Environment {
         currentState = state;
     }
     
-    private boolean isGoalState(int x, int y) {
+    private boolean isGoalState(@Nonnegative int x, @Nonnegative int y) {
         return (x == goalX && y == goalY);
     }
 
@@ -215,7 +222,7 @@ public class GridWorldEnvironment implements Environment {
         logger.debug("Moved to new X = {}", xState);
     }
 
-    private void assertNotAtBoundary(int current, int boundary) {
+    private void assertNotAtBoundary(@Nonnegative int current, @Nonnegative int boundary) {
         if (current == boundary) {
             throw new UnsupportedOperationException("Current at the boundary, cannot move any further");
         }

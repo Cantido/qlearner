@@ -89,21 +89,25 @@ public final class ExplorationFactor extends Number {
 	}
 
 	@Override
+	@Nonnegative 
 	public int intValue() {
 		return Double.valueOf(value).intValue();
 	}
 
 	@Override
+	@Nonnegative
 	public long longValue() {
 		return Double.valueOf(value).longValue();
 	}
 
 	@Override
+	@Nonnegative
 	public float floatValue() {
 		return Double.valueOf(value).floatValue();
 	}
 
 	@Override
+	@Nonnegative
 	public double doubleValue() {
 		return value;
 	}

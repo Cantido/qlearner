@@ -19,6 +19,7 @@ package qlearning.domain.quality;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.Signed;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -60,6 +61,7 @@ public class StateActionQuality implements Comparable<StateActionQuality> {
     }
 
     @Override
+    @Signed
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -89,6 +91,7 @@ public class StateActionQuality implements Comparable<StateActionQuality> {
     		justification = "We are overriding compareTo, which is defined " +
     						"as @Nullable. This is a false positive.")
     @Override
+    @Signed
     public int compareTo(@Nullable StateActionQuality o) {
     	if(o == null) throw new NullPointerException("Tried to compare this value to null.");
         return quality.compareTo(o.quality);

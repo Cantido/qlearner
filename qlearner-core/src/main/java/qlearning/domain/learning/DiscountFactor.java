@@ -55,21 +55,25 @@ public final class DiscountFactor extends Number {
     }
     
     @Override
+    @Nonnegative
     public int intValue() {
         return value.intValue();
     }
 
     @Override
+    @Nonnegative
     public long longValue() {
         return value.longValue();
     }
 
     @Override
+    @Nonnegative
     public float floatValue() {
         return value.floatValue();
     }
 
     @Override
+    @Nonnegative
     public double doubleValue() {
         return value;
     }

@@ -20,6 +20,7 @@ package gridworld.actions;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.Signed;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import gridworld.GridWorldEnvironment;
@@ -29,7 +30,7 @@ import qlearning.client.Action;
 /* package-private */ abstract class GridWorldAction extends Action {
 
     @Nonnull protected final GridWorldEnvironment environment;
-    protected final int hashCodeValue;
+    @Signed protected final int hashCodeValue;
 
     public GridWorldAction(GridWorldEnvironment environment) {
         this.environment = environment;
@@ -37,10 +38,12 @@ import qlearning.client.Action;
     }
 
     @Override
+    @Signed
     public int hashCode() {
         return hashCodeValue;
     }
-
+    
+    @Signed
     protected int computeHashCode() {
         final int prime = 127;
         int result = 1;

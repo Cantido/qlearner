@@ -19,12 +19,12 @@ package qlearning.domain.quality;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import qlearning.domain.learning.DiscountFactor;
 import qlearning.domain.learning.LearningRate;
 import qlearning.domain.learning.Reward;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Signed;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -37,6 +37,7 @@ import javax.annotation.concurrent.ThreadSafe;
 public class BackwardInduction implements QualityUpdateStrategy {
 	@SuppressWarnings("null")
 	@Nonnull private static final Logger logger = LoggerFactory.getLogger(BackwardInduction.class);
+	
 	@Override
 	public Quality next(
 			Quality oldQuality,
@@ -48,7 +49,8 @@ public class BackwardInduction implements QualityUpdateStrategy {
 		logger.debug(
 				"Creating new quality using the following values: (Qt: {}), (a: {}), (Rt+1: {}), (d: {}), (maxQt: {})",
 				oldQuality, learningRate, reward, discountFactor, optimalFutureValueEstimate);
-
+		
+		@Signed
         double qualityValue = oldQuality.doubleValue()
                 				+ (learningRate.doubleValue()
                 						* (reward.doubleValue()
