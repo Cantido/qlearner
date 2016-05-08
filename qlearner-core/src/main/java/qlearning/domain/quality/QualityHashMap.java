@@ -43,7 +43,7 @@ public class QualityHashMap implements QualityMap {
     /**
      * Mapping of State-Action pairs to their Quality value
      */
-    private final Map<ImmutablePair<State, Action>, Quality> actionQualities;
+    @Nonnull private final Map<ImmutablePair<State, Action>, Quality> actionQualities;
     /**
      * An optimization; stores the best quality for each state
      * 

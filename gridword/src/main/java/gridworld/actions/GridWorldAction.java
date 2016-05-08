@@ -18,6 +18,7 @@
 package gridworld.actions;
 
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -27,7 +28,7 @@ import qlearning.client.Action;
 @NotThreadSafe
 /* package-private */ abstract class GridWorldAction extends Action {
 
-    protected final GridWorldEnvironment environment;
+    @Nonnull protected final GridWorldEnvironment environment;
     protected final int hashCodeValue;
 
     public GridWorldAction(GridWorldEnvironment environment) {

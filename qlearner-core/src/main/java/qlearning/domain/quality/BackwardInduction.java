@@ -24,6 +24,7 @@ import qlearning.domain.learning.DiscountFactor;
 import qlearning.domain.learning.LearningRate;
 import qlearning.domain.learning.Reward;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -34,7 +35,8 @@ import javax.annotation.concurrent.ThreadSafe;
 @Immutable
 @ThreadSafe
 public class BackwardInduction implements QualityUpdateStrategy {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+	@SuppressWarnings("null")
+	@Nonnull private static final Logger logger = LoggerFactory.getLogger(BackwardInduction.class);
 	@Override
 	public Quality next(
 			Quality oldQuality,
