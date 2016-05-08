@@ -10,4 +10,15 @@
 	<body>
 		<menu ref="modules" />
 	</body>
+		<custom>
+		<fluidoSkin>
+			<profile>sandbox</profile>
+			<sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+			<gitHub>
+				<projectId>Cantido/qlearner</projectId>
+				<ribbonOrientation>right</ribbonOrientation>
+				<ribbonColor>red</ribbonColor>
+			</gitHub>
+		</fluidoSkin>
+	</custom>
 </project>
