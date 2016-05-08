@@ -12,7 +12,6 @@
 	</body>
 		<custom>
 		<fluidoSkin>
-			<profile>sandbox</profile>
 			<sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
 			<gitHub>
 				<projectId>Cantido/qlearner</projectId>
