@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>io.github.cantido</groupId>
 		<artifactId>qlearner</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>qlearner-core</artifactId>
 	<name>QLearner Core</name>
