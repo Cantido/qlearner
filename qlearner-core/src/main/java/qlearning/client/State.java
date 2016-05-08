@@ -17,15 +17,13 @@
 
 package qlearning.client;
 
-import java.util.Set;
-
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
-import javax.annotation.concurrent.ThreadSafe;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import qlearning.agent.Agent;
 import qlearning.domain.learning.Reward;
+
+import java.util.Set;
+
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * A condition that you want to reward or discourage the system from arriving at, and all of the gridworld.actions that it is

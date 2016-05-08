@@ -95,14 +95,14 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
     
     
     private Action getBestAction(SortedSet<StateActionQuality> stateActionQualities) {
-    	assert(stateActionQualities != null) : "stateActionQualities must not be null";
+    	assert stateActionQualities != null : "stateActionQualities must not be null";
     	
         logger.debug("Determining best action from possible gridworld.actions: {}", stateActionQualities);
         return stateActionQualities.last().getAction();
     }
 
     private Action getRandomAction(SortedSet<StateActionQuality> stateActionQualities) {
-    	assert(stateActionQualities != null) : "stateActionQualities must not be null";
+    	assert stateActionQualities != null : "stateActionQualities must not be null";
     	
         Integer randomIndex = random.nextInt(stateActionQualities.size());
         StateActionQuality randomTriplet = (StateActionQuality) stateActionQualities.toArray()[randomIndex];

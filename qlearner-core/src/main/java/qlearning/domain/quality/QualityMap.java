@@ -19,7 +19,6 @@ package qlearning.domain.quality;
 
 import qlearning.client.Action;
 import qlearning.client.State;
-import qlearning.domain.quality.Quality;
 
 /**
  * An object that can store the {@link Quality} values of

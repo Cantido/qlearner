@@ -167,6 +167,6 @@ public final class Quality extends Number implements Comparable<Quality> {
         }
         Quality rhs = (Quality) obj;
         
-        return ( Math.abs(rhs.value - value) < EQUALITY_DELTA );
+        return Math.abs(rhs.value - value) < EQUALITY_DELTA;
     }
 }

@@ -129,7 +129,7 @@ public class Agent {
 	}
 
 	private SortedSet<StateActionQuality> buildTriplets(State state) {
-		assert (state != null) : "state must not be null";
+		assert state != null : "state must not be null";
 		SortedSet<StateActionQuality> pairs = new TreeSet<>();
 
 		// Using streams is not as fast as this plain ol' iteration

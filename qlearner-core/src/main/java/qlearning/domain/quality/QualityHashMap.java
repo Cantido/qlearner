@@ -31,8 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qlearning.client.Action;
 import qlearning.client.State;
-import qlearning.domain.quality.Quality;
-import qlearning.domain.quality.QualityMap;
 
 /**
  * A data structure that stores {@link Quality} values in a hashed form.
