@@ -42,10 +42,6 @@ import qlearning.domain.quality.Quality;
 public class RandomExplorationStrategyTest {
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
     
-    @InjectMocks
-    RandomExplorationStrategy strategy;
-    
-    @Mock ExplorationFactor explorationFactor;
     @Mock Random random;
     
     @Mock State state;
@@ -76,7 +72,9 @@ public class RandomExplorationStrategyTest {
     
     @Test
     public void getBestAction() {
-        when(explorationFactor.shouldExplore(anyDouble())).thenReturn(false);
+    	ExplorationFactor neverExplore = new ExplorationFactor(0);
+    	
+    	RandomExplorationStrategy strategy = new RandomExplorationStrategy(neverExplore, random);
         
         Action actualAction = strategy.getNextAction(stateActionQualities);
         
@@ -85,7 +83,9 @@ public class RandomExplorationStrategyTest {
 
     @Test
     public void getRandomAction() {
-        when(explorationFactor.shouldExplore(anyDouble())).thenReturn(true);
+    	ExplorationFactor alwaysExplore = new ExplorationFactor(1);
+    	
+    	RandomExplorationStrategy strategy = new RandomExplorationStrategy(alwaysExplore, random);
         
         Action actualAction = strategy.getNextAction(stateActionQualities);
         
