@@ -67,29 +67,29 @@ public final class LearningRate extends Number {
         this.value = value;
     }
 
-    @Override
-    @Nonnegative
-    public int intValue() {
-        return Double.valueOf(value).intValue();
-    }
+	@Override
+	@Nonnegative 
+	public int intValue() {
+		return (int) value;
+	}
 
-    @Override
-    @Nonnegative
-    public long longValue() {
-        return Double.valueOf(value).longValue();
-    }
+	@Override
+	@Nonnegative
+	public long longValue() {
+		return (long) value;
+	}
 
-    @Override
-    @Nonnegative
-    public float floatValue() {
-        return Double.valueOf(value).floatValue();
-    }
+	@Override
+	@Nonnegative
+	public float floatValue() {
+		return (float) value;
+	}
 
-    @Override
-    @Nonnegative
-    public double doubleValue() {
-        return value;
-    }
+	@Override
+	@Nonnegative
+	public double doubleValue() {
+		return value;
+	}
 
     @Override
     public String toString() {

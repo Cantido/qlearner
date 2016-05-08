@@ -58,14 +58,4 @@ public abstract class State {
      * @return all gridworld.actions that can be taken
      */
     public abstract Set<Action> getActions();
-    
-    @Override
-    public abstract int hashCode();
-    
-    @SuppressFBWarnings(
-    		value = "NP_METHOD_PARAMETER_TIGHTENS_ANNOTATION",
-    		justification = "We are overriding equals, which is defined " +
-    						"as @Nullable. This is a false positive.")
-    @Override
-    public abstract boolean equals(@Nullable Object other);
 }

@@ -84,8 +84,8 @@ public class QualityHashMap implements QualityMap {
 	 * state will have. 
 	 */
     public QualityHashMap(@Nonnegative int expectedStates, @Nonnegative int actionsPerState) {
-    	if(expectedStates < 0) throw new IllegalArgumentException("Was given a negative expectedStates number, which is invalid.");
-    	if(actionsPerState < 0) throw new IllegalArgumentException("Was given a negative actionsPerState number, which is invalid.");
+    	if(expectedStates < 0) throw new IllegalArgumentException("Was given a negative expectedStates number, which is invalid. Got: " + expectedStates);
+    	if(actionsPerState < 0) throw new IllegalArgumentException("Was given a negative actionsPerState number, which is invalid. Got: " + actionsPerState);
     	
         EXPECTED_AVERAGE_ACTIONS_PER_STATE = actionsPerState;
         actionQualities = new HashMap<>(expectedStates * actionsPerState);

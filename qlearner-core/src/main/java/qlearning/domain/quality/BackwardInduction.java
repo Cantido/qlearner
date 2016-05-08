@@ -50,12 +50,14 @@ public class BackwardInduction implements QualityUpdateStrategy {
 				"Creating new quality using the following values: (Qt: {}), (a: {}), (Rt+1: {}), (d: {}), (maxQt: {})",
 				oldQuality, learningRate, reward, discountFactor, optimalFutureValueEstimate);
 		
+		double oldQualityValue = oldQuality.doubleValue();
+		
 		@Signed
-        double qualityValue = oldQuality.doubleValue()
+        double qualityValue = oldQualityValue
                 				+ (learningRate.doubleValue()
                 						* (reward.doubleValue()
                 								+ discountFactor.doubleValue() * optimalFutureValueEstimate.doubleValue()
-                								- oldQuality.doubleValue()));
+                								- oldQualityValue));
 
         return new Quality(qualityValue);
 	}

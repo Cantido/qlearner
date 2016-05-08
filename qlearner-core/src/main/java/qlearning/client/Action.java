@@ -17,9 +17,6 @@
 
 package qlearning.client;
 
-import javax.annotation.Nullable;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import qlearning.agent.Agent;
 
 /**
@@ -41,19 +38,5 @@ import qlearning.agent.Agent;
  * </p>
  */
 public abstract class Action implements Runnable {
-    /**
-     * Perform the activity that this object represents.
-     */
-    @Override
-    public abstract void run();
-    
-    @Override
-    public abstract int hashCode();
-    
-    @SuppressFBWarnings(
-    		value = "NP_METHOD_PARAMETER_TIGHTENS_ANNOTATION",
-    		justification = "We are overriding equals, which is defined " +
-    						"as @Nullable. This is a false positive.")
-    @Override
-    public abstract boolean equals(@Nullable Object other);
+	/* Intentionally left blank */
 }

@@ -48,7 +48,7 @@ public final class DiscountFactor extends Number {
     public DiscountFactor(@CheckForSigned @Nonnegative Number value) {
         if(value.doubleValue() < ZERO) {
             throw new IllegalArgumentException(
-                "Discount factor must be greater than or equal to zero");
+                "Discount factor must be greater than or equal to zero, but got: " + value);
         }
 
         this.value = value.doubleValue();

@@ -150,10 +150,6 @@ public class Agent {
 	 * @return the most recent {@code Step} taken by this object.
 	 */
 	public Optional<Step> getLastStep() {
-		Optional<Step> optional = Optional.of(lastStep);
-		if (optional == null) {
-			throw new AssertionError("Optional.of returned null.");
-		}
-		return optional;
+		return Optional.of(lastStep);
 	}
 }

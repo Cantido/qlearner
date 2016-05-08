@@ -105,19 +105,19 @@ public final class ExplorationFactor extends Number {
 	@Override
 	@Nonnegative 
 	public int intValue() {
-		return Double.valueOf(value).intValue();
+		return (int) value;
 	}
 
 	@Override
 	@Nonnegative
 	public long longValue() {
-		return Double.valueOf(value).longValue();
+		return (long) value;
 	}
 
 	@Override
 	@Nonnegative
 	public float floatValue() {
-		return Double.valueOf(value).floatValue();
+		return (float) value;
 	}
 
 	@Override

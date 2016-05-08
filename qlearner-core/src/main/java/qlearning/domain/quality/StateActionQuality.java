@@ -27,6 +27,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import qlearning.client.Action;
 import qlearning.client.State;
 
+import java.util.Objects;
+
 /**
  * A triplet of a {@link State}, {@link Action}, and {@link Quality} of that pair
  */
@@ -86,12 +88,7 @@ public class StateActionQuality implements Comparable<StateActionQuality> {
     @Override
     @Signed
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + action.hashCode();
-        result = prime * result + quality.hashCode();
-        result = prime * result + state.hashCode();
-        return result;
+        return Objects.hash(action, quality, state);
     }
     
     @SuppressFBWarnings(
@@ -110,9 +107,12 @@ public class StateActionQuality implements Comparable<StateActionQuality> {
     }
 
     @SuppressFBWarnings(
-    		value = "NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE",
+    		value = {"NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE",
+    				"WEM_WEAK_EXCEPTION_MESSAGING"},
     		justification = "We are overriding compareTo, which is defined " +
-    						"as @Nullable. This is a false positive.")
+    						"as @Nullable. This is a false positive. "
+    						+ "There is also no possible context to add to"
+    						+ "the null-check exception message.")
     @Override
     @Signed
     public int compareTo(@Nullable StateActionQuality o) {

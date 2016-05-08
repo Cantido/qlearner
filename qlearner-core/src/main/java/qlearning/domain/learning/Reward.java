@@ -52,31 +52,47 @@ public final class Reward extends Number {
         this.value = value.doubleValue();
     }
 
-    @Override
-    @Nonnegative
-    public int intValue() {
-        return Double.valueOf(value).intValue();
-    }
+	@Override
+	@Nonnegative 
+	public int intValue() {
+		return (int) value;
+	}
+
+	@Override
+	@Nonnegative
+	public long longValue() {
+		return (long) value;
+	}
+
+	@Override
+	@Nonnegative
+	public float floatValue() {
+		return (float) value;
+	}
+
+	@Override
+	@Nonnegative
+	public double doubleValue() {
+		return value;
+	}
 
     @Override
-    @Nonnegative
-    public long longValue() {
-        return Double.valueOf(value).longValue();
-    }
+	public int hashCode() {
+		long temp = Double.doubleToLongBits(value);
+		return 31 * 1 + (int) (temp ^ (temp >>> 32));
+	}
 
-    @Override
-    @Nonnegative
-    public float floatValue() {
-        return Double.valueOf(value).floatValue();
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		
+		Reward other = (Reward) obj;
+		return Double.valueOf(value).equals(other.value);
+	}
 
-    @Override
-    @Nonnegative
-    public double doubleValue() {
-        return value;
-    }
-
-    @Override
+	@Override
     public String toString() {
         return "Reward["+value+"]";
     }

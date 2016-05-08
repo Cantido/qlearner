@@ -17,9 +17,11 @@
 
 package qlearning.domain.quality;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.Signed;
@@ -37,7 +39,28 @@ import qlearning.domain.learning.Reward;
 @Immutable
 @ThreadSafe
 public final class Quality extends Number implements Comparable<Quality> {
+	private static final class ReverseOrder implements Comparator<Quality>, Serializable {
+		private static final long serialVersionUID = -7048183549162821204L;
+
+	    @SuppressFBWarnings(
+	    		value = {
+	    				"NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE",
+	    				"WEM_WEAK_EXCEPTION_MESSAGING"
+	    				},
+	    		justification = "We are overriding compare, which is defined " +
+	    						"as @Nullable. This is a false positive. "
+	    						+ "There is also no context to add to the "
+	    						+ "null-check exception messages.")
+		@Override
+	    @Signed public int compare(@Nullable Quality o1, @Nullable Quality o2) {
+			if(o1 == null) { throw new NullPointerException("First argument to this comparator was null, which is not allowed."); }
+			if(o2 == null) { throw new NullPointerException("First second to this comparator was null, which is not allowed."); }
+	        return o2.compareTo(o1);
+	    }
+	}
+	
 	private static final long serialVersionUID = -6538970599397750791L;
+	private static final double EQUALITY_DELTA = 0.0000001;
 
     /**
      * A {@link Comparator} sorts {@link Quality} objects in reverse order
@@ -65,34 +88,41 @@ public final class Quality extends Number implements Comparable<Quality> {
      * 
      * @param value the value of this quality object.
      */
+    @SuppressFBWarnings(
+    		value = "WEM_WEAK_EXCEPTION_MESSAGING",
+    		justification = "There is no additional context to give this exception")
     public Quality(@Signed Number value) {
     	double doubleValue = value.doubleValue();
         if(Double.isNaN(doubleValue)) {
-            throw new IllegalArgumentException("Cannot create a Quality from NaN");
+            throw new IllegalArgumentException("Got a NaN for a Quality value, which is invalid.");
         }
         this.value = doubleValue;
         this.hashCode = calculateHashCode(doubleValue);
     }
 
-    @Override
-    @Signed public int intValue() {
-        return Double.valueOf(value).intValue();
-    }
+	@Override
+	@Nonnegative 
+	public int intValue() {
+		return (int) value;
+	}
 
-    @Override
-    @Signed public long longValue() {
-        return Double.valueOf(value).longValue();
-    }
+	@Override
+	@Nonnegative
+	public long longValue() {
+		return (long) value;
+	}
 
-    @Override
-    @Signed public float floatValue() {
-        return Double.valueOf(value).floatValue();
-    }
+	@Override
+	@Nonnegative
+	public float floatValue() {
+		return (float) value;
+	}
 
-    @Override
-    @Signed public double doubleValue() {
-        return value;
-    }
+	@Override
+	@Nonnegative
+	public double doubleValue() {
+		return value;
+	}
     
 	@Override
     public String toString() {
@@ -102,10 +132,13 @@ public final class Quality extends Number implements Comparable<Quality> {
     }
 
     @Override
-    @SuppressFBWarnings(
-    		value = "NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE",
-    		justification = "We are overriding compareTo, which is defined " +
-    						"as @Nullable. This is a false positive.")
+    @SuppressFBWarnings(value = {
+    	"NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE",
+    	"WEM_WEAK_EXCEPTION_MESSAGING"
+    },
+		justification = "We are overriding compareTo, which is defined " +
+						"as @Nullable. This is a false positive. Also, there " +
+						"is no addition contex to add to the exception message.")
     @Signed public int compareTo(@Nullable Quality o) {
     	if(o == null) { throw new NullPointerException("Tried to compare Quality to null value."); }
         return Double.compare(value, o.value);
@@ -133,6 +166,7 @@ public final class Quality extends Number implements Comparable<Quality> {
           return false;
         }
         Quality rhs = (Quality) obj;
-        return value == rhs.value;
+        
+        return ( Math.abs(rhs.value - value) < EQUALITY_DELTA );
     }
 }
