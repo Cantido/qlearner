@@ -1,7 +1,2 @@
 **/target
-/.settings
-/.classpath
-/.project
-/.idea
-*.iml
-src/site/markdown/README.md
+**/bin
