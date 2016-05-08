@@ -17,26 +17,24 @@
 
 package qlearning.domain.exploration;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-import static org.hamcrest.Matchers.*;
-
-import java.util.Random;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isOneOf;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-
 import qlearning.client.Action;
 import qlearning.client.State;
-import qlearning.domain.quality.StateActionQuality;
 import qlearning.domain.quality.Quality;
+import qlearning.domain.quality.StateActionQuality;
+
+import java.util.Random;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @SuppressWarnings({ "null", "javadoc" })
 public class RandomExplorationStrategyTest {
@@ -72,9 +70,8 @@ public class RandomExplorationStrategyTest {
     
     @Test
     public void getBestAction() {
-    	ExplorationFactor neverExplore = new ExplorationFactor(0);
-    	
-    	RandomExplorationStrategy strategy = new RandomExplorationStrategy(neverExplore, random);
+    	RandomExplorationStrategy strategy
+    		= new RandomExplorationStrategy(ExplorationFactor.NEVER_EXPLORE, random);
         
         Action actualAction = strategy.getNextAction(stateActionQualities);
         
@@ -83,9 +80,8 @@ public class RandomExplorationStrategyTest {
 
     @Test
     public void getRandomAction() {
-    	ExplorationFactor alwaysExplore = new ExplorationFactor(1);
-    	
-    	RandomExplorationStrategy strategy = new RandomExplorationStrategy(alwaysExplore, random);
+    	RandomExplorationStrategy strategy
+    		= new RandomExplorationStrategy(ExplorationFactor.ALWAYS_EXPLORE, random);
         
         Action actualAction = strategy.getNextAction(stateActionQualities);
         

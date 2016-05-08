@@ -38,6 +38,21 @@ import javax.annotation.concurrent.ThreadSafe;
 public final class ExplorationFactor extends Number {
 	@Signed
 	private static final long serialVersionUID = -4745713414722996934L;
+	
+	private static final double ALWAYS_EXPLORE_VALUE = 1.0;
+	private static final double NEVER_EXPLORE_VALUE = 0.0;
+	
+	/**
+	 * An {@code ExplorationFactor} whose {@link #shouldExplore(Number)} will
+	 * always return {@code true}.
+	 */
+	public static final ExplorationFactor ALWAYS_EXPLORE = new ExplorationFactor(ALWAYS_EXPLORE_VALUE);
+	
+	/**
+	 * An {@code ExplorationFactor} whose {@link #shouldExplore(Number)} will
+	 * always return {@code true}.
+	 */
+	public static final ExplorationFactor NEVER_EXPLORE = new ExplorationFactor(NEVER_EXPLORE_VALUE);
 
 	@Nonnegative
 	private final double value;
@@ -80,9 +95,9 @@ public final class ExplorationFactor extends Number {
 		if (doubleCheckValue < 0.0 || doubleCheckValue >= 1.0) {
 			throw new IllegalArgumentException("Test value must be within [0,1). Given value: " + checkValue);
 		}
-		if (value == 0.0)
+		if (value == NEVER_EXPLORE_VALUE)
 			return false;
-		if (value == 1.0)
+		if (value == ALWAYS_EXPLORE_VALUE)
 			return true;
 		return doubleCheckValue < value;
 	}
