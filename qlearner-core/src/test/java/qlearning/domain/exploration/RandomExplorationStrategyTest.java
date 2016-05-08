@@ -38,7 +38,7 @@ import qlearning.client.State;
 import qlearning.domain.quality.StateActionQuality;
 import qlearning.domain.quality.Quality;
 
-@SuppressWarnings("null")
+@SuppressWarnings({ "null", "javadoc" })
 public class RandomExplorationStrategyTest {
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
     

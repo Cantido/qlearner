@@ -32,7 +32,7 @@ import org.junit.runner.RunWith;
 
 import qlearning.domain.learning.DiscountFactor;
 
-
+@SuppressWarnings({ "null", "javadoc" })
 @RunWith(Theories.class)
 public class DiscountFactorTest {
 

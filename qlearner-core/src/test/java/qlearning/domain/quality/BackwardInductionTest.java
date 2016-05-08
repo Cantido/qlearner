@@ -29,6 +29,7 @@ import qlearning.domain.learning.DiscountFactor;
 import qlearning.domain.learning.LearningRate;
 import qlearning.domain.learning.Reward;
 
+@SuppressWarnings({ "null", "javadoc" })
 public class BackwardInductionTest {
     @Rule public MockitoRule mockito = MockitoJUnit.rule();
 	

@@ -34,6 +34,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import qlearning.domain.exploration.ExplorationFactor;
 
+@SuppressWarnings({ "null", "javadoc" })
 @RunWith(Theories.class)
 public class ExplorationFactorShouldExploreTheoryTest {
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();

@@ -24,6 +24,7 @@ import org.junit.Test;
 
 import qlearning.domain.quality.Quality;
 
+@SuppressWarnings({ "null", "javadoc" })
 public class QualityTest {
 
     Quality lower = new Quality(0.0);

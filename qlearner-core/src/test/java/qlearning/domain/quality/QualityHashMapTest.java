@@ -34,7 +34,7 @@ import org.mockito.junit.MockitoRule;
 import qlearning.client.Action;
 import qlearning.client.State;
 
-@SuppressWarnings("null")
+@SuppressWarnings({ "null", "javadoc" })
 public class QualityHashMapTest {
 	@Rule public MockitoRule mockito = MockitoJUnit.rule();
     

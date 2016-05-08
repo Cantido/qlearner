@@ -34,6 +34,7 @@ import org.junit.runner.RunWith;
 
 import qlearning.domain.learning.LearningRate;
 
+@SuppressWarnings({ "null", "javadoc" })
 @RunWith(Theories.class)
 public class LearningRateTest {
     @Rule public ExpectedException exception = ExpectedException.none();

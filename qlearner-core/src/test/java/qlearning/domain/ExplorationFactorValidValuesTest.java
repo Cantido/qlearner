@@ -34,6 +34,7 @@ import org.junit.runner.RunWith;
 
 import qlearning.domain.exploration.ExplorationFactor;
 
+@SuppressWarnings({ "null", "javadoc" })
 @RunWith(Theories.class)
 public class ExplorationFactorValidValuesTest {
     @DataPoints
