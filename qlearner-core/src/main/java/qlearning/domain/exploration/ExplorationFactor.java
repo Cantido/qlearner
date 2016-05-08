@@ -17,70 +17,100 @@
 
 package qlearning.domain.exploration;
 
-import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ONE;
-import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ZERO;
-
-import javax.annotation.Nonnull;
+import javax.annotation.CheckForSigned;
+import javax.annotation.Nonnegative;
 import javax.annotation.Signed;
-import javax.annotation.Syntax;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
-import org.apache.commons.lang3.Validate;
-
+/**
+ * Represent's an agent's likelihood of taking non-optimal actions in order to
+ * explore the problem space.
+ * 
+ * <p>
+ * A value of 0.0 means that the agent should never explore, and a value of 1.0
+ * means that the agent will always explore. How exactly your agent explores is
+ * decided by your {@link ExplorationStrategy}.
+ * </p>
+ *
+ */
+@Immutable
+@ThreadSafe
 public class ExplorationFactor extends Number {
+	@Signed
 	private static final long serialVersionUID = -4745713414722996934L;
-	
-	@Syntax("StringFormat") @Nonnull
-	private static final String STRING_FORMAT = "ExplorationFactor[%f]";
-	
-	@Signed @Nonnull
-	private final Double value;
-    
-    public ExplorationFactor(double value) {
-        validateFactorValue(value);
-        this.value = value;
-    }
-    
-    private void validateFactorValue(Double factorValue) {
-    	Validate.notNull(factorValue, "Exploration factor must not be null");
-        Validate.inclusiveBetween(DOUBLE_ZERO, DOUBLE_ONE, factorValue, "Exploration factor must be within [0,1]");
-    }
-    
-    public boolean shouldExplore(Double checkValue) {
-        validateCheckValue(checkValue);
-        if (value.equals(DOUBLE_ZERO)) return false;
-        if (value.equals(DOUBLE_ONE)) return true;
-        return checkValue < value;
-    }
-    
-    private void validateCheckValue(Double checkValue) {
-    	Validate.notNull(checkValue, "Test value must not be null");
-        Validate.isTrue(!DOUBLE_ONE.equals(checkValue), "Test value must be within [0,1). Given value: %f", checkValue);
-        Validate.inclusiveBetween(DOUBLE_ZERO, DOUBLE_ONE, checkValue, "Test value must be within [0,1). Given value: %f", checkValue);
-    }
 
-    @Override
-    public int intValue() {
-        return value.intValue();
-    }
+	@Nonnegative
+	private final double value;
 
-    @Override
-    public long longValue() {
-        return value.longValue();
-    }
+	/**
+	 * Create an exploration factor of the given value.
+	 * 
+	 * @param value
+	 *            the value of this factor in the interval [0,1]. A value of 0.0
+	 *            means that the agent should never explore, and a value of 1.0
+	 *            means that the agent will always explore.
+	 */
+	public ExplorationFactor(@Nonnegative @CheckForSigned Number value) {
+		@CheckForSigned
+		@Nonnegative
+		double doubleValue = value.doubleValue();
 
-    @Override
-    public float floatValue() {
-        return value.floatValue();
-    }
+		if (doubleValue < 0.0 || doubleValue > 1.0) {
+			throw new IllegalArgumentException(
+					"Exploration Factor value must be within [0,1]. Given value: " + doubleValue);
+		}
 
-    @Override
-    public double doubleValue() {
-        return value;
-    }
+		this.value = doubleValue;
+	}
 
-    @Override
-    public String toString() {
-        return "ExplorationFactor["+value+"]";
-    }
+	/**
+	 * Test a value against this factor to see if exploration should happen.
+	 * 
+	 * @param checkValue
+	 *            the value to compare against this factor in the interval
+	 *            [0,1).
+	 * @return {@code true} if exploration should take place, {@code false}
+	 *         otherwise.
+	 */
+	public boolean shouldExplore(@Nonnegative @CheckForSigned Number checkValue) {
+		@CheckForSigned
+		@Nonnegative
+		double doubleCheckValue = checkValue.doubleValue();
+
+		if (doubleCheckValue < 0.0 || doubleCheckValue >= 1.0) {
+			throw new IllegalArgumentException("Test value must be within [0,1). Given value: " + checkValue);
+		}
+		if (value == 0.0)
+			return false;
+		if (value == 1.0)
+			return true;
+		return doubleCheckValue < value;
+	}
+
+	@Override
+	public int intValue() {
+		return Double.valueOf(value).intValue();
+	}
+
+	@Override
+	public long longValue() {
+		return Double.valueOf(value).longValue();
+	}
+
+	@Override
+	public float floatValue() {
+		return Double.valueOf(value).floatValue();
+	}
+
+	@Override
+	public double doubleValue() {
+		return value;
+	}
+
+	@Override
+	public String toString() {
+		return "ExplorationFactor[" + value + "]";
+	}
 
 }

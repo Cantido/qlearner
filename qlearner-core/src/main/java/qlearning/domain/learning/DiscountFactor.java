@@ -17,36 +17,37 @@
 
 package qlearning.domain.learning;
 
+import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Signed;
 
 /**
  * The discount factor determines the importance of future rewards.
- * <p>
- * A factor of 0 will make the agent "myopic" (or short-sighted) by only considering current rewards, while a factor
- * approaching 1 will make it strive for a long-term high reward. If the discount factor meets or exceeds 1, the
- * quality values may diverge.
- * </p>
+ * 
+ * <p>A factor of 0 will make the agent "myopic" (or short-sighted) by only
+ * considering current rewards, while a factor approaching 1 will make it
+ * strive for a long-term high reward. If the discount factor meets or
+ * exceeds 1, the quality values may diverge.</p>
  */
 public class DiscountFactor extends Number {
-	private static final long serialVersionUID = 743132734230321555L;
+	@Signed private static final long serialVersionUID = 743132734230321555L;
+	@Nonnegative private static final double ZERO = 0.0;
 	
 	@Nonnull @Nonnegative private final Double value;
 	
     /**
-     * Create a new {@code DiscountFactor} with the given value
-     * <p>
-     * A factor of 0 will make the agent "myopic" (or short-sighted) by only considering current rewards, while a factor
-     * approaching 1 will make it strive for a long-term high reward. If the discount factor meets or exceeds 1, the
-     * quality values may diverge.
-     * </p>
+     * Create a new {@code DiscountFactor} with the given value.
      * 
      * @param value the value of the new discount factor, in the range [0, &infin;)
      */
-    public DiscountFactor(double value) {
-        if(value < 0.0) throw new IllegalArgumentException("Discount factor must be greater than or equal to zero");
+    public DiscountFactor(@CheckForSigned @Nonnegative Number value) {
+        if(value.doubleValue() < ZERO) {
+            throw new IllegalArgumentException(
+                "Discount factor must be greater than or equal to zero");
+        }
 
-        this.value = value;
+        this.value = value.doubleValue();
     }
     
     @Override
