@@ -112,6 +112,17 @@ public class GridWorldEnvironment implements Environment {
      */
     @Nonnull private final Right RIGHT = new Right(this);
 
+    /**
+     * Build a {@code GridWorldEnvironment} of the specified size, with the
+     * specified starting point and goal point.
+     * 
+     * @param sizeX horizontal size of the grid, in the interval [1, {@code Integer.MAX_VALUE}]
+     * @param sizeY vertical size of the grid, in the interval [1, {@code Integer.MAX_VALUE}]
+     * @param startX horizontal, array-indexed position of the starting state, in the interval [0, {@code sizeX}]
+     * @param startY vertical, array-indexed position of the starting state, in the interval [0, {@code sizeY}]
+     * @param goalX horizontal, array-indexed position of the goal state, in the interval [0, {@code sizeX}]
+     * @param goalY vertical, array-indexed position of the goal state, in the interval [0, {@code sizeY}]
+     */
     public GridWorldEnvironment(
         @Nonnegative @CheckForSigned int sizeX,
         @Nonnegative @CheckForSigned int sizeY,
@@ -190,32 +201,69 @@ public class GridWorldEnvironment implements Environment {
         return (x == goalX && y == goalY);
     }
 
+    /**
+     * Check if this environment is at its specified goal state.
+     * 
+     * @return {@code true} if this environment's current {@link State} is
+     * equal to its goal {@code State}, {@code false} otherwise. 
+     */
     public boolean isAtGoalState() {
         return (xState == goalX && yState == goalY);
     }
 
+    /**
+     * Reset this environment to its goal state.
+     */
     public void reset() {
         setState(startX, startY);
     }
 
+    /**
+     * Change the state of the environment so that its Y-dimension is more
+     * positive.
+     * 
+     * @throws IllegalStateException if this object's Y-state is at the
+     * boundary and cannot be any higher.
+     */
     public void moveUp() {
         assertNotAtBoundary(yState, maxY);
         setState(xState, yState + 1);
         logger.debug("Moved to new Y = {}", yState);
     }
 
+    /**
+     * Change the state of the environment so that its Y-dimension is less
+     * positive, closer to zero.
+     * 
+     * @throws IllegalStateException if this object's Y-state is at the
+     * boundary and cannot be any lower.
+     */
     public void moveDown() {
         assertNotAtBoundary(yState, minY);
         setState(xState, yState - 1);
         logger.debug("Moved to new Y = {}", yState);
     }
 
+    /**
+     * Change the state of the environment so that its X-dimension is less
+     * positive, closer to zero.
+     * 
+     * @throws IllegalStateException if this object's X-state is at the
+     * boundary and cannot be any lower.
+     */
     public void moveLeft() {
         assertNotAtBoundary(xState, minX);
         setState(xState - 1, yState);
         logger.debug("Moved to new X = {}", xState);
     }
 
+    /**
+     * Change the state of the environment so that its X-dimension is more
+     * positive.
+     * 
+     * @throws IllegalStateException if this object's X-state is at the
+     * boundary and cannot be any higher.
+     */
     public void moveRight() {
         assertNotAtBoundary(xState, maxX);
         setState(xState + 1, yState);
@@ -224,7 +272,7 @@ public class GridWorldEnvironment implements Environment {
 
     private void assertNotAtBoundary(@Nonnegative int current, @Nonnegative int boundary) {
         if (current == boundary) {
-            throw new UnsupportedOperationException("Current at the boundary, cannot move any further");
+            throw new IllegalStateException("Current at the boundary, cannot move any further");
         }
     }
     

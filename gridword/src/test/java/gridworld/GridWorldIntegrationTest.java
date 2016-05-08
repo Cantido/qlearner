@@ -46,6 +46,14 @@ import qlearning.domain.quality.QualityUpdateStrategy;
  */
 public class GridWorldIntegrationTest {
 
+	/**
+	 * The time limit for these tests.
+	 * 
+	 * <p>If there is a problem with the Q-learning algorithm, the values will
+	 * never converge. That will cause the tests to run too long. If this test
+	 * fails due to a timeout, we can be pretty sure that the algorithm is
+	 * not converging as it should.</p>
+	 */
 	@Rule
 	public Timeout timeout = Timeout.seconds(10);
 
@@ -62,7 +70,7 @@ public class GridWorldIntegrationTest {
 
 	/**
 	 * We can reasonably expect the agent to learn the environment after this
-	 * many successful sessions
+	 * many successful sessions.
 	 */
 	private static final double SUCCESSES_UNTIL_CONVERGENCE = 10;
 
@@ -73,15 +81,18 @@ public class GridWorldIntegrationTest {
 	private static final double EXACT_SOLUTION = 20;
 	
 	/**
-	 * How many successes we want to run this test for
+	 * How many successes we want to run this test for.
 	 */
 	private static final int MAX_SUCCESS_COUNT = 1000;
 	
 	/**
-	 * The percentage of all sessions that should have step counts below {@link #EXACT_SOLUTION}
+	 * The percentage of successes that have step counts above {@link #EXACT_SOLUTION}.
 	 */
 	private static final double CONVERGENCE_PERCENTAGE = SUCCESSES_UNTIL_CONVERGENCE / MAX_SUCCESS_COUNT;
 
+	/**
+	 * Build the agent that will be tested.
+	 */
 	@Before
 	public void setUp() {
 		agent = (new AgentBuilder(environment))
@@ -98,7 +109,7 @@ public class GridWorldIntegrationTest {
 	 * an observed value.
 	 * 
 	 * This will run the agent until it reaches the goal a certain number of
-	 * times ({@link #MAX_SUCCESS_COUNT}), and will calculate the average number
+	 * times, and will calculate the average number
 	 * of steps it took to reach the goal state.
 	 * 
 	 * There is the potential for the agent to never find the goal state, and
@@ -108,9 +119,8 @@ public class GridWorldIntegrationTest {
 	@Test
 	public void reachesHighSuccessRate() {
 		// I know the fastest way to do this would be to just divide totalSteps
-		// by totalSuccesses, but
-		// creating a double array allows us to do some more fancy statistics,
-		// if I ever write tests for that.
+		// by totalSuccesses, but creating a double array allows us to do some
+		// more fancy statistics, if I ever write tests for that.
 
 		double[] stepCounts = new double[MAX_SUCCESS_COUNT];
 

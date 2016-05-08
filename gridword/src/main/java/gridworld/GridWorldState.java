@@ -31,6 +31,9 @@ import qlearning.client.Action;
 import qlearning.client.State;
 import qlearning.domain.learning.Reward;
 
+/**
+ * The current position of the grid world's agent in the Grid World.
+ */
 @Immutable
 @ThreadSafe
 public class GridWorldState extends State {
@@ -41,6 +44,14 @@ public class GridWorldState extends State {
     @Signed private final int hashCodeValue;
     @Nonnull private final String toStringValue;
 
+    /**
+     * Create a {@code GridWorldState} for the given position.
+     * 
+     * @param x the horizontal, array-indexed, position of this state in the grid world. Must be greater than zero.
+     * @param y the vertical, array-indexed, position of this state in the grid world. Must be greater than zero.
+     * @param reward the desirability of this state to an agent.
+     * @param actions the actions that it is possible to take from this state.
+     */
     public GridWorldState(@CheckForSigned int x, @CheckForSigned int y, Reward reward, Set<Action> actions) {
     	if(x < 0) throw new IllegalArgumentException("Recieved a negative value for x: got "+x+ ", which is invalid.");
     	if(y < 0) throw new IllegalArgumentException("Recieved a negative value for y: got "+y+ ", which is invalid.");
@@ -53,11 +64,21 @@ public class GridWorldState extends State {
         this.toStringValue = computeToString();
     }
 
+    /**
+     * Get the X coordinate of this state.
+     * 
+     * @return the horizontal, array-indexed position of this state.
+     */
     @Nonnegative
     public int getX() {
         return x;
     }
 
+    /**
+     * Get the Y coordinate of this state.
+     * 
+     * @return the vertical, array-indexed position of this state.
+     */
     @Nonnegative
     public int getY() {
         return y;
@@ -115,7 +136,7 @@ public class GridWorldState extends State {
         return toStringValue;
     }
     
-    public String computeToString() {
+    private String computeToString() {
         StringBuilder builder = new StringBuilder();
         builder.append("GridWorldState[")
                .append("X: ").append(x)

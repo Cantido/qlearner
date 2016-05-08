@@ -34,6 +34,9 @@ import qlearning.client.State;
 import qlearning.domain.quality.Quality;
 import qlearning.domain.quality.QualityMap;
 
+/**
+ * A data structure that stores {@link Quality} values in a hashed form.
+ */
 @NotThreadSafe
 public class QualityHashMap implements QualityMap {
 	@SuppressWarnings("null")
@@ -56,6 +59,11 @@ public class QualityHashMap implements QualityMap {
     @SuppressWarnings("null")
 	@Nonnull private Quality defaultQuality = Quality.ZERO;
     
+	/**
+	 * Constructs an empty {@code QualityHashMap} with a default number
+	 * of expected total states (16) and a default number of expected actions
+	 * per state (11).
+	 */
 	public QualityHashMap() {
         // Will just match the default PriorityQueue size
         EXPECTED_AVERAGE_ACTIONS_PER_STATE = 11;
@@ -63,6 +71,18 @@ public class QualityHashMap implements QualityMap {
         bestQualities = new HashMap<>();
     }
     
+	/**
+	 * Constructs an empty {@code QualityHashMap} with a specified number
+	 * of expected total states and number of expected actions
+	 * per state.
+	 * 
+	 * <p>Specifying these values is only a performance optimization. It does
+	 * not change the functionality of this object.</p>
+	 * @param expectedStates the approximate total count of states this object
+	 * will store. 
+	 * @param actionsPerState the average count of actions that each stored
+	 * state will have. 
+	 */
     public QualityHashMap(@Nonnegative int expectedStates, @Nonnegative int actionsPerState) {
     	if(expectedStates < 0) throw new IllegalArgumentException("Was given a negative expectedStates number, which is invalid.");
     	if(actionsPerState < 0) throw new IllegalArgumentException("Was given a negative actionsPerState number, which is invalid.");
@@ -72,6 +92,12 @@ public class QualityHashMap implements QualityMap {
         bestQualities = new HashMap<>(expectedStates);
     }
     
+    /**
+     * Set the {@code Quality} value that will be returned for
+     * {@code State}-{@code Action} pairs that this object has not yet stored.
+     * 
+     * @param defaultQuality the default {@code Quality} value.
+     */
     public void setDefaultQuality(Quality defaultQuality) {
         this.defaultQuality = defaultQuality;
     }

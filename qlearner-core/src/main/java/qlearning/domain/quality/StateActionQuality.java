@@ -37,20 +37,43 @@ public class StateActionQuality implements Comparable<StateActionQuality> {
     @Nonnull private final Action action;
     @Nonnull private final Quality quality;
     
+    /**
+     * Create a {@code StateActionQuality} triplet with the given {@code Quality}
+     * value.
+     * 
+     * @param state
+     * @param action
+     * @param quality
+     */
     public StateActionQuality(State state, Action action, Quality quality) {
         this.state = state;
         this.action = action;
         this.quality = quality;
     }
     
+    /**
+     * Get the state stored in this triplet.
+     * 
+     * @return the state of this triplet.
+     */
     public State getState() {
         return this.state;
     }
     
+    /**
+     * Get the action stored in this triplet.
+     * 
+     * @return the action of this triplet.
+     */
     public Action getAction() {
         return this.action;
     }
     
+    /**
+     * Get the quality stored in this triplet.
+     * 
+     * @return the quality of this triplet.
+     */
     public Quality getQuality() {
         return this.quality;
     }

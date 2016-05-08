@@ -18,12 +18,22 @@
 package gridworld.actions;
 
 import gridworld.GridWorldEnvironment;
+import qlearning.client.Action;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
+/**
+ * An {@link Action} to move "right" in a {@link GridWorldEnvironment}.
+ */
 @NotThreadSafe
 public class Right extends GridWorldAction {
-    public Right(GridWorldEnvironment environment) {
+    /**
+     * Create a {@code Right} action.
+     * 
+     * @param environment the environment to modify when this action is
+     * executed.
+     */
+	public Right(GridWorldEnvironment environment) {
         super(environment);
     }
     @Override

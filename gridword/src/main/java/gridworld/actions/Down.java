@@ -18,11 +18,21 @@
 package gridworld.actions;
 
 import gridworld.GridWorldEnvironment;
+import qlearning.client.Action;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
+/**
+ * An {@link Action} to move "down" in a {@link GridWorldEnvironment}.
+ */
 @NotThreadSafe
 public class Down extends GridWorldAction {
+    /**
+     * Create a {@code Down} action.
+     * 
+     * @param environment the environment to modify when this action is
+     * executed.
+     */
     public Down(GridWorldEnvironment environment) {
         super(environment);
     }

@@ -52,6 +52,14 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
         this(explorationFactor, ThreadLocalRandom.current());
     }
     
+    /**
+     * Create a {@code RandomExplorationStrategy} that uses the given
+     * exploration factor and source of randomness to determine whether or
+     * not to explore.
+     * 
+     * @param explorationFactor
+     * @param random
+     */
     public RandomExplorationStrategy(ExplorationFactor explorationFactor, Random random) {
         this.explorationFactor = explorationFactor;
         this.random = random;
@@ -61,17 +69,12 @@ public class RandomExplorationStrategy implements ExplorationStrategy {
      * Get the exploration factor, which determines how often the agent will choose random gridworld.actions over desirable ones
      * in order to explore the problem space.
      * 
-     * @return the exploration factor
+     * @return this strategy's propensity to explore.
      */
     public ExplorationFactor getExplorationFactor() {
         return this.explorationFactor;
     }
     
-    /**
-     * Choose either the best possible action, or a random action.
-     *
-     * @see RandomExplorationStrategy
-     */
     @Override
     public Action getNextAction(SortedSet<StateActionQuality> stateActionQualities) {
         

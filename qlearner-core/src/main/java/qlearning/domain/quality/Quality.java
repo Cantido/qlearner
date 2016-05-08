@@ -32,7 +32,7 @@ import qlearning.client.State;
 import qlearning.domain.learning.Reward;
 
 /**
- * The learned value of a {@link State}-{@link Action} pair's potential for future {@link Reward}s
+ * The learned value of a {@link State}-{@link Action} pair's potential for future {@link Reward}s.
  */
 @Immutable
 @ThreadSafe
@@ -48,19 +48,30 @@ public final class Quality extends Number implements Comparable<Quality> {
      */
 	@Nonnull public static final Comparator<Quality> DESCENDING_ORDER = new ReverseOrder();
     
+    /** A {@code Quality} value of zero. */
     @Nonnull public static final Quality ZERO = new Quality(0.0);
+    
+    /** The most negative possible {@code Quality} value. */
     @Nonnull public static final Quality MIN = new Quality(Double.NEGATIVE_INFINITY);
+    
+    /** The most positive possible {@code Quality} value. */
     @Nonnull public static final Quality MAX = new Quality(Double.POSITIVE_INFINITY);
     
     @Signed private final double value;
     @Signed private final int hashCode;
     
-    public Quality(@Signed double value) {
-        if(Double.isNaN(value)) {
+    /**
+     * Create a {@code Quality} object with the given value.
+     * 
+     * @param value the value of this quality object.
+     */
+    public Quality(@Signed Number value) {
+    	double doubleValue = value.doubleValue();
+        if(Double.isNaN(doubleValue)) {
             throw new IllegalArgumentException("Cannot create a Quality from NaN");
         }
-        this.value = value;
-        this.hashCode = calculateHashCode(value);
+        this.value = doubleValue;
+        this.hashCode = calculateHashCode(doubleValue);
     }
 
     @Override

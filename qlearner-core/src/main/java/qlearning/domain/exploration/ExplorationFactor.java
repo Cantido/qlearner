@@ -32,7 +32,6 @@ import javax.annotation.concurrent.ThreadSafe;
  * means that the agent will always explore. How exactly your agent explores is
  * decided by your {@link ExplorationStrategy}.
  * </p>
- *
  */
 @Immutable
 @ThreadSafe
@@ -116,5 +115,4 @@ public final class ExplorationFactor extends Number {
 	public String toString() {
 		return "ExplorationFactor[" + value + "]";
 	}
-
 }

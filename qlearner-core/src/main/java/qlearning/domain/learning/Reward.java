@@ -21,14 +21,35 @@ import javax.annotation.Nonnegative;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 
+/**
+ * The desirability of a certain state.
+ * 
+ * <p>The q-learning algorithm as a whole is about maximizing reward. Agents
+ * will learn to take actions that will lead them to states with higher reward
+ * values, and they will learn to avoid states with lower reward values.</p>
+ * 
+ * <p>Agents only care about the relative position of reward values, so values
+ * can be as far or as close to zero as you see fit. Values that are
+ * dramatically greater than others will be sought out much, much more.</p>
+ * 
+ * <p>An agent's "greediness" or "far-sightedness" is controlled by the
+ * {@link DiscountFactor} value. An agent's memory of rewards is controlled
+ * by its {@link LearningRate} value.</p>
+ */
 @Immutable
 @ThreadSafe
 public final class Reward extends Number {
 	private static final long serialVersionUID = 8968547494739709536L;
 	private final double value;
     
-    public Reward(double value) {
-        this.value = value;
+    /**
+     * Create a {@code Reward} with the given value. Higher values are more
+     * desirable to an agent.
+     * 
+     * @param value the value of this reward.
+     */
+    public Reward(Number value) {
+        this.value = value.doubleValue();
     }
 
     @Override

@@ -18,12 +18,22 @@
 package gridworld.actions;
 
 import gridworld.GridWorldEnvironment;
+import qlearning.client.Action;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
+/**
+ * An {@link Action} to move "up" in a {@link GridWorldEnvironment}.
+ */
 @NotThreadSafe
 public class Up extends GridWorldAction {
-    public Up(GridWorldEnvironment environment) {
+    /**
+     * Create an {@code Up} action.
+     * 
+     * @param environment the environment to modify when this action is
+     * executed.
+     */
+	public Up(GridWorldEnvironment environment) {
         super(environment);
     }
 

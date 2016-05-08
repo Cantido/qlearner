@@ -24,13 +24,20 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.Signed;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
- * A single choice cycle made by an {@link Agent}.
+ * A single {@link State}-{@link Action} pair choice made by an {@link Agent}
+ * during one iteration of its algorithm.
+ * <p>
+ * The {@code State} represents the state that the agent was in when it started
+ * an iteration, and the {@code Action} represents the action that was chosen
+ * to leave that state.
+ * </p>
  */
 @Immutable
 @ThreadSafe
@@ -38,15 +45,33 @@ public class Step {
     @Nonnull private final State startingState;
     @Nonnull private final Action leavingAction;
 
+    /**
+     * Create a {@code Step} containing the given {@code State} and
+     * {@code Action}.
+     * 
+     * @param startingState the {@code State} that the agent originated from.
+     * @param leavingAction the {@code Action} that was taken from that state.
+     */
     public Step(State startingState, Action leavingAction) {
         this.startingState = startingState;
         this.leavingAction = leavingAction;
     }
 
+    /**
+     * Get the action that was taken to leave this step's {@link State}.
+     * 
+     * @return the {@code Action} that was taken to leave this {@code Step}'s
+     * {@code State}.
+     */
     public Action getLeavingAction() {
         return leavingAction;
     }
 
+    /**
+     * Get the {@code State} that preceded this step's {@link Action}.
+     * 
+     * @return the starting {@code State}.
+     */
     public State getStartingState() {
         return startingState;
     }
@@ -65,6 +90,7 @@ public class Step {
     }
 
     @Override
+    @Signed
     public int hashCode() {
         return Objects.hash(startingState, leavingAction);
     }

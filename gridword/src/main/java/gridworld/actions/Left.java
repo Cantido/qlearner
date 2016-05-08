@@ -18,11 +18,20 @@
 package gridworld.actions;
 
 import gridworld.GridWorldEnvironment;
+import qlearning.client.Action;
 
 import javax.annotation.concurrent.NotThreadSafe;
-
+/**
+ * An {@link Action} to move "left" in a {@link GridWorldEnvironment}.
+ */
 @NotThreadSafe
 public class Left extends GridWorldAction {
+    /**
+     * Create a {@code Left} action.
+     * 
+     * @param environment the environment to modify when this action is
+     * executed.
+     */
     public Left(GridWorldEnvironment environment) {
         super(environment);
     }

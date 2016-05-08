@@ -42,7 +42,8 @@ import qlearning.domain.quality.StateActionQuality;
  * <p>
  * This is the object that will navigate and learn the problem space (the
  * {@code Environment}). It implements the Q-learning algorithm to pick the
- * optimal {@code Action} to take while in each {@code State}.
+ * optimal {@code Action} to take while in each {@code State} in order to
+ * maximize the accumulated {@link qlearning.domain.learning.Reward} value.
  * </p>
  */
 @NotThreadSafe

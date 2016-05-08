@@ -32,9 +32,18 @@ import qlearning.domain.quality.QualityHashMap;
 import qlearning.domain.quality.QualityMap;
 import qlearning.domain.quality.QualityUpdateStrategy;
 
+/**
+ * A test with a high number of iterations, used for performance testing an optimization.
+ */
 public class GridWorldPerformanceTest {
     private static final int MAX_SUCCESS_COUNT = 500000;
 
+    /**
+     * Build a {@link GridWorldEnvironment} and an {@link Agent}, and run
+     * a large number of iterations.
+     * 
+     * @param args not used.
+     */
     public static void main(String[] args) {
         GridWorldEnvironment environment = new GridWorldEnvironment(10, 10, 0, 0, 10, 10);
         QualityMap qualityMap = new QualityHashMap(100, 4);
@@ -72,6 +81,5 @@ public class GridWorldPerformanceTest {
         Duration runTime = Duration.between(start, end).abs();
         
         System.out.println("Finished at " + end + ". Total time taken: " + runTime);
-        
     }
 }

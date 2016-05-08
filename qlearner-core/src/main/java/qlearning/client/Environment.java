@@ -32,8 +32,6 @@ public interface Environment {
     /**
      * Get the current {@link State} of the environment.
      * 
-     * @see State
-     * 
      * @return the environment's current state
      */
 	State getState();
