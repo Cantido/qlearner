@@ -17,21 +17,24 @@
 
 package qlearning.domain.exploration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import qlearning.client.Action;
+import qlearning.domain.quality.StateActionQuality;
+
 import java.util.Random;
 import java.util.SortedSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nonnull;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import qlearning.client.Action;
-import qlearning.domain.quality.StateActionQuality;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * A simple {@link ExplorationStrategy} which will choose a random {@link Action} some of the time.
  */
+@Immutable
+@ThreadSafe
 public class RandomExplorationStrategy implements ExplorationStrategy {
     @SuppressWarnings("null")
 	@Nonnull private final Logger logger =  LoggerFactory.getLogger(getClass());

@@ -22,9 +22,13 @@ import java.util.Comparator;
 
 import javax.annotation.Nullable;
 import javax.annotation.Signed;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+@Immutable
+@ThreadSafe
 /* package private */ class ReverseOrder implements Comparator<Quality>, Serializable {
 	private static final long serialVersionUID = -7048183549162821204L;
 

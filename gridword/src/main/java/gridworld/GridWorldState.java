@@ -24,11 +24,15 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.Signed;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import qlearning.client.Action;
 import qlearning.client.State;
 import qlearning.domain.learning.Reward;
 
+@Immutable
+@ThreadSafe
 public class GridWorldState extends State {
     @Nonnegative private final int x, y;
     @Nonnull private final Reward reward;

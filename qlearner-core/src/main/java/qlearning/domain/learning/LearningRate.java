@@ -21,6 +21,8 @@ import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ONE;
 import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ZERO;
 
 import javax.annotation.Nonnegative;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.apache.commons.lang3.Validate;
 
@@ -39,7 +41,9 @@ import org.apache.commons.lang3.Validate;
  * The default learning rate is 1.
  * </p>
  */
-public class LearningRate extends Number {
+@Immutable
+@ThreadSafe
+public final class LearningRate extends Number {
 	private static final long serialVersionUID = -1492055404079602330L;
 	@Nonnegative private final double value;
     

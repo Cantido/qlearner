@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.Signed;
 import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import qlearning.client.Action;
@@ -34,6 +35,7 @@ import qlearning.domain.learning.Reward;
  * The learned value of a {@link State}-{@link Action} pair's potential for future {@link Reward}s
  */
 @Immutable
+@ThreadSafe
 public final class Quality extends Number implements Comparable<Quality> {
 	private static final long serialVersionUID = -6538970599397750791L;
 

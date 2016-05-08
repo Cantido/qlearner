@@ -23,6 +23,7 @@ import java.util.PriorityQueue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
@@ -33,6 +34,7 @@ import qlearning.client.State;
 import qlearning.domain.quality.Quality;
 import qlearning.domain.quality.QualityMap;
 
+@NotThreadSafe
 public class QualityHashMap implements QualityMap {
 	@SuppressWarnings("null")
 	@Nonnull private static final Logger logger = LoggerFactory.getLogger(QualityHashMap.class);

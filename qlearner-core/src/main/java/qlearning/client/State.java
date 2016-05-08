@@ -20,6 +20,8 @@ package qlearning.client;
 import java.util.Set;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import qlearning.agent.Agent;
@@ -34,9 +36,11 @@ import qlearning.domain.learning.Reward;
  * </p><p>
  * Note: This class <strong>must</strong> implement {@link #hashCode()} and {@link #equals(Object)}! The system uses
  * these comparisons to look up the quality values of {@code State-Action} pairs, so if two different {@code State}s are
- * seen as equivalent, then the system will not work correctly.
+ * seen as equivalent, then the system will not work correctly. For that reason, {@code State} objects must be immutable.
  * </p>
  */
+@Immutable
+@ThreadSafe
 public abstract class State {
     /**
      * Get the desirability of the current state. Higher values will make the {@link Agent} prefer this state, and lower

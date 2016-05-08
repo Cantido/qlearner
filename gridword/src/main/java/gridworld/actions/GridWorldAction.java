@@ -19,10 +19,12 @@ package gridworld.actions;
 
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import gridworld.GridWorldEnvironment;
 import qlearning.client.Action;
 
+@NotThreadSafe
 /* package-private */ abstract class GridWorldAction extends Action {
 
     protected final GridWorldEnvironment environment;

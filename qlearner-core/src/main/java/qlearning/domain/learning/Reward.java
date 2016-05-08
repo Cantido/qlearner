@@ -17,7 +17,12 @@
 
 package qlearning.domain.learning;
 
-public class Reward extends Number {
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
+
+@Immutable
+@ThreadSafe
+public final class Reward extends Number {
 	private static final long serialVersionUID = 8968547494739709536L;
 	private final double value;
     

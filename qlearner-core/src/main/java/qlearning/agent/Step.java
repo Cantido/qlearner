@@ -24,12 +24,16 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * A single choice cycle made by an {@link Agent}.
  */
+@Immutable
+@ThreadSafe
 public class Step {
     @Nonnull private final State startingState;
     @Nonnull private final Action leavingAction;

@@ -20,6 +20,7 @@ package qlearning.agent;
 import java.util.concurrent.Executor;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import qlearning.agent.executors.DirectExecutor;
 import qlearning.client.Environment;
@@ -42,6 +43,7 @@ import qlearning.domain.quality.QualityUpdater;
  * 		.setLearningRate(LEARNING_RATE).setDiscountFactor(DISCOUNT_FACTOR).setQualityMap(qualityMap).getAgent();
  * </pre>
  */
+@NotThreadSafe
 public class AgentBuilder {
 	@Nonnull private static final ExplorationFactor DEFAULT_EXPLORATION_FACTOR = new ExplorationFactor(0.2);
 

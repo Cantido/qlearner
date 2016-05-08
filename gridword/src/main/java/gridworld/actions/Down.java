@@ -19,6 +19,9 @@ package gridworld.actions;
 
 import gridworld.GridWorldEnvironment;
 
+import javax.annotation.concurrent.NotThreadSafe;
+
+@NotThreadSafe
 public class Down extends GridWorldAction {
     public Down(GridWorldEnvironment environment) {
         super(environment);

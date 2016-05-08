@@ -40,8 +40,10 @@ package gridworld;/*
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +68,8 @@ import gridworld.actions.Up;
  * goal state in a minimal number of moves.
  * </p>
  */
+
+@NotThreadSafe
 public class GridWorldEnvironment implements Environment {
     private static final Logger logger = LoggerFactory.getLogger(GridWorldEnvironment.class);
     

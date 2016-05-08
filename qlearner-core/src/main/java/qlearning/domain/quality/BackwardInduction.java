@@ -24,10 +24,15 @@ import qlearning.domain.learning.DiscountFactor;
 import qlearning.domain.learning.LearningRate;
 import qlearning.domain.learning.Reward;
 
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
+
 /**
  * A strategy for updating {@link Quality} values by looking at backwards at
  * the {@link Reward}s accumulated thus far.
  */
+@Immutable
+@ThreadSafe
 public class BackwardInduction implements QualityUpdateStrategy {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Override

@@ -36,7 +36,7 @@ import javax.annotation.concurrent.ThreadSafe;
  */
 @Immutable
 @ThreadSafe
-public class ExplorationFactor extends Number {
+public final class ExplorationFactor extends Number {
 	@Signed
 	private static final long serialVersionUID = -4745713414722996934L;
 

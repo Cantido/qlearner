@@ -20,11 +20,15 @@ package qlearning.agent.executors;
 import java.util.concurrent.Executor;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * An {@link Executor} that just runs the given {@link Runnable}
  * in the same thread. Probably the simplest possible implementation.
  */
+@Immutable
+@ThreadSafe
 public class DirectExecutor implements Executor {
     @Override
     public void execute(@Nullable Runnable command) {

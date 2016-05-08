@@ -21,6 +21,8 @@ import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Signed;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * The discount factor determines the importance of future rewards.
@@ -30,7 +32,9 @@ import javax.annotation.Signed;
  * strive for a long-term high reward. If the discount factor meets or
  * exceeds 1, the quality values may diverge.</p>
  */
-public class DiscountFactor extends Number {
+@Immutable
+@ThreadSafe
+public final class DiscountFactor extends Number {
 	@Signed private static final long serialVersionUID = 743132734230321555L;
 	@Nonnegative private static final double ZERO = 0.0;
 	

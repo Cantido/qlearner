@@ -19,6 +19,8 @@ package qlearning.domain.quality;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import qlearning.client.Action;
@@ -27,6 +29,8 @@ import qlearning.client.State;
 /**
  * A triplet of a {@link State}, {@link Action}, and {@link Quality} of that pair
  */
+@Immutable
+@ThreadSafe
 public class StateActionQuality implements Comparable<StateActionQuality> {
     @Nonnull private final State state;
     @Nonnull private final Action action;
