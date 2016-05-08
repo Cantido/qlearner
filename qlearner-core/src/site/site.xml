@@ -10,7 +10,6 @@
 	<body>
 		<links>
 			<item name="Q-learning on Wikipedia" href="https://en.wikipedia.org/wiki/Q-learning"/>
-			<item name="Cantido/qlearner on GitHub" href="https://github.com/Cantido/qlearner" />
 		</links>
 		<menu name="Overview">
 			<item name="Introduction" href="index.html" />
