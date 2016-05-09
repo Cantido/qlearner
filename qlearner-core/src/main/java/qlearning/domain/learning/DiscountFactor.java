@@ -1,18 +1,16 @@
 /*
  * This file is part of QLearner.
  *
- * QLearner is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * QLearner is free software: you can redistribute it and/or modify it under the terms of the GNU
+ * General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
- * QLearner is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * QLearner is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with QLearner.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with QLearner. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 
 package qlearning.domain.learning;
@@ -27,59 +25,64 @@ import javax.annotation.concurrent.ThreadSafe;
 /**
  * The discount factor determines the importance of future rewards.
  * 
- * <p>A factor of 0 will make the agent "myopic" (or short-sighted) by only
- * considering current rewards, while a factor approaching 1 will make it
- * strive for a long-term high reward. If the discount factor meets or
- * exceeds 1, the quality values may diverge.</p>
+ * <p>
+ * A factor of 0 will make the agent "myopic" (or short-sighted) by only considering current
+ * rewards, while a factor approaching 1 will make it strive for a long-term high reward. If the
+ * discount factor meets or exceeds 1, the quality values may diverge.
+ * </p>
  */
 @Immutable
 @ThreadSafe
 public final class DiscountFactor extends Number {
-	@Signed private static final long serialVersionUID = 743132734230321555L;
-	@Nonnegative private static final double ZERO = 0.0;
-	
-	@Nonnull @Nonnegative private final Double value;
-	
-    /**
-     * Create a new {@code DiscountFactor} with the given value.
-     * 
-     * @param value the value of the new discount factor, in the range [0, &infin;)
-     */
-    public DiscountFactor(@CheckForSigned @Nonnegative Number value) {
-        if(value.doubleValue() < ZERO) {
-            throw new IllegalArgumentException(
-                "Discount factor must be greater than or equal to zero, but got: " + value);
-        }
+  @Signed
+  private static final long serialVersionUID = 743132734230321555L;
+  @Nonnegative
+  private static final double ZERO = 0.0;
 
-        this.value = value.doubleValue();
-    }
-    
-    @Override
-    @Nonnegative
-    public int intValue() {
-        return value.intValue();
+  @Nonnull
+  @Nonnegative
+  private final Double value;
+
+  /**
+   * Create a new {@code DiscountFactor} with the given value.
+   * 
+   * @param value the value of the new discount factor, in the range [0, &infin;)
+   */
+  public DiscountFactor(@CheckForSigned @Nonnegative Number value) {
+    if (value.doubleValue() < ZERO) {
+      throw new IllegalArgumentException(
+          "Discount factor must be greater than or equal to zero, but got: " + value);
     }
 
-    @Override
-    @Nonnegative
-    public long longValue() {
-        return value.longValue();
-    }
+    this.value = value.doubleValue();
+  }
 
-    @Override
-    @Nonnegative
-    public float floatValue() {
-        return value.floatValue();
-    }
+  @Override
+  @Nonnegative
+  public int intValue() {
+    return value.intValue();
+  }
 
-    @Override
-    @Nonnegative
-    public double doubleValue() {
-        return value;
-    }
+  @Override
+  @Nonnegative
+  public long longValue() {
+    return value.longValue();
+  }
 
-    @Override
-    public String toString() {
-        return "DiscountFactor["+value+"]";
-    }
+  @Override
+  @Nonnegative
+  public float floatValue() {
+    return value.floatValue();
+  }
+
+  @Override
+  @Nonnegative
+  public double doubleValue() {
+    return value;
+  }
+
+  @Override
+  public String toString() {
+    return "DiscountFactor[" + value + "]";
+  }
 }

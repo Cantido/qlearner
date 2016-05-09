@@ -1,18 +1,16 @@
 /*
  * This file is part of QLearner.
  *
- * QLearner is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * QLearner is free software: you can redistribute it and/or modify it under the terms of the GNU
+ * General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
- * QLearner is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * QLearner is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with QLearner.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with QLearner. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 
 package qlearning.domain;
@@ -31,49 +29,42 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-
 import qlearning.domain.learning.LearningRate;
 
-@SuppressWarnings({ "null", "javadoc" })
+@SuppressWarnings({"null", "javadoc"})
 @RunWith(Theories.class)
 public class LearningRateTest {
-    @Rule public ExpectedException exception = ExpectedException.none();
+  @Rule
+  public ExpectedException exception = ExpectedException.none();
 
-    @DataPoints
-    public static double[] doubles = new double[] {
-        Double.NEGATIVE_INFINITY,
-        (- Double.MIN_NORMAL),
-        DOUBLE_ZERO,
-        Double.MIN_NORMAL,
-        (DOUBLE_ONE - Double.MIN_NORMAL),
-        DOUBLE_ONE,
-        (DOUBLE_ONE + Double.MIN_NORMAL),
-        Double.POSITIVE_INFINITY
-    };
-    
-    @Theory
-    public void learningRateBetweenZeroAndOneInclusiveIsLegal(double learningRate) {
-        assumeThat(learningRate, greaterThanOrEqualTo(DOUBLE_ZERO));
-        assumeThat(learningRate, lessThanOrEqualTo(DOUBLE_ONE));
-        
-        // No exception expected
-        new LearningRate(learningRate);
-    }
+  @DataPoints
+  public static double[] doubles = new double[] {Double.NEGATIVE_INFINITY, (-Double.MIN_NORMAL),
+      DOUBLE_ZERO, Double.MIN_NORMAL, (DOUBLE_ONE - Double.MIN_NORMAL), DOUBLE_ONE,
+      (DOUBLE_ONE + Double.MIN_NORMAL), Double.POSITIVE_INFINITY};
 
-    @Theory
-    public void learningRateLessThanZeroIsIllegal(double learningRate) {
-        assumeThat(learningRate, lessThan(DOUBLE_ZERO));
+  @Theory
+  public void learningRateBetweenZeroAndOneInclusiveIsLegal(double learningRate) {
+    assumeThat(learningRate, greaterThanOrEqualTo(DOUBLE_ZERO));
+    assumeThat(learningRate, lessThanOrEqualTo(DOUBLE_ONE));
 
-        exception.expect(IllegalArgumentException.class);
-        new LearningRate(learningRate);
-    }
+    // No exception expected
+    new LearningRate(learningRate);
+  }
 
-    @Theory
-    public void learningRateGreaterThanOneIsIllegal(double learningRate) {
-        assumeThat(learningRate, greaterThan(DOUBLE_ONE));
+  @Theory
+  public void learningRateLessThanZeroIsIllegal(double learningRate) {
+    assumeThat(learningRate, lessThan(DOUBLE_ZERO));
 
-        exception.expect(IllegalArgumentException.class);
-        new LearningRate(learningRate);
-    }
+    exception.expect(IllegalArgumentException.class);
+    new LearningRate(learningRate);
+  }
+
+  @Theory
+  public void learningRateGreaterThanOneIsIllegal(double learningRate) {
+    assumeThat(learningRate, greaterThan(DOUBLE_ONE));
+
+    exception.expect(IllegalArgumentException.class);
+    new LearningRate(learningRate);
+  }
 
 }
