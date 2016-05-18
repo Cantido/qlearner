@@ -16,32 +16,46 @@
 package qlearning.domain.quality;
 
 import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertThat;
 
+import com.google.common.testing.EqualsTester;
+
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @SuppressWarnings({"null", "javadoc"})
+@RunWith(JUnitParamsRunner.class)
 public class QualityTest {
 
-  Quality lower = new Quality(0.0);
-  Quality higher = new Quality(1.0);
-
-  @Test
-  public void compareLessThan() {
-    assertThat(lower.compareTo(higher), lessThan(0));
+  @SuppressWarnings("unused")
+  private Object[] compareToParams() {
+    return new Object[] {
+        new Object[] {new Quality(1),new Quality(0)},
+        new Object[] {new Quality(0),new Quality(-1)},
+    };
   }
 
   @Test
-  public void compareHigherThan() {
-    assertThat(higher.compareTo(lower), greaterThan(0));
+  @Parameters(method = "compareToParams")
+  public void compareTo(Quality higher, Quality lower) {
+    assertThat(lower, lessThan(higher));
+    assertThat(higher, greaterThan(lower));
   }
 
   @Test
   public void compareEquals() {
-    Quality first = new Quality(0.0);
-    Quality second = new Quality(0.0);
-    assertThat(first.compareTo(second), is(0));
+    new EqualsTester()
+      .addEqualityGroup(
+          new Quality(0),
+          new Quality(0L),
+          new Quality(0.0),
+          new Quality((byte) 0),
+          Quality.ZERO)
+      .addEqualityGroup(new Quality(1), new Quality(1.0))
+      .addEqualityGroup(new Quality(-1.0), new Quality(-1.0))
+      .testEquals();
   }
 }

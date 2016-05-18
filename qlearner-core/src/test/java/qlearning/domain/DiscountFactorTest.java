@@ -15,46 +15,51 @@
 
 package qlearning.domain;
 
-import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ONE;
-import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ZERO;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.lessThan;
-import static org.junit.Assume.assumeThat;
-
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.junit.Rule;
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import qlearning.domain.learning.DiscountFactor;
 
 @SuppressWarnings({"null", "javadoc"})
-@RunWith(Theories.class)
+@RunWith(JUnitParamsRunner.class)
 public class DiscountFactorTest {
-
-  @DataPoints
-  public static double[] doubles = new double[] {Double.NEGATIVE_INFINITY, (-Double.MIN_NORMAL),
-      DOUBLE_ZERO, Double.MIN_NORMAL, (DOUBLE_ONE - Double.MIN_NORMAL), DOUBLE_ONE,
-      (DOUBLE_ONE + Double.MIN_NORMAL), Double.POSITIVE_INFINITY};
-
   @Rule
   public ExpectedException exception = ExpectedException.none();
+  
+  @SuppressWarnings("unused")
+  private Object[] validValues() {
+    return new Object[] {
+        0.0,
+        Double.MIN_NORMAL,
+        1.0 - Double.MIN_NORMAL,
+        1.0,
+        1.0 + Double.MIN_NORMAL,
+        Double.POSITIVE_INFINITY
+    };
+  }
+  
+  @Test
+  @Parameters(method = "validValues")
+  public void acceptsValidValues(Double validValue) throws Exception {
+    new DiscountFactor(validValue);
+  }
+  
+  @SuppressWarnings("unused")
+  private Object[] invalidValues() {
+    return new Object[] {
+        Double.NEGATIVE_INFINITY,
+        -Double.MIN_NORMAL
+    };
+  }
 
-  @Theory
-  public void discountFactorBelowZeroIsIllegal(double discountFactor) {
-    assumeThat(discountFactor, lessThan(DOUBLE_ZERO));
-
+  @Test
+  @Parameters(method = "invalidValues")
+  public void invalidValuesThrowRuntimeException(Double invalidValue) {
     exception.expect(IllegalArgumentException.class);
-    new DiscountFactor(discountFactor);
+    new DiscountFactor(invalidValue);
   }
 
-  @Theory
-  public void discountFactorAboveZeroIsLegal(double discountFactor) {
-    assumeThat(discountFactor, greaterThan(DOUBLE_ZERO));
-
-    new DiscountFactor(discountFactor);
-
-    // Expect no exceptions
-  }
 }
