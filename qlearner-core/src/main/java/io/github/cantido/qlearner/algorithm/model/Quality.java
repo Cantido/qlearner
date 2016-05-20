@@ -110,7 +110,7 @@ public final class Quality extends Number implements Comparable<Quality> {
       throw new IllegalArgumentException("Got a non-finite for a Quality value, which is invalid.");
     }
     this.value = doubleValue;
-    this.hashCode = calculateHashCode(doubleValue);
+    this.hashCode = Double.hashCode(doubleValue);
   }
 
   @Override
@@ -165,12 +165,6 @@ public final class Quality extends Number implements Comparable<Quality> {
   @Signed
   public int hashCode() {
     return hashCode;
-  }
-
-  @Signed
-  private int calculateHashCode(double value) {
-    long temp = Double.doubleToLongBits(value);
-    return (int) (temp ^ (temp >>> 32));
   }
 
   @SuppressFBWarnings(value = "NP_METHOD_PARAMETER_TIGHTENS_ANNOTATION",
