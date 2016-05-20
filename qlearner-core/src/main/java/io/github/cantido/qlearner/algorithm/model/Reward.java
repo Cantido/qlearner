@@ -84,9 +84,9 @@ public final class Reward extends Number {
   }
 
   @Override
+  @Signed
   public int hashCode() {
-    long temp = Double.doubleToLongBits(value);
-    return 31 * 1 + (int) (temp ^ (temp >>> 32));
+    return Double.hashCode(value);
   }
 
   @Override
