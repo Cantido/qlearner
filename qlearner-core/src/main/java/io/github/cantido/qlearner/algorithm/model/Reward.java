@@ -102,7 +102,7 @@ public final class Reward extends Number {
     }
 
     Reward other = (Reward) obj;
-    return Double.valueOf(value).equals(other.value);
+    return value == other.value;
   }
 
   @Override
