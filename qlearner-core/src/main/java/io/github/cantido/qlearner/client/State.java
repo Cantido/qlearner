@@ -24,15 +24,16 @@ import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 
 /**
- * A condition that you want to reward or discourage the system from arriving at, and all of the
- * gridworld.actions that it is possible to take while in this condition.
+ * A condition that you want to reward or discourage the system from arriving at.
  * <p>
- * The desirability of this condition is determined by the reward provided by {@link #getReward}.
- * Higher values will make the system prefer this state. Possible gridworld.actions are provided by
- * {@link #getActions}.
+ * A {@code State} has possible {@link Action}s that can be taken that are expected to have some
+ * impact on your {@link Environment}. These {@code Action}s are provided by this class's 
+ * {@link #getActions} method. The desirability of this {@code State} is determined by the
+ * {@link Reward} value provided by {@link #getReward}.
  * </p>
  * <p>
- * Note: This class <strong>must</strong> implement {@link #hashCode()} and {@link #equals(Object)}!
+ * <strong>Warning</strong>: This class <em>must</em> implement {@link #hashCode()} and
+ * {@link #equals(Object)}!
  * The system uses these comparisons to look up the quality values of {@code State-Action} pairs, so
  * if two different {@code State}s are seen as equivalent, then the system will not work correctly.
  * For that reason, {@code State} objects must be immutable.
@@ -52,7 +53,7 @@ public abstract class State {
   public abstract Reward getReward();
 
   /**
-   * Get all {@link Action}s that is possible to perform while in this state
+   * Get all {@link Action}s that is possible to perform while in this state.
    * 
    * @return all gridworld.actions that can be taken
    */
