@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.Signed;
@@ -114,25 +113,25 @@ public final class Quality extends Number implements Comparable<Quality> {
   }
 
   @Override
-  @Nonnegative
+  @Signed
   public int intValue() {
     return (int) value;
   }
 
   @Override
-  @Nonnegative
+  @Signed
   public long longValue() {
     return (long) value;
   }
 
   @Override
-  @Nonnegative
+  @Signed
   public float floatValue() {
     return (float) value;
   }
 
   @Override
-  @Nonnegative
+  @Signed
   public double doubleValue() {
     return value;
   }
