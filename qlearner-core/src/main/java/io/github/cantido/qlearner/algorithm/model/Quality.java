@@ -60,7 +60,7 @@ public final class Quality extends Number implements Comparable<Quality> {
   }
 
   private static final long serialVersionUID = -6538970599397750791L;
-  private static final double EQUALITY_DELTA = 0.0000001;
+  private static final double EQUALITY_DELTA = 1.0E-7;
 
   /**
    * A {@link Comparator} sorts {@link Quality} objects in reverse order from their natural
