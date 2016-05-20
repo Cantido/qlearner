@@ -14,7 +14,8 @@
  */
 
 /**
- * Strategies for a {@link io.github.cantido.qlearner.agent.Agent Agent} to execute {@link io.github.cantido.qlearner.client.Action
+ * Strategies for a {@link io.github.cantido.qlearner.agent.Agent Agent} to execute {@link io.
+ * github.cantido.qlearner.client.Action
  * Actions}.
  */
 @javax.annotation.ParametersAreNonnullByDefault

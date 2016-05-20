@@ -14,7 +14,8 @@
  */
 
 /**
- * Classes for representing and manipulating {@link io.github.cantido.qlearner.algorithm.model.Quality Quality}
+ * Classes for representing and manipulating {@link io.github.cantido.qlearner.algorithm.model.
+ * Quality Quality}
  * values.
  */
 @javax.annotation.ParametersAreNonnullByDefault
