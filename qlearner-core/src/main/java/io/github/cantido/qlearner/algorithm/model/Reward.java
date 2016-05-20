@@ -50,8 +50,13 @@ public final class Reward extends Number {
    * 
    * @param value the value of this reward.
    */
-  public Reward(Number value) {
-    this.value = value.doubleValue();
+  public Reward(@Signed Number value) {
+    double doubleValue = value.doubleValue();
+    if (!Double.isFinite(doubleValue)) {
+      throw new IllegalArgumentException(
+          "Non-finite values are not allowed, but got " + doubleValue);
+    }
+    this.value = doubleValue;
   }
 
   @Override
