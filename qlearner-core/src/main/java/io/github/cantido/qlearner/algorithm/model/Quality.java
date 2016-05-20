@@ -105,8 +105,9 @@ public final class Quality extends Number implements Comparable<Quality> {
       justification = "There is no additional context to give this exception")
   public Quality(@Signed Number value) {
     double doubleValue = value.doubleValue();
-    if (!Double.isFinite(doubleValue)) {
-      throw new IllegalArgumentException("Got a non-finite for a Quality value, which is invalid.");
+    if (Double.isNaN(doubleValue)) {
+      throw new IllegalArgumentException(
+          "Got a NaN for a Quality value, which is invalid. Got: " + doubleValue);
     }
     this.value = doubleValue;
     this.hashCode = Double.hashCode(doubleValue);
