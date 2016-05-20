@@ -13,7 +13,7 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package qlearning.domain.learning;
+package qlearning.domain.model;
 
 import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ONE;
 import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ZERO;

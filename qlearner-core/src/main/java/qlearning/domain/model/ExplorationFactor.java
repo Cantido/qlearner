@@ -13,7 +13,7 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package qlearning.domain.exploration;
+package qlearning.domain.model;
 
 import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnegative;

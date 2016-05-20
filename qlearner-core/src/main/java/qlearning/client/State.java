@@ -16,7 +16,7 @@
 package qlearning.client;
 
 import qlearning.agent.Agent;
-import qlearning.domain.learning.Reward;
+import qlearning.domain.model.Reward;
 
 import java.util.Set;
 

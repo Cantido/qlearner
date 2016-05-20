@@ -14,7 +14,7 @@
  */
 
 /**
- * Classes for representing and manipulating {@link qlearning.domain.quality.Quality Quality}
+ * Classes for representing and manipulating {@link qlearning.domain.model.Quality Quality}
  * values.
  */
 @javax.annotation.ParametersAreNonnullByDefault

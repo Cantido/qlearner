@@ -13,7 +13,7 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package qlearning.domain;
+package qlearning.domain.model;
 
 import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ONE;
 import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ZERO;
@@ -34,7 +34,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import qlearning.domain.exploration.ExplorationFactor;
+import qlearning.domain.model.ExplorationFactor;
 
 @SuppressWarnings({"null", "javadoc"})
 @RunWith(Theories.class)

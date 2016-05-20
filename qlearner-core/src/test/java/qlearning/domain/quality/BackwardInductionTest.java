@@ -22,9 +22,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import qlearning.domain.learning.DiscountFactor;
-import qlearning.domain.learning.LearningRate;
-import qlearning.domain.learning.Reward;
+import qlearning.domain.model.DiscountFactor;
+import qlearning.domain.model.LearningRate;
+import qlearning.domain.model.Quality;
+import qlearning.domain.model.QualityUpdateStrategy;
+import qlearning.domain.model.Reward;
 
 @SuppressWarnings({"null", "javadoc"})
 public class BackwardInductionTest {

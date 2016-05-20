@@ -18,6 +18,8 @@ package qlearning.domain.exploration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qlearning.client.Action;
+import qlearning.domain.model.ExplorationFactor;
+import qlearning.domain.model.ExplorationStrategy;
 import qlearning.domain.quality.StateActionQuality;
 
 import java.util.Random;

@@ -18,9 +18,9 @@ package qlearning.agent;
 import qlearning.client.Action;
 import qlearning.client.Environment;
 import qlearning.client.State;
-import qlearning.domain.exploration.ExplorationStrategy;
-import qlearning.domain.quality.Quality;
-import qlearning.domain.quality.QualityMap;
+import qlearning.domain.model.ExplorationStrategy;
+import qlearning.domain.model.Quality;
+import qlearning.domain.model.QualityMap;
 import qlearning.domain.quality.QualityUpdater;
 import qlearning.domain.quality.StateActionQuality;
 
@@ -40,7 +40,7 @@ import javax.annotation.concurrent.NotThreadSafe;
  * <p>
  * This is the object that will navigate and learn the problem space (the {@code Environment}). It
  * implements the Q-learning algorithm to pick the optimal {@code Action} to take while in each
- * {@code State} in order to maximize the accumulated {@link qlearning.domain.learning.Reward}
+ * {@code State} in order to maximize the accumulated {@link qlearning.domain.model.Reward}
  * value.
  * </p>
  */

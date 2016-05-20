@@ -22,15 +22,15 @@ import java.time.Instant;
 
 import qlearning.agent.Agent;
 import qlearning.agent.AgentBuilder;
-import qlearning.domain.exploration.ExplorationFactor;
-import qlearning.domain.exploration.ExplorationStrategy;
 import qlearning.domain.exploration.RandomExplorationStrategy;
-import qlearning.domain.learning.DiscountFactor;
-import qlearning.domain.learning.LearningRate;
+import qlearning.domain.model.DiscountFactor;
+import qlearning.domain.model.ExplorationFactor;
+import qlearning.domain.model.ExplorationStrategy;
+import qlearning.domain.model.LearningRate;
+import qlearning.domain.model.QualityMap;
+import qlearning.domain.model.QualityUpdateStrategy;
 import qlearning.domain.quality.BackwardInduction;
 import qlearning.domain.quality.QualityHashMap;
-import qlearning.domain.quality.QualityMap;
-import qlearning.domain.quality.QualityUpdateStrategy;
 
 /**
  * A test with a high number of iterations, used for performance testing an optimization.

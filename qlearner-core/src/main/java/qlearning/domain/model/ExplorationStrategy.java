@@ -13,11 +13,10 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package qlearning.domain.exploration;
+package qlearning.domain.model;
 
 import qlearning.client.Action;
 import qlearning.client.State;
-import qlearning.domain.quality.Quality;
 import qlearning.domain.quality.StateActionQuality;
 
 import java.util.SortedSet;

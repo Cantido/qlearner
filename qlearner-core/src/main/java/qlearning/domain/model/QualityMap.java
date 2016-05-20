@@ -13,10 +13,11 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package qlearning.domain.quality;
+package qlearning.domain.model;
 
 import qlearning.client.Action;
 import qlearning.client.State;
+import qlearning.domain.quality.StateActionQuality;
 
 /**
  * An object that can store the {@link Quality} values of {@link State}-{@link Action} pairs.

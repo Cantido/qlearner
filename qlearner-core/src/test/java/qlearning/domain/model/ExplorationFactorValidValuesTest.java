@@ -13,7 +13,7 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package qlearning.domain;
+package qlearning.domain.model;
 
 import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ONE;
 import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ZERO;
@@ -29,42 +29,44 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import qlearning.domain.learning.LearningRate;
+import qlearning.domain.model.ExplorationFactor;
 
 @SuppressWarnings({"null", "javadoc"})
 @RunWith(Theories.class)
-public class LearningRateTest {
-  @Rule
-  public ExpectedException exception = ExpectedException.none();
-
+public class ExplorationFactorValidValuesTest {
   @DataPoints
-  public static double[] doubles = new double[] {Double.NEGATIVE_INFINITY, (-Double.MIN_NORMAL),
+  public static double[] values = new double[] {Double.NEGATIVE_INFINITY, (-Double.MIN_NORMAL),
       DOUBLE_ZERO, Double.MIN_NORMAL, (DOUBLE_ONE - Double.MIN_NORMAL), DOUBLE_ONE,
       (DOUBLE_ONE + Double.MIN_NORMAL), Double.POSITIVE_INFINITY};
 
-  @Theory
-  public void learningRateBetweenZeroAndOneInclusiveIsLegal(double learningRate) {
-    assumeThat(learningRate, greaterThanOrEqualTo(DOUBLE_ZERO));
-    assumeThat(learningRate, lessThanOrEqualTo(DOUBLE_ONE));
+  @Rule
+  public ExpectedException exception = ExpectedException.none();
 
-    // No exception expected
-    new LearningRate(learningRate);
+  @Theory
+  public void explorationFactorBetweenZeroAndOneInclusiveIsLegal(double value) {
+    assumeThat(value, greaterThanOrEqualTo(DOUBLE_ZERO));
+    assumeThat(value, lessThanOrEqualTo(DOUBLE_ONE));
+
+    new ExplorationFactor(value);
+
+    // Expect no exceptions
   }
 
   @Theory
-  public void learningRateLessThanZeroIsIllegal(double learningRate) {
-    assumeThat(learningRate, lessThan(DOUBLE_ZERO));
+  public void explorationFactorBelowZeroIsIllegal(double value) {
+    assumeThat(value, lessThan(DOUBLE_ZERO));
 
     exception.expect(IllegalArgumentException.class);
-    new LearningRate(learningRate);
+
+    new ExplorationFactor(value);
   }
 
   @Theory
-  public void learningRateGreaterThanOneIsIllegal(double learningRate) {
-    assumeThat(learningRate, greaterThan(DOUBLE_ONE));
+  public void explorationFactorAboveOneIsIllegal(double value) {
+    assumeThat(value, greaterThan(DOUBLE_ONE));
 
     exception.expect(IllegalArgumentException.class);
-    new LearningRate(learningRate);
-  }
 
+    new ExplorationFactor(value);
+  }
 }

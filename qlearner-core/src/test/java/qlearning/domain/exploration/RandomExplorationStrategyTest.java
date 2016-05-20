@@ -27,7 +27,8 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import qlearning.client.Action;
 import qlearning.client.State;
-import qlearning.domain.quality.Quality;
+import qlearning.domain.model.ExplorationFactor;
+import qlearning.domain.model.Quality;
 import qlearning.domain.quality.StateActionQuality;
 
 import java.util.Random;

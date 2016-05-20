@@ -18,9 +18,12 @@ package qlearning.domain.quality;
 import qlearning.agent.Step;
 import qlearning.client.Action;
 import qlearning.client.State;
-import qlearning.domain.learning.DiscountFactor;
-import qlearning.domain.learning.LearningRate;
-import qlearning.domain.learning.Reward;
+import qlearning.domain.model.DiscountFactor;
+import qlearning.domain.model.LearningRate;
+import qlearning.domain.model.Quality;
+import qlearning.domain.model.QualityMap;
+import qlearning.domain.model.QualityUpdateStrategy;
+import qlearning.domain.model.Reward;
 
 import javax.annotation.Nonnull;
 

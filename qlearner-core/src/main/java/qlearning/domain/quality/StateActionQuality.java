@@ -18,6 +18,7 @@ package qlearning.domain.quality;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import qlearning.client.Action;
 import qlearning.client.State;
+import qlearning.domain.model.Quality;
 
 import java.util.Objects;
 

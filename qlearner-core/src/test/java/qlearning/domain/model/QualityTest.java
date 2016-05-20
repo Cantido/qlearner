@@ -13,7 +13,7 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package qlearning.domain.quality;
+package qlearning.domain.model;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
@@ -25,6 +25,7 @@ import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import qlearning.domain.model.Quality;
 
 @SuppressWarnings({"null", "javadoc"})
 @RunWith(JUnitParamsRunner.class)

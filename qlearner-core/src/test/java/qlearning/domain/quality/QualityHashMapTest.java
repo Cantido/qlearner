@@ -27,6 +27,8 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import qlearning.client.Action;
 import qlearning.client.State;
+import qlearning.domain.model.Quality;
+import qlearning.domain.model.QualityMap;
 
 import java.util.HashSet;
 import java.util.Set;

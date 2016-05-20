@@ -29,7 +29,7 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import qlearning.client.Action;
 import qlearning.client.State;
-import qlearning.domain.learning.Reward;
+import qlearning.domain.model.Reward;
 
 /**
  * The current position of the grid world's agent in the Grid World.
