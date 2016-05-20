@@ -15,7 +15,7 @@
 
 package io.github.cantido.qlearner.algorithm.model;
 
-import javax.annotation.Nonnegative;
+import javax.annotation.Signed;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -55,25 +55,25 @@ public final class Reward extends Number {
   }
 
   @Override
-  @Nonnegative
+  @Signed
   public int intValue() {
     return (int) value;
   }
 
   @Override
-  @Nonnegative
+  @Signed
   public long longValue() {
     return (long) value;
   }
 
   @Override
-  @Nonnegative
+  @Signed
   public float floatValue() {
     return (float) value;
   }
 
   @Override
-  @Nonnegative
+  @Signed
   public double doubleValue() {
     return value;
   }
