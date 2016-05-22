@@ -105,7 +105,7 @@ public class Agent {
    */
   public void reset() {
     this.lastStep = null;
-    this.lastActionFuture = Futures.immediateFuture(null);
+    this.lastExecutedActionFuture = Futures.immediateFuture(null);
   }
 
   /**
