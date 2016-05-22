@@ -29,6 +29,7 @@ import io.github.cantido.qlearner.client.State;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -66,8 +67,8 @@ public class Agent {
   private Step lastStep;
   
   @Nonnull
-  private Future<?> lastActionFuture = Futures.immediateFuture(null);
-
+  private Future<?> lastExecutedActionFuture = Futures.immediateFuture(null);
+  
   /**
    * Clients should not be instantiating this object themselves. Please use the {@link AgentBuilder}
    * .
@@ -117,16 +118,12 @@ public class Agent {
    * </p>
    */
   public void takeNextAction() {
-    try {
-      lastActionFuture.get();
-    } catch (InterruptedException | ExecutionException futureException) {
-      // Let it fail.
-    }
     State currentState = environment.getState();
     SortedSet<StateActionQuality> potentialQualities = buildTriplets(currentState);
     Action nextAction = explorationStrategy.getNextAction(potentialQualities);
 
-    lastActionFuture = actionExecutorService.submit(nextAction);
+    lastExecutedActionFuture = actionExecutorService.submit(nextAction);
+    
 
     if (lastStep != null) {
       updater.updateQuality(lastStep, currentState);
@@ -160,5 +157,29 @@ public class Agent {
    */
   public Optional<Step> getLastStep() {
     return Optional.of(lastStep);
+  }
+  
+  /**
+   * Wait for the last executed {@link Action} to complete. Calling this method is optional. If
+   * the {@code Action}s taken by this {@code Agent} will happen in another thread, and the
+   * caller needs that thread to complete before the next call to {@link #takeNextAction()}, then
+   * you can use this method to block until the most recently-taken {@code Action} completes.
+   * <p>
+   * If you are using the default {@link ExecutorService} provided by {@link AgentBuilder}, then
+   * calling this method does nothing: {@code AgentBuilder}'s default {@code ExecutorService}
+   * runs {@code Action}s in the same thread as this {@code Agent}.
+   * </p>
+   * <pre>
+   * while(true) {
+   *     agent.takeNextAction(); // This may run your Action in a new thread.
+   *     agent.await();          // This will block until that thread completes.
+   * }</pre>
+   * 
+   * @throws CancellationException if the {@code Action} was cancelled
+   * @throws ExecutionException if the {@code Action} threw an exception
+   * @throws InterruptedException if the current thread was interrupted while waiting
+   */
+  public void await() throws InterruptedException, ExecutionException {
+    lastExecutedActionFuture.get();
   }
 }
