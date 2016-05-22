@@ -37,50 +37,50 @@ import java.time.Instant;
  * A test with a high number of iterations, used for performance testing an optimization.
  */
 public class GridWorldPerformanceTest {
-    private static final int MAX_SUCCESS_COUNT = 500000;
+  private static final int MAX_SUCCESS_COUNT = 500000;
 
-    /**
-     * Build a {@link GridWorldEnvironment} and an {@link Agent}, and run
-     * a large number of iterations.
-     * 
-     * @param args not used.
-     */
-    public static void main(String[] args) {
-        GridWorldEnvironment environment = new GridWorldEnvironment(10, 10, 0, 0, 10, 10);
-        QualityMap qualityMap = new QualityHashMap(100, 4);
-        QualityUpdateStrategy qualityUpdateStrategy = new BackwardInduction();
-        
-        ExplorationFactor EXPLORATION_FACTOR = new ExplorationFactor(0.1);
-        ExplorationStrategy EXPLORATION_STRATEGY = new RandomExplorationStrategy(EXPLORATION_FACTOR);
-        DiscountFactor DISCOUNT_FACTOR = new DiscountFactor(1);
-        LearningRate LEARNING_RATE = new LearningRate(1);
-        
-        
-        Agent agent = (new AgentBuilder(environment))
-                .setExplorationStrategy(EXPLORATION_STRATEGY)
-                .setLearningRate(LEARNING_RATE)
-                .setDiscountFactor(DISCOUNT_FACTOR)
-                .setQualityMap(qualityMap)
-                .setQualityUpdateStrategy(qualityUpdateStrategy)
-                .getAgent();
-        
-        Instant start = Instant.now();
-        System.out.println("Running " + MAX_SUCCESS_COUNT + " successes, starting " + start.toString());
-        
-        for (int successCount = 0; successCount < MAX_SUCCESS_COUNT; successCount++) {
+  /**
+   * Build a {@link GridWorldEnvironment} and an {@link Agent}, and run a large number of
+   * iterations.
+   * 
+   * @param args not used.
+   */
+  public static void main(String[] args) {
+    GridWorldEnvironment environment = new GridWorldEnvironment(10, 10, 0, 0, 10, 10);
+    QualityMap qualityMap = new QualityHashMap(100, 4);
+    QualityUpdateStrategy qualityUpdateStrategy = new BackwardInduction();
 
-            while (!environment.isAtGoalState()) {
-                agent.takeNextAction();
-            }
+    ExplorationFactor EXPLORATION_FACTOR = new ExplorationFactor(0.1);
+    ExplorationStrategy EXPLORATION_STRATEGY = new RandomExplorationStrategy(EXPLORATION_FACTOR);
+    DiscountFactor DISCOUNT_FACTOR = new DiscountFactor(1);
+    LearningRate LEARNING_RATE = new LearningRate(1);
 
-            environment.reset();
-            agent.reset();
-        }
-        
-        Instant end = Instant.now();
-        
-        Duration runTime = Duration.between(start, end).abs();
-        
-        System.out.println("Finished at " + end + ". Total time taken: " + runTime);
+
+    Agent agent = (new AgentBuilder(environment))
+        .setExplorationStrategy(EXPLORATION_STRATEGY)
+        .setLearningRate(LEARNING_RATE)
+        .setDiscountFactor(DISCOUNT_FACTOR)
+        .setQualityMap(qualityMap)
+        .setQualityUpdateStrategy(qualityUpdateStrategy)
+        .getAgent();
+
+    Instant start = Instant.now();
+    System.out.println("Running " + MAX_SUCCESS_COUNT + " successes, starting " + start.toString());
+
+    for (int successCount = 0; successCount < MAX_SUCCESS_COUNT; successCount++) {
+
+      while (!environment.isAtGoalState()) {
+        agent.takeNextAction();
+      }
+
+      environment.reset();
+      agent.reset();
     }
+
+    Instant end = Instant.now();
+
+    Duration runTime = Duration.between(start, end).abs();
+
+    System.out.println("Finished at " + end + ". Total time taken: " + runTime);
+  }
 }
