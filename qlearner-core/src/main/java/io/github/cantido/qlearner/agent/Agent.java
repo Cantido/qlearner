@@ -27,7 +27,7 @@ import io.github.cantido.qlearner.client.State;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -54,7 +54,7 @@ public class Agent {
   @Nonnull
   private final QualityMap qualityMap;
   @Nonnull
-  private final Executor actionExecutor;
+  private final ExecutorService actionExecutorService;
   @Nonnull
   private final QualityUpdater updater;
 
@@ -75,12 +75,12 @@ public class Agent {
                             Environment environment,
                             ExplorationStrategy explorationStrategy,
                             QualityMap qualityMap,
-                            Executor actionExecutor,
+                            ExecutorService actionExecutor,
                             QualityUpdater updater) {
     this.environment = environment;
     this.explorationStrategy = explorationStrategy;
     this.qualityMap = qualityMap;
-    this.actionExecutor = actionExecutor;
+    this.actionExecutorService = actionExecutor;
     this.updater = updater;
   }
 
@@ -118,8 +118,8 @@ public class Agent {
     }
 
     lastStep = new Step(currentState, nextAction);
-
-    actionExecutor.execute(nextAction);
+    
+    actionExecutorService.execute(nextAction);
   }
 
   private SortedSet<StateActionQuality> buildTriplets(State state) {

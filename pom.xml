@@ -52,6 +52,7 @@
 		<license.licenseName>gpl_v3</license.licenseName>
 		<license.failOnMissingHeader>true</license.failOnMissingHeader>
 		<github.global.server>github</github.global.server>
+		<dependencies.guava.version>19.0</dependencies.guava.version>
 	</properties>
 	<issueManagement>
 		<system>GitHub</system>
@@ -202,6 +203,26 @@
 				<version>3.5</version>
 			</dependency>
 			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${dependencies.guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava-testlib</artifactId>
+				<version>${dependencies.guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.code.findbugs</groupId>
+				<artifactId>jsr305</artifactId>
+				<version>3.0.1</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.code.findbugs</groupId>
+				<artifactId>annotations</artifactId>
+				<version>3.0.1</version>
+			</dependency>
+			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
 				<version>1.7.21</version>
@@ -230,21 +251,6 @@
 				<groupId>org.mockito</groupId>
 				<artifactId>mockito-core</artifactId>
 				<version>2.0.2-beta</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava-testlib</artifactId>
-				<version>19.0</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.code.findbugs</groupId>
-				<artifactId>jsr305</artifactId>
-				<version>3.0.1</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.code.findbugs</groupId>
-				<artifactId>annotations</artifactId>
-				<version>3.0.1</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

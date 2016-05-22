@@ -15,7 +15,8 @@
 
 package io.github.cantido.qlearner.agent;
 
-import io.github.cantido.qlearner.agent.executors.DirectExecutor;
+import com.google.common.util.concurrent.MoreExecutors;
+
 import io.github.cantido.qlearner.algorithm.exploration.RandomExplorationStrategy;
 import io.github.cantido.qlearner.algorithm.model.DiscountFactor;
 import io.github.cantido.qlearner.algorithm.model.ExplorationFactor;
@@ -31,6 +32,7 @@ import io.github.cantido.qlearner.client.Action;
 import io.github.cantido.qlearner.client.Environment;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
@@ -52,7 +54,6 @@ public class AgentBuilder {
   @Nonnull
   private final Environment environment;
   @Nonnull
-  private Executor actionExecutor = new DirectExecutor();
   @Nonnull
   private DiscountFactor discountFactor = new DiscountFactor(1);
   @Nonnull
@@ -173,13 +174,13 @@ public class AgentBuilder {
   }
 
   /**
-   * Set the {@code Executor} that this builder will give to its resulting {@link Agent} to execute
-   * chosen {@link Action}s.
+   * Set the {@code ExecutorService} that this builder will give to its resulting {@link Agent} to
+   * execute chosen {@link Action}s.
    * 
-   * @param executor the {@code Executor} that the resulting {@code Agent} will use.
+   * @param executor the {@code ExecutorService} that the resulting {@code Agent} will use.
    * @return this builder, for chaining
    */
-  public AgentBuilder setExecutor(Executor executor) {
+  public AgentBuilder setExecutorService(ExecutorService executor) {
     this.actionExecutor = executor;
     return this;
   }
