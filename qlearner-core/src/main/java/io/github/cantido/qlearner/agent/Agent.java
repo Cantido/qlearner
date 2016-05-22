@@ -15,6 +15,7 @@
 
 package io.github.cantido.qlearner.agent;
 
+import com.google.common.util.concurrent.Futures;
 import io.github.cantido.qlearner.algorithm.model.ExplorationStrategy;
 import io.github.cantido.qlearner.algorithm.model.Quality;
 import io.github.cantido.qlearner.algorithm.model.QualityMap;
@@ -27,7 +28,9 @@ import io.github.cantido.qlearner.client.State;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -60,6 +63,9 @@ public class Agent {
 
   @Nullable
   private Step lastStep;
+  
+  @Nonnull
+  private Future<?> lastActionFuture = Futures.immediateFuture(null);
 
   /**
    * Clients should not be instantiating this object themselves. Please use the {@link AgentBuilder}
@@ -97,6 +103,7 @@ public class Agent {
    */
   public void reset() {
     this.lastStep = null;
+    this.lastActionFuture = Futures.immediateFuture(null);
   }
 
   /**
@@ -109,17 +116,22 @@ public class Agent {
    * </p>
    */
   public void takeNextAction() {
+    try {
+      lastActionFuture.get();
+    } catch (InterruptedException | ExecutionException futureException) {
+      // Let it fail.
+    }
     State currentState = environment.getState();
     SortedSet<StateActionQuality> potentialQualities = buildTriplets(currentState);
     Action nextAction = explorationStrategy.getNextAction(potentialQualities);
+
+    lastActionFuture = actionExecutorService.submit(nextAction);
 
     if (lastStep != null) {
       updater.updateQuality(lastStep, currentState);
     }
 
     lastStep = new Step(currentState, nextAction);
-    
-    actionExecutorService.execute(nextAction);
   }
 
   private SortedSet<StateActionQuality> buildTriplets(State state) {
