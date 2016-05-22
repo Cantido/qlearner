@@ -44,8 +44,9 @@ public class GridWorldIntegrationTest {
 
   private final GridWorldBuilder gridWorldBuilder = new GridWorldBuilder();
 
-  private Agent agent = gridWorldBuilder.buildGridWorldAgent();
-  private GridWorldEnvironment environment = gridWorldBuilder.getLastEnvironment();
+  private Agent agent = gridWorldBuilder.getAgent();
+  private GridWorldEnvironment environment =
+      (GridWorldEnvironment) gridWorldBuilder.getEnvironment();
 
   /**
    * We can reasonably expect the agent to learn the environment after this many successful

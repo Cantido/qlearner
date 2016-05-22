@@ -36,8 +36,9 @@ public class GridWorldPerformanceTest {
    */
   public static void main(String[] args) {
     GridWorldBuilder builder = new GridWorldBuilder();
-    Agent agent = builder.buildGridWorldAgent();
-    GridWorldEnvironment environment = builder.getLastEnvironment();
+    Agent agent = builder.getAgent();
+    GridWorldEnvironment environment =
+        (GridWorldEnvironment) builder.getEnvironment();
 
     Instant start = Instant.now();
     System.out.println("Running " + MAX_SUCCESS_COUNT + " successes, starting " + start.toString());
