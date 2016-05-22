@@ -16,6 +16,7 @@
 package io.github.cantido.qlearner.agent;
 
 import com.google.common.util.concurrent.Futures;
+
 import io.github.cantido.qlearner.algorithm.model.ExplorationStrategy;
 import io.github.cantido.qlearner.algorithm.model.Quality;
 import io.github.cantido.qlearner.algorithm.model.QualityMap;
