@@ -18,17 +18,6 @@
 package io.github.cantido.qlearner.gridworld;
 
 import io.github.cantido.qlearner.agent.Agent;
-import io.github.cantido.qlearner.agent.AgentBuilder;
-import io.github.cantido.qlearner.algorithm.exploration.RandomExplorationStrategy;
-import io.github.cantido.qlearner.algorithm.model.DiscountFactor;
-import io.github.cantido.qlearner.algorithm.model.ExplorationFactor;
-import io.github.cantido.qlearner.algorithm.model.ExplorationStrategy;
-import io.github.cantido.qlearner.algorithm.model.LearningRate;
-import io.github.cantido.qlearner.algorithm.model.QualityMap;
-import io.github.cantido.qlearner.algorithm.model.QualityUpdateStrategy;
-import io.github.cantido.qlearner.algorithm.quality.BackwardInduction;
-import io.github.cantido.qlearner.algorithm.quality.QualityHashMap;
-import io.github.cantido.qlearner.gridworld.GridWorldEnvironment;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -38,7 +27,7 @@ import java.time.Instant;
  */
 public class GridWorldPerformanceTest {
   private static final int MAX_SUCCESS_COUNT = 500000;
-
+  
   /**
    * Build a {@link GridWorldEnvironment} and an {@link Agent}, and run a large number of
    * iterations.
@@ -46,23 +35,9 @@ public class GridWorldPerformanceTest {
    * @param args not used.
    */
   public static void main(String[] args) {
-    GridWorldEnvironment environment = new GridWorldEnvironment(10, 10, 0, 0, 10, 10);
-    QualityMap qualityMap = new QualityHashMap(100, 4);
-    QualityUpdateStrategy qualityUpdateStrategy = new BackwardInduction();
-
-    ExplorationFactor EXPLORATION_FACTOR = new ExplorationFactor(0.1);
-    ExplorationStrategy EXPLORATION_STRATEGY = new RandomExplorationStrategy(EXPLORATION_FACTOR);
-    DiscountFactor DISCOUNT_FACTOR = new DiscountFactor(1);
-    LearningRate LEARNING_RATE = new LearningRate(1);
-
-
-    Agent agent = (new AgentBuilder(environment))
-        .setExplorationStrategy(EXPLORATION_STRATEGY)
-        .setLearningRate(LEARNING_RATE)
-        .setDiscountFactor(DISCOUNT_FACTOR)
-        .setQualityMap(qualityMap)
-        .setQualityUpdateStrategy(qualityUpdateStrategy)
-        .getAgent();
+    GridWorldBuilder builder = new GridWorldBuilder();
+    Agent agent = builder.buildGridWorldAgent();
+    GridWorldEnvironment environment = builder.getLastEnvironment();
 
     Instant start = Instant.now();
     System.out.println("Running " + MAX_SUCCESS_COUNT + " successes, starting " + start.toString());
