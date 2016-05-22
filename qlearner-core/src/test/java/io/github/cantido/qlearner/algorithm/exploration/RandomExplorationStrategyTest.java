@@ -29,6 +29,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
@@ -36,10 +37,15 @@ import java.util.Random;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-@SuppressWarnings({"null", "javadoc"})
+/**
+ * Tests for {@link RandomExplorationStrategy}.
+ */
+@SuppressWarnings({"null"})
 public class RandomExplorationStrategyTest {
-  @Rule
-  public MockitoRule mockitoRule = MockitoJUnit.rule();
+  /**
+   * JUnit {@link Rule} to add {@link Mockito} functionality.
+   */
+  @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
   @Mock
   Random random;
@@ -60,6 +66,10 @@ public class RandomExplorationStrategyTest {
   SortedSet<StateActionQuality> stateActionQualities;
 
 
+  /**
+   * Build a {@link StateActionQuality} triplet with a higher {@link Quality} and a lower
+   * {@code Quality}.
+   */
   @Before
   public void setUp() {
     goodQuality = new Quality(1.0);
@@ -73,8 +83,12 @@ public class RandomExplorationStrategyTest {
     stateActionQualities.add(badTriplet);
   }
 
+  /**
+   * If a {@link RandomExplorationStrategy} has an {@link ExplorationFactor} of zero, then it
+   * should never explore, and always pick the best action.
+   */
   @Test
-  public void getBestAction() {
+  public void nonexploringStrategyGetsBestAction() {
     RandomExplorationStrategy strategy =
         new RandomExplorationStrategy(ExplorationFactor.NEVER_EXPLORE, random);
 
@@ -83,8 +97,12 @@ public class RandomExplorationStrategyTest {
     assertThat(actualAction, is(goodAction));
   }
 
+  /**
+   * If a {@link RandomExplorationStrategy} has an {@link ExplorationFactor} of one, then it
+   * should always explore, and it should pick an action randomly.
+   */
   @Test
-  public void getRandomAction() {
+  public void alwaysExploringStrategySelectsRandomAction() {
     RandomExplorationStrategy strategy =
         new RandomExplorationStrategy(ExplorationFactor.ALWAYS_EXPLORE, random);
 
