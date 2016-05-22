@@ -54,6 +54,7 @@ public class AgentBuilder {
   @Nonnull
   private final Environment environment;
   @Nonnull
+  private ExecutorService actionExecutor = MoreExecutors.sameThreadExecutor();
   @Nonnull
   private DiscountFactor discountFactor = new DiscountFactor(1);
   @Nonnull
