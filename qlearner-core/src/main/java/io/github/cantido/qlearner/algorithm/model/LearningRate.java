@@ -94,4 +94,26 @@ public final class LearningRate extends Number {
   public String toString() {
     return "LearningRate[" + value + "]";
   }
+
+  @Override
+  public int hashCode() {
+    return Double.hashCode(value);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    LearningRate other = (LearningRate) obj;
+
+    return value == other.value;
+  }
+  
 }

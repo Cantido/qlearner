@@ -15,6 +15,12 @@
 
 package io.github.cantido.qlearner.algorithm.model;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasToString;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.*;
+
+import com.google.common.testing.EqualsTester;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Rule;
@@ -47,5 +53,42 @@ public class LearningRateTest {
   public void learningRateGreaterThanOneIsIllegal(double learningRate) {
     exception.expect(IllegalArgumentException.class);
     new LearningRate(learningRate);
+  }
+  
+  @Test
+  @Parameters({"-0", "0", "0.1", "0.5", "0.9", "1"})
+  public void convertedNumberValuesAreCorrect(double learningRate) {
+    LearningRate rate = new LearningRate(learningRate);
+    
+    assertThat(rate.intValue(), is(Double.valueOf(learningRate).intValue()));
+    assertThat(rate.longValue(), is(Double.valueOf(learningRate).longValue()));
+    assertThat(rate.floatValue(), is(Double.valueOf(learningRate).floatValue()));
+    assertThat(rate.doubleValue(), is(Double.valueOf(learningRate).doubleValue()));
+  }
+  
+  @Test
+  @Parameters({"-0", "0", "0.1", "0.5", "0.9", "1"})
+  public void toStringContainsValue(double learningRate) {
+    LearningRate rate = new LearningRate(learningRate);
+    assertThat(rate, hasToString(containsString(Double.toString(learningRate))));
+  }
+  
+  @Test
+  public void equalsTest() throws Exception {
+    new EqualsTester()
+          .addEqualityGroup(
+              new LearningRate(1),
+              new LearningRate(1.0),
+              new LearningRate(1L),
+              new LearningRate((float) 1.0))
+          .addEqualityGroup(
+              new LearningRate(0.5),
+              new LearningRate((float) 0.5))
+          .addEqualityGroup(
+              new LearningRate(0),
+              new LearningRate(0.0),
+              new LearningRate((float) 0.0),
+              new LearningRate(0L))
+          .testEquals();
   }
 }
