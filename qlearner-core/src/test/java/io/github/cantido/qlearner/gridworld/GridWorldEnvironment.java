@@ -31,7 +31,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.CheckForSigned;
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -54,19 +53,14 @@ public class GridWorldEnvironment implements Environment {
   private static final Logger logger = LoggerFactory.getLogger(GridWorldEnvironment.class);
 
   private final Point topRightMostPoint;
-
   private final Point bottomLeftMostPoint = new Point(0, 0);
-
   private final Point startingPoint;
-
   private final Point goal;
 
   @Nonnull private final GridWorldState[][] states;
 
   private Point currentPoint;
   
-  @Nonnull private GridWorldState currentState;
-
   /** More positive in the Y direction (away from zero). */
   @Nonnull private final Up up = new Up(this);
 
@@ -131,12 +125,11 @@ public class GridWorldEnvironment implements Environment {
 
     GridWorldState newCurrentState =
         states[currentPoint.horizontalIndex][currentPoint.verticalIndex];
+    
     if (newCurrentState == null) {
       throw new NullPointerException("State at position ("
           + currentPoint.horizontalIndex + ", " + currentPoint.verticalIndex + ") was null");
     }
-
-    currentState = newCurrentState;
   }
 
   private GridWorldState[][] buildStateCache() {
@@ -149,7 +142,7 @@ public class GridWorldEnvironment implements Environment {
         Point currentPoint = new Point(x, y);
         
         int rewardValue;
-        if (isGoalState(x, y)) {
+        if (currentPoint.equals(goal)) {
           rewardValue = 10;
         } else {
           rewardValue = -1;
@@ -181,35 +174,9 @@ public class GridWorldEnvironment implements Environment {
   public State getState() {
     logger.debug("Current environment: {}", this);
 
-    return currentState;
+    return states[currentPoint.horizontalIndex][currentPoint.verticalIndex];
   }
   
-  private GridWorldState getState(
-                                  @Nonnegative int horizontalIndex,
-                                  @Nonnegative int verticalIndex) {
-    GridWorldState state = states[horizontalIndex][verticalIndex];
-    if (state == null) {
-      throw new NullPointerException("State at position ("
-          + horizontalIndex + ", " + verticalIndex + ") was null");
-    }
-    return state;
-  }
-
-  private void setState(@Nonnegative int horizontalIndex, @Nonnegative int verticalIndex) {
-    currentPoint = new Point(horizontalIndex, verticalIndex);
-
-    setCurrentState(getState(horizontalIndex, verticalIndex));
-  }
-
-  private void setCurrentState(GridWorldState state) {
-    currentState = state;
-  }
-  
-  private boolean isGoalState(@Nonnegative int horizontalIndex, @Nonnegative int verticalIndex) {
-    return (horizontalIndex == goal.horizontalIndex
-        && verticalIndex == goal.verticalIndex);
-  }
-
   /**
    * Check if this environment is at its specified goal state.
    * 
@@ -224,7 +191,7 @@ public class GridWorldEnvironment implements Environment {
    * Reset this environment to its goal state.
    */
   public void reset() {
-    setState(startingPoint.horizontalIndex, startingPoint.verticalIndex);
+    currentPoint = startingPoint;
   }
 
   /**
@@ -234,8 +201,8 @@ public class GridWorldEnvironment implements Environment {
    *         higher.
    */
   public void moveUp() {
-    assertNotAtBoundary(currentPoint.verticalIndex, topRightMostPoint.verticalIndex);
-    setState(currentPoint.horizontalIndex, currentPoint.verticalIndex + 1);
+    assertWithinBoundary(currentPoint.isBelow(topRightMostPoint));
+    currentPoint = currentPoint.movedUp();
     logger.debug("Moved to new Y = {}", currentPoint.verticalIndex);
   }
 
@@ -246,8 +213,8 @@ public class GridWorldEnvironment implements Environment {
    *         lower.
    */
   public void moveDown() {
-    assertNotAtBoundary(currentPoint.verticalIndex, bottomLeftMostPoint.verticalIndex);
-    setState(currentPoint.horizontalIndex, currentPoint.verticalIndex - 1);
+    assertWithinBoundary(currentPoint.isAbove(bottomLeftMostPoint));
+    currentPoint = currentPoint.movedDown();
     logger.debug("Moved to new Y = {}", currentPoint.verticalIndex);
   }
 
@@ -258,8 +225,8 @@ public class GridWorldEnvironment implements Environment {
    *         lower.
    */
   public void moveLeft() {
-    assertNotAtBoundary(currentPoint.horizontalIndex, bottomLeftMostPoint.horizontalIndex);
-    setState(currentPoint.horizontalIndex - 1, currentPoint.verticalIndex);
+    assertWithinBoundary(currentPoint.isRightOf(bottomLeftMostPoint));
+    currentPoint = currentPoint.movedLeft();
     logger.debug("Moved to new X = {}", currentPoint.horizontalIndex);
   }
 
@@ -270,13 +237,13 @@ public class GridWorldEnvironment implements Environment {
    *         higher.
    */
   public void moveRight() {
-    assertNotAtBoundary(currentPoint.horizontalIndex, topRightMostPoint.horizontalIndex);
-    setState(currentPoint.horizontalIndex + 1, currentPoint.verticalIndex);
+    assertWithinBoundary(currentPoint.isLeftOf(topRightMostPoint));
+    currentPoint = currentPoint.movedRight();
     logger.debug("Moved to new X = {}", currentPoint.horizontalIndex);
   }
 
-  private void assertNotAtBoundary(@Nonnegative int current, @Nonnegative int boundary) {
-    if (current == boundary) {
+  private void assertWithinBoundary(boolean withinBoundary) {
+    if (!withinBoundary) {
       throw new IllegalStateException("Current at the boundary, cannot move any further");
     }
   }
@@ -284,7 +251,7 @@ public class GridWorldEnvironment implements Environment {
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
-    builder.append("GridWorldEnvironment[Current state: ").append(currentState).append("]");
+    builder.append("GridWorldEnvironment[Current state: ").append(getState()).append("]");
     String stringValue = builder.toString();
     if (stringValue == null) {
       throw new NullPointerException("StringBuilder.toString returned null.");
