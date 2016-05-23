@@ -109,14 +109,10 @@ public class StateActionQuality implements Comparable<StateActionQuality> {
     }
     
     StateActionQuality other = (StateActionQuality) obj;
-
-    if (!action.equals(other.action)) {
-      return false;
-    }
-    if (!quality.equals(other.quality)) {
-      return false;
-    }
-    return state.equals(other.state);
+    
+    return action.equals(other.action) 
+        && quality.equals(other.quality)
+        && state.equals(other.state);
   }
 
   @SuppressFBWarnings(
