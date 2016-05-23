@@ -17,7 +17,12 @@
 
 package io.github.cantido.qlearner.gridworld;
 
+import static org.junit.Assert.*;
+
 import io.github.cantido.qlearner.agent.Agent;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.Timeout;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -25,23 +30,54 @@ import java.time.Instant;
 /**
  * A test with a high number of iterations, used for performance testing an optimization.
  */
-public class GridWorldPerformanceTest {
-  private static final int MAX_SUCCESS_COUNT = 500000;
+public class GridWorldPerformanceIT {
+  /*
+   * Just some math to allow us to choose how long to run the tests for.
+   * 
+   * Set DESIRED_TEST_DURATION_SECONDS to however long you want to run this test for.
+   * Everything else should work itself out.
+   * 
+   * You may have to tweak EXPECTED_OPERATIONS_PER_SECOND depending on your machine. The number
+   * that I've supplied is what approximately works on my machine.
+   */
+  
+  private static final int DESIRED_TEST_DURATION_SECONDS = 5;
+  
+  private static final int EXPECTED_OPERATIONS_PER_SECOND = 50_000;
+  private static final int TIMEOUT = (int) (DESIRED_TEST_DURATION_SECONDS * 1.5);
+  
+  @Rule public Timeout timeout = Timeout.seconds(TIMEOUT);
+  private static final int MAX_SUCCESS_COUNT =
+      EXPECTED_OPERATIONS_PER_SECOND * DESIRED_TEST_DURATION_SECONDS;
   
   /**
    * Build a {@link GridWorldEnvironment} and an {@link Agent}, and run a large number of
    * iterations.
    * 
    * @param args not used.
+   * @throws Exception if any exception occurs.
    */
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception {
+    GridWorldPerformanceIT test = new GridWorldPerformanceIT();
+    
+    test.performanceTest();
+  }
+  
+  /**
+   * Build a {@link GridWorldEnvironment} and an {@link Agent}, and run a large number of
+   * iterations.
+   * @throws Exception on any exception
+   */
+  @Test
+  public void performanceTest() throws Exception {
     GridWorldBuilder builder = new GridWorldBuilder();
     Agent agent = builder.getAgent();
     GridWorldEnvironment environment =
         (GridWorldEnvironment) builder.getEnvironment();
 
     Instant start = Instant.now();
-    System.out.println("Running " + MAX_SUCCESS_COUNT + " successes, starting " + start.toString());
+    System.out.println("Performing " + MAX_SUCCESS_COUNT
+        + " successes, starting " + start.toString());
 
     for (int successCount = 0; successCount < MAX_SUCCESS_COUNT; successCount++) {
 
