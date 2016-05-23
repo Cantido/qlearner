@@ -40,7 +40,7 @@ public class GridWorldConvergenceIT {
    * </p>
    */
   @Rule
-  public Timeout timeout = Timeout.seconds(10);
+  public Timeout timeout = Timeout.seconds(1);
 
   private final GridWorldBuilder gridWorldBuilder = new GridWorldBuilder();
 

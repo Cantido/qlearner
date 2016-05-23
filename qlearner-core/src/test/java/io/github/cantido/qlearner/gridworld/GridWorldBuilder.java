@@ -11,6 +11,6 @@ public class GridWorldBuilder extends AgentBuilder {
    * Create a {@code GridWorldBuilder} with default parameters.
    */
   public GridWorldBuilder() {
-    super(new GridWorldEnvironment(10, 10, 0, 0, 10, 10));
+    super(new GridWorldEnvironment(10, 10, 0, 0, 9, 9));
   }
 }

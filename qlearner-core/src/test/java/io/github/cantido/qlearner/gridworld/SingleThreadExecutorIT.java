@@ -2,7 +2,9 @@ package io.github.cantido.qlearner.gridworld;
 
 import io.github.cantido.qlearner.agent.Agent;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Timeout;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,7 +14,19 @@ import java.util.concurrent.Executors;
  * some of the package's thread-safety.
  */
 public class SingleThreadExecutorIT {
-  private static final int MAX_SUCCESS_COUNT = 10000;
+  /**
+   * The time limit for these tests.
+   * 
+   * <p>
+   * If there is a problem with the Q-learning algorithm, the values will never converge. That will
+   * cause the tests to run too long. If this test fails due to a timeout, we can be pretty sure
+   * that the algorithm is not converging as it should.
+   * </p>
+   */
+  @Rule
+  public Timeout timeout = Timeout.seconds(1);
+  
+  private static final int MAX_SUCCESS_COUNT = 1000;
   private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
   //private final ExecutorService executorService = MoreExecutors.newDirectExecutorService();
