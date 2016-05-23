@@ -53,22 +53,18 @@ public class GridWorldEnvironment implements Environment {
   @Nonnull
   private static final Logger logger = LoggerFactory.getLogger(GridWorldEnvironment.class);
 
-  @Nonnegative private final int maximumWidthIndexInclusive;
-  @Nonnegative private final int maximumHeightIndexInclusive;
+  private final Point topRightMostPoint;
 
-  @Nonnegative private final int minimumWidthIndexInclusive = 0;
-  @Nonnegative private final int minimumHeightIndexInclusive = 0;
+  private final Point bottomLeftMostPoint = new Point(0, 0);
 
-  @Nonnegative private final int startingHorizontalIndex;
-  @Nonnegative private final int startingVerticalIndex;
+  private final Point startingPoint;
 
-  @Nonnegative private final int goalHorizontalIndex;
-  @Nonnegative private final int goalVerticalIndex;
+  private final Point goal;
 
   @Nonnull private final GridWorldState[][] states;
 
-  @Nonnegative private int stateHorizontalIndex;
-  @Nonnegative private int stateVerticalIndex;
+  private Point currentPoint;
+  
   @Nonnull private GridWorldState currentState;
 
   /** More positive in the Y direction (away from zero). */
@@ -109,10 +105,8 @@ public class GridWorldEnvironment implements Environment {
       throw new IllegalArgumentException("Column and row sizes cannot be less than 1. "
           + "Got columns count: " + columnsCount + " and rows count " + rowsCount);
     }
+    this.topRightMostPoint = new Point(columnsCount - 1, rowsCount - 1);
     
-    this.maximumWidthIndexInclusive = columnsCount - 1;
-    this.maximumHeightIndexInclusive = rowsCount - 1;
-
     if (startingColumnIndex < 0 || startingColumnIndex >= columnsCount
         || startingRowIndex < 0 || startingRowIndex >= rowsCount) {
       throw new IllegalArgumentException("Starting indices must be within zero and your provided"
@@ -120,11 +114,9 @@ public class GridWorldEnvironment implements Environment {
           + " and starting row index was " + startingRowIndex);
     }
     
-    this.startingHorizontalIndex = startingColumnIndex;
-    this.startingVerticalIndex = startingRowIndex;
+    this.startingPoint = new Point(startingColumnIndex, startingRowIndex);
 
-    this.stateHorizontalIndex = startingColumnIndex;
-    this.stateVerticalIndex = startingRowIndex;
+    this.currentPoint = startingPoint;
     
     if (goalColumnIndex < 0 || goalColumnIndex >= columnsCount
         || goalRowIndex < 0 || goalRowIndex >= rowsCount) {
@@ -133,15 +125,15 @@ public class GridWorldEnvironment implements Environment {
           + " and goal row index was " + goalRowIndex);
     }
     
-    this.goalHorizontalIndex = goalColumnIndex;
-    this.goalVerticalIndex = goalRowIndex;
+    this.goal = new Point(goalColumnIndex, goalRowIndex);
 
     states = buildStateCache();
 
-    GridWorldState newCurrentState = states[stateHorizontalIndex][stateVerticalIndex];
+    GridWorldState newCurrentState =
+        states[currentPoint.horizontalIndex][currentPoint.verticalIndex];
     if (newCurrentState == null) {
       throw new NullPointerException("State at position ("
-          + stateHorizontalIndex + ", " + stateVerticalIndex + ") was null");
+          + currentPoint.horizontalIndex + ", " + currentPoint.verticalIndex + ") was null");
     }
 
     currentState = newCurrentState;
@@ -149,10 +141,13 @@ public class GridWorldEnvironment implements Environment {
 
   private GridWorldState[][] buildStateCache() {
     GridWorldState[][] states =
-        new GridWorldState[maximumWidthIndexInclusive + 1][maximumHeightIndexInclusive + 1];
+        new GridWorldState[topRightMostPoint.horizontalIndex + 1]
+                          [topRightMostPoint.verticalIndex + 1];
 
-    for (int x = minimumWidthIndexInclusive; x < maximumWidthIndexInclusive + 1; x++) {
-      for (int y = minimumHeightIndexInclusive; y < maximumHeightIndexInclusive + 1; y++) {
+    for (int x = bottomLeftMostPoint.horizontalIndex; x <= topRightMostPoint.horizontalIndex; x++) {
+      for (int y = bottomLeftMostPoint.verticalIndex; y <= topRightMostPoint.verticalIndex; y++) {
+        Point currentPoint = new Point(x, y);
+        
         int rewardValue;
         if (isGoalState(x, y)) {
           rewardValue = 10;
@@ -162,16 +157,16 @@ public class GridWorldEnvironment implements Environment {
 
         Set<Action> actions = new HashSet<>(4);
 
-        if (x > minimumWidthIndexInclusive) {
+        if (currentPoint.isRightOf(bottomLeftMostPoint)) {
           actions.add(left);
         }
-        if (x < maximumWidthIndexInclusive) {
+        if (currentPoint.isLeftOf(topRightMostPoint)) {
           actions.add(right);
         }
-        if (y > minimumHeightIndexInclusive) {
+        if (currentPoint.isAbove(bottomLeftMostPoint)) {
           actions.add(down);
         }
-        if (y < maximumHeightIndexInclusive) {
+        if (currentPoint.isBelow(topRightMostPoint)) {
           actions.add(up);
         }
 
@@ -201,10 +196,9 @@ public class GridWorldEnvironment implements Environment {
   }
 
   private void setState(@Nonnegative int horizontalIndex, @Nonnegative int verticalIndex) {
-    stateHorizontalIndex = horizontalIndex;
-    stateVerticalIndex = verticalIndex;
+    currentPoint = new Point(horizontalIndex, verticalIndex);
 
-    setCurrentState(getState(stateHorizontalIndex, stateVerticalIndex));
+    setCurrentState(getState(horizontalIndex, verticalIndex));
   }
 
   private void setCurrentState(GridWorldState state) {
@@ -212,8 +206,8 @@ public class GridWorldEnvironment implements Environment {
   }
   
   private boolean isGoalState(@Nonnegative int horizontalIndex, @Nonnegative int verticalIndex) {
-    return (horizontalIndex == goalHorizontalIndex
-        && verticalIndex == goalVerticalIndex);
+    return (horizontalIndex == goal.horizontalIndex
+        && verticalIndex == goal.verticalIndex);
   }
 
   /**
@@ -223,15 +217,14 @@ public class GridWorldEnvironment implements Environment {
    *         {@code State}, {@code false} otherwise.
    */
   public boolean isAtGoalState() {
-    return (stateHorizontalIndex == goalHorizontalIndex
-        && stateVerticalIndex == goalVerticalIndex);
+    return currentPoint.equals(goal);
   }
 
   /**
    * Reset this environment to its goal state.
    */
   public void reset() {
-    setState(startingHorizontalIndex, startingVerticalIndex);
+    setState(startingPoint.horizontalIndex, startingPoint.verticalIndex);
   }
 
   /**
@@ -241,9 +234,9 @@ public class GridWorldEnvironment implements Environment {
    *         higher.
    */
   public void moveUp() {
-    assertNotAtBoundary(stateVerticalIndex, maximumHeightIndexInclusive);
-    setState(stateHorizontalIndex, stateVerticalIndex + 1);
-    logger.debug("Moved to new Y = {}", stateVerticalIndex);
+    assertNotAtBoundary(currentPoint.verticalIndex, topRightMostPoint.verticalIndex);
+    setState(currentPoint.horizontalIndex, currentPoint.verticalIndex + 1);
+    logger.debug("Moved to new Y = {}", currentPoint.verticalIndex);
   }
 
   /**
@@ -253,9 +246,9 @@ public class GridWorldEnvironment implements Environment {
    *         lower.
    */
   public void moveDown() {
-    assertNotAtBoundary(stateVerticalIndex, minimumHeightIndexInclusive);
-    setState(stateHorizontalIndex, stateVerticalIndex - 1);
-    logger.debug("Moved to new Y = {}", stateVerticalIndex);
+    assertNotAtBoundary(currentPoint.verticalIndex, bottomLeftMostPoint.verticalIndex);
+    setState(currentPoint.horizontalIndex, currentPoint.verticalIndex - 1);
+    logger.debug("Moved to new Y = {}", currentPoint.verticalIndex);
   }
 
   /**
@@ -265,9 +258,9 @@ public class GridWorldEnvironment implements Environment {
    *         lower.
    */
   public void moveLeft() {
-    assertNotAtBoundary(stateHorizontalIndex, minimumWidthIndexInclusive);
-    setState(stateHorizontalIndex - 1, stateVerticalIndex);
-    logger.debug("Moved to new X = {}", stateHorizontalIndex);
+    assertNotAtBoundary(currentPoint.horizontalIndex, bottomLeftMostPoint.horizontalIndex);
+    setState(currentPoint.horizontalIndex - 1, currentPoint.verticalIndex);
+    logger.debug("Moved to new X = {}", currentPoint.horizontalIndex);
   }
 
   /**
@@ -277,9 +270,9 @@ public class GridWorldEnvironment implements Environment {
    *         higher.
    */
   public void moveRight() {
-    assertNotAtBoundary(stateHorizontalIndex, maximumWidthIndexInclusive);
-    setState(stateHorizontalIndex + 1, stateVerticalIndex);
-    logger.debug("Moved to new X = {}", stateHorizontalIndex);
+    assertNotAtBoundary(currentPoint.horizontalIndex, topRightMostPoint.horizontalIndex);
+    setState(currentPoint.horizontalIndex + 1, currentPoint.verticalIndex);
+    logger.debug("Moved to new X = {}", currentPoint.horizontalIndex);
   }
 
   private void assertNotAtBoundary(@Nonnegative int current, @Nonnegative int boundary) {
