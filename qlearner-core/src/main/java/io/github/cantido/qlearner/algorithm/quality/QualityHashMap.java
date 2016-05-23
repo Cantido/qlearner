@@ -19,7 +19,6 @@ import io.github.cantido.qlearner.algorithm.model.Quality;
 import io.github.cantido.qlearner.algorithm.model.QualityMap;
 import io.github.cantido.qlearner.client.Action;
 import io.github.cantido.qlearner.client.State;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +45,8 @@ public class QualityHashMap implements QualityMap {
    * Mapping of State-Action pairs to their Quality value.
    */
   @Nonnull
-  private final Map<ImmutablePair<State, Action>, Quality> actionQualities;
+  private final Map<State, Map<Action, Quality>> actionQualities;
+  
   /**
    * An optimization; stores the best quality for each state.
    * 
@@ -117,7 +117,11 @@ public class QualityHashMap implements QualityMap {
   public void put(State state, Action action, Quality quality) {
     Quality oldQuality = get(state, action);
 
-    actionQualities.put(new ImmutablePair<>(state, action), quality);
+    if (!actionQualities.containsKey(state)) {
+      actionQualities.put(state, new HashMap<>(expectedAverageActionsPerState));
+    }
+    actionQualities.get(state).put(action, quality);
+    //actionQualities.put(new ImmutablePair<>(state, action), quality);
 
     PriorityQueue<Quality> queueToUpdate;
 
@@ -137,7 +141,12 @@ public class QualityHashMap implements QualityMap {
 
   @Override
   public Quality get(State state, Action action) {
-    Quality quality = actionQualities.get(new ImmutablePair<>(state, action));
+    Map<Action, Quality> actions = actionQualities.get(state);
+    if (actions == null) {
+      return defaultQuality;
+    }
+    
+    Quality quality = actions.get(action);
 
     if (quality == null) {
       return defaultQuality;
