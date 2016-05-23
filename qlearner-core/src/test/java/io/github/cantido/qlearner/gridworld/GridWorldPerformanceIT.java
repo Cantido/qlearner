@@ -40,7 +40,7 @@ public class GridWorldPerformanceIT {
    * Everything else should work itself out.
    * 
    * You may have to tweak EXPECTED_OPERATIONS_PER_SECOND depending on your machine. The number
-   * that I've supplied is what approximately works on my machine.
+   * What I've supplied is what approximately works on my machine.
    */
   
   private static final int DESIRED_TEST_DURATION_SECONDS = 5;
