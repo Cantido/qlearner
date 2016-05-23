@@ -18,6 +18,8 @@ package io.github.cantido.qlearner.algorithm.model;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasToString;
 
 import com.google.common.testing.EqualsTester;
 import io.github.cantido.qlearner.algorithm.model.Quality;
@@ -57,5 +59,13 @@ public class QualityTest {
       .addEqualityGroup(new Quality(1), new Quality(1.0))
       .addEqualityGroup(new Quality(-1.0), new Quality(-1.0))
       .testEquals();
+  }
+  
+  @Test
+  public void toStringContainsValue() throws Exception {
+    Double value = Double.valueOf(1.0);
+    Quality quality = new Quality(value);
+    
+    assertThat(quality, hasToString(containsString(value.toString())));
   }
 }
