@@ -78,7 +78,7 @@ public class GridWorldPerformanceIT {
         (GridWorldEnvironment) builder.getEnvironment();
 
     Instant start = Instant.now();
-    LOGGER.info("Performing " + MAX_SUCCESS_COUNT + " successes, starting " + start);
+    LOGGER.info("Performing {} successes, starting at {}", MAX_SUCCESS_COUNT, start);
 
     for (int successCount = 0; successCount < MAX_SUCCESS_COUNT; successCount++) {
 
@@ -94,6 +94,6 @@ public class GridWorldPerformanceIT {
 
     Duration runTime = Duration.between(start, end).abs();
 
-    LOGGER.info("Finished at " + end + ". Total time taken: " + runTime);
+    LOGGER.info("Finished at {}. Total time taken: {}", end, runTime);
   }
 }
