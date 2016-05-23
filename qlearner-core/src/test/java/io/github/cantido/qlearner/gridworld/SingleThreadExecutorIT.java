@@ -1,14 +1,11 @@
 package io.github.cantido.qlearner.gridworld;
 
-import com.google.common.util.concurrent.MoreExecutors;
 import io.github.cantido.qlearner.agent.Agent;
-import io.github.cantido.qlearner.client.Environment;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * An integration test that uses a single-worker-thread {@link ExecutorService} to validate
