@@ -90,13 +90,13 @@ public class GridWorldEnvironment implements Environment {
    * @param columnsCount horizontal size of the grid, in the interval [1, {@code Integer.MAX_VALUE}]
    * @param rowsCount vertical size of the grid, in the interval [1, {@code Integer.MAX_VALUE}]
    * @param startingColumnIndex horizontal, array-indexed position of the starting state, in the
-   *        interval [0, {@code sizeX}]
+   *        interval [0, {@code columnsCount}]
    * @param startingRowIndex vertical, array-indexed position of the starting state, in the interval
-   *        [0, {@code sizeY}]
+   *        [0, {@code rowsCount}]
    * @param goalColumnIndex horizontal, array-indexed position of the goal state, in the interval
-   *        [0, {@code sizeX}]
+   *        [0, {@code columnsCount}]
    * @param goalRowIndex vertical, array-indexed position of the goal state, in the interval [0,
-   *        {@code sizeY}]
+   *        {@code rowsCount}]
    */
   public GridWorldEnvironment(
                               @CheckForSigned int columnsCount,
