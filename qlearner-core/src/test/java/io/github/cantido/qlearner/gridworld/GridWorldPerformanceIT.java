@@ -17,12 +17,12 @@
 
 package io.github.cantido.qlearner.gridworld;
 
-import static org.junit.Assert.*;
-
 import io.github.cantido.qlearner.agent.Agent;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -31,6 +31,8 @@ import java.time.Instant;
  * A test with a high number of iterations, used for performance testing an optimization.
  */
 public class GridWorldPerformanceIT {
+  private static final Logger LOGGER = LoggerFactory.getLogger(GridWorldPerformanceIT.class);
+  
   /*
    * Just some math to allow us to choose how long to run the tests for.
    * 
@@ -76,8 +78,7 @@ public class GridWorldPerformanceIT {
         (GridWorldEnvironment) builder.getEnvironment();
 
     Instant start = Instant.now();
-    System.out.println("Performing " + MAX_SUCCESS_COUNT
-        + " successes, starting " + start.toString());
+    LOGGER.info("Performing " + MAX_SUCCESS_COUNT + " successes, starting " + start);
 
     for (int successCount = 0; successCount < MAX_SUCCESS_COUNT; successCount++) {
 
@@ -93,6 +94,6 @@ public class GridWorldPerformanceIT {
 
     Duration runTime = Duration.between(start, end).abs();
 
-    System.out.println("Finished at " + end + ". Total time taken: " + runTime);
+    LOGGER.info("Finished at " + end + ". Total time taken: " + runTime);
   }
 }
