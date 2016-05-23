@@ -8,6 +8,7 @@ import org.junit.rules.Timeout;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * An integration test that uses a single-worker-thread {@link ExecutorService} to validate
@@ -62,5 +63,6 @@ public class SingleThreadExecutorIT {
       agent.reset();
     }
     executorService.shutdown();
+    executorService.awaitTermination(1, TimeUnit.SECONDS);
   }
 }
