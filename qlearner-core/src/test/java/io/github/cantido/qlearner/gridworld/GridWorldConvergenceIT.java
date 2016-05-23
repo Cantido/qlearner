@@ -28,7 +28,7 @@ import org.junit.rules.Timeout;
  * Tests that the {@link GridWorldEnvironment} implementation of this library converges on the goal
  * state.
  */
-public class GridWorldIntegrationTest {
+public class GridWorldConvergenceIT {
 
   /**
    * The time limit for these tests.
