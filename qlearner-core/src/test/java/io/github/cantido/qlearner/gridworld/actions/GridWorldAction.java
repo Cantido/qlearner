@@ -16,25 +16,23 @@
 package io.github.cantido.qlearner.gridworld.actions;
 
 
+import io.github.cantido.qlearner.client.Action;
+import io.github.cantido.qlearner.gridworld.GridWorldEnvironment;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.Signed;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import io.github.cantido.qlearner.client.Action;
-import io.github.cantido.qlearner.gridworld.GridWorldEnvironment;
-
 @NotThreadSafe
 /* package-private */ abstract class GridWorldAction extends Action {
 
-  @Nonnull
-  protected final GridWorldEnvironment environment;
-  @Signed
-  protected final int hashCodeValue;
+  @Nonnull protected final GridWorldEnvironment environment;
+  @Signed protected final int hashCodeValue;
 
   public GridWorldAction(GridWorldEnvironment environment) {
     this.environment = environment;
-    this.hashCodeValue = computeHashCode();
+    this.hashCodeValue = environment.hashCode();
   }
 
   @Override
@@ -43,25 +41,19 @@ import io.github.cantido.qlearner.gridworld.GridWorldEnvironment;
     return hashCodeValue;
   }
 
-  @Signed
-  protected int computeHashCode() {
-    final int prime = 127;
-    int result = 1;
-    result = prime * result + environment.hashCode();
-    return result;
-  }
-
   @Override
   public boolean equals(@Nullable Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    Down other = (Down) obj;
-    if (!environment.equals(other.environment))
-      return false;
-    return true;
+    }
+    GridWorldAction other = (GridWorldAction) obj;
+    
+    return environment.equals(other.environment);
   }
 }
