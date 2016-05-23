@@ -1,4 +1,4 @@
-package io.github.cantido.qlearner.gridworld;
+package io.github.cantido.qlearner.gridworld.client;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nullable;

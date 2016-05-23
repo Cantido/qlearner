@@ -13,29 +13,8 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.cantido.qlearner.gridworld.actions;
-
-import io.github.cantido.qlearner.client.Action;
-import io.github.cantido.qlearner.gridworld.client.GridWorldEnvironment;
-
-import javax.annotation.concurrent.NotThreadSafe;
-
 /**
- * An {@link Action} to move "right" in a {@link GridWorldEnvironment}.
+ * Integration tests of QLearner using the Gridworld implementation.
  */
-@NotThreadSafe
-public class Right extends GridWorldAction {
-  /**
-   * Create a {@code Right} action.
-   * 
-   * @param environment the environment to modify when this action is executed.
-   */
-  public Right(GridWorldEnvironment environment) {
-    super(environment);
-  }
-
-  @Override
-  public void run() {
-    environment.moveRight();
-  }
-}
+@javax.annotation.ParametersAreNonnullByDefault
+package io.github.cantido.qlearner.gridworld.integration;

@@ -13,13 +13,15 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.cantido.qlearner.gridworld;
+package io.github.cantido.qlearner.gridworld.integration;
 
 import static org.apache.commons.math3.stat.StatUtils.percentile;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.assertThat;
 
 import io.github.cantido.qlearner.agent.Agent;
+import io.github.cantido.qlearner.gridworld.client.GridWorldBuilder;
+import io.github.cantido.qlearner.gridworld.client.GridWorldEnvironment;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;

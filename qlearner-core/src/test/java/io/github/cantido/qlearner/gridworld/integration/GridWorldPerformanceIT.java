@@ -15,9 +15,11 @@
  * along with QLearner.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.cantido.qlearner.gridworld;
+package io.github.cantido.qlearner.gridworld.integration;
 
 import io.github.cantido.qlearner.agent.Agent;
+import io.github.cantido.qlearner.gridworld.client.GridWorldBuilder;
+import io.github.cantido.qlearner.gridworld.client.GridWorldEnvironment;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
@@ -51,7 +53,7 @@ public class GridWorldPerformanceIT {
   @Rule public Timeout timeout = Timeout.seconds(TIMEOUT);
   private static final int MAX_SUCCESS_COUNT =
       EXPECTED_OPERATIONS_PER_SECOND * DESIRED_TEST_DURATION_SECONDS;
-  
+//  private static final int MAX_SUCCESS_COUNT = 1000;
   /**
    * Build a {@link GridWorldEnvironment} and an {@link Agent}, and run a large number of
    * iterations.

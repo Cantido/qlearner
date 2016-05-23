@@ -1,6 +1,8 @@
-package io.github.cantido.qlearner.gridworld;
+package io.github.cantido.qlearner.gridworld.integration;
 
 import io.github.cantido.qlearner.agent.Agent;
+import io.github.cantido.qlearner.gridworld.client.GridWorldBuilder;
+import io.github.cantido.qlearner.gridworld.client.GridWorldEnvironment;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

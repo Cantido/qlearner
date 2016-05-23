@@ -13,7 +13,7 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package io.github.cantido.qlearner.gridworld;
+package io.github.cantido.qlearner.gridworld.client;
 
 import io.github.cantido.qlearner.algorithm.model.Reward;
 import io.github.cantido.qlearner.client.Action;

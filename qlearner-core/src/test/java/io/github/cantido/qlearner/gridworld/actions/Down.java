@@ -16,7 +16,7 @@
 package io.github.cantido.qlearner.gridworld.actions;
 
 import io.github.cantido.qlearner.client.Action;
-import io.github.cantido.qlearner.gridworld.GridWorldEnvironment;
+import io.github.cantido.qlearner.gridworld.client.GridWorldEnvironment;
 
 import javax.annotation.concurrent.NotThreadSafe;
 

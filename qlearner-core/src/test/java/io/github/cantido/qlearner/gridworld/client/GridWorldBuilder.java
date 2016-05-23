@@ -1,4 +1,4 @@
-package io.github.cantido.qlearner.gridworld;
+package io.github.cantido.qlearner.gridworld.client;
 
 import io.github.cantido.qlearner.agent.Agent;
 import io.github.cantido.qlearner.agent.AgentBuilder;
