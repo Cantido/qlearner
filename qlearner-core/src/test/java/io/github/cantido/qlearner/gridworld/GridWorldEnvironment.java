@@ -51,7 +51,10 @@ public class GridWorldEnvironment implements Environment {
   @SuppressWarnings("null")
   @Nonnull
   private static final Logger logger = LoggerFactory.getLogger(GridWorldEnvironment.class);
-
+  
+  private static final Reward GOAL_REWARD = new Reward(10);
+  private static final Reward NORMAL_REWARD = new Reward(-1);
+  
   private final Point topRightMostPoint;
   private final Point bottomLeftMostPoint = new Point(0, 0);
   private final Point startingPoint;
@@ -140,13 +143,6 @@ public class GridWorldEnvironment implements Environment {
     for (int x = bottomLeftMostPoint.horizontalIndex; x <= topRightMostPoint.horizontalIndex; x++) {
       for (int y = bottomLeftMostPoint.verticalIndex; y <= topRightMostPoint.verticalIndex; y++) {
         Point currentPoint = new Point(x, y);
-        
-        int rewardValue;
-        if (currentPoint.equals(goal)) {
-          rewardValue = 10;
-        } else {
-          rewardValue = -1;
-        }
 
         Set<Action> actions = new HashSet<>(4);
 
@@ -163,7 +159,9 @@ public class GridWorldEnvironment implements Environment {
           actions.add(up);
         }
 
-        GridWorldState state = new GridWorldState(x, y, new Reward(rewardValue), actions);
+        Reward pointReward = currentPoint.equals(goal) ? GOAL_REWARD : NORMAL_REWARD;
+        
+        GridWorldState state = new GridWorldState(x, y, pointReward, actions);
         states[x][y] = state;
       }
     }
