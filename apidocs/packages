@@ -1,8 +1,0 @@
-qlearning.agent
-qlearning.agent.executors
-qlearning.client
-qlearning.domain.exploration
-qlearning.domain.learning
-qlearning.domain
-qlearning.domain.quality
-qlearning

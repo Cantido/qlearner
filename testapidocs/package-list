@@ -1,3 +1,7 @@
-qlearning.domain
-qlearning.domain.exploration
-qlearning.domain.quality
+io.github.cantido.qlearner.algorithm.exploration
+io.github.cantido.qlearner.algorithm.model
+io.github.cantido.qlearner.algorithm.quality
+io.github.cantido.qlearner.gridworld
+io.github.cantido.qlearner.gridworld.actions
+io.github.cantido.qlearner.gridworld.client
+io.github.cantido.qlearner.gridworld.integration
