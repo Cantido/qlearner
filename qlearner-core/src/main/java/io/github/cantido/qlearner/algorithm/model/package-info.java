@@ -14,6 +14,7 @@
  */
 
 /**
- * The
+ * The variable types and objects that form the QLearning model.
  */
+@javax.annotation.ParametersAreNonnullByDefault
 package io.github.cantido.qlearner.algorithm.model;

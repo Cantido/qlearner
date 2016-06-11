@@ -21,6 +21,7 @@ import static org.apache.commons.lang3.math.NumberUtils.DOUBLE_ZERO;
 import org.apache.commons.lang3.Validate;
 
 import javax.annotation.Nonnegative;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -101,7 +102,7 @@ public final class LearningRate extends Number {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(@Nullable Object obj) {
     if (this == obj) {
       return true;
     }

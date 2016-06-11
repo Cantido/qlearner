@@ -15,6 +15,7 @@
 
 package io.github.cantido.qlearner.algorithm.model;
 
+import javax.annotation.Nullable;
 import javax.annotation.Signed;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
@@ -90,7 +91,7 @@ public final class Reward extends Number {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(@Nullable Object obj) {
     if (this == obj) {
       return true;
     }
