@@ -15,8 +15,8 @@
 
 /**
  * The {@link io.github.cantido.qlearner.agent.Agent Agent} class is the entry point to this
- * library. It has only one method: {@link io.github.cantido.qlearner.agent.Agent#takeNextAction() 
- * Agent.takeNextAction()}.
+ * library. It has only one method:
+ * {@link io.github.cantido.qlearner.agent.Agent#takeNextAction() Agent.takeNextAction()}.
  * <pre>
  * Agent agent = ... ;
  * 
@@ -61,10 +61,10 @@
  *     agent.reset();
  *     myGameEnvironment.endGame();
  * }</pre>
- * You can also create a brand new {@code Agent} object, just be sure to save the {@link io.github.
- * cantido.qlearner.algorithm.model.QualityMap} that you created it with. The {@code QualityMap} is
- * where the {@code Agent} stores its learned values, and represents the hard work you just
- * performed.
+ * You can also create a brand new {@code Agent} object, just be sure to save the
+ * {@link io.github.cantido.qlearner.algorithm.model.QualityMap} that you created it with. The
+ * {@code QualityMap} is where the {@code Agent} stores its learned values, and represents the
+ * hard work you just performed.
  */
 @javax.annotation.ParametersAreNonnullByDefault
 package io.github.cantido.qlearner.agent;

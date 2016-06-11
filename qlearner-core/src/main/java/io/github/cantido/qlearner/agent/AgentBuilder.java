@@ -178,15 +178,16 @@ public class AgentBuilder {
   /**
    * Set the {@code ExecutorService} that this builder will give to its resulting {@link Agent} to
    * execute chosen {@link Action}s. By default, {@code Agent}s are built with an
-   * {@code ExecutorService} that executes actions in the same thread, also known as a  "direct"
+   * {@code ExecutorService} that executes actions in the same thread, also known as a "direct"
    * executor.
    * <p>
    * If your {@code Action}s are fairly lightweight, any thread-based {@code ExecutorService} will
-   * incur too much overhead to be worthwhile. For example using a {@link Executors#
-   * newSingleThreadExecutor()} in the Gridworld example increases its execution time six-fold, 
-   * purely through its overhead. Be sure that your {@code Action}s really do need to be executed
-   * in their own threads.
+   * incur too much overhead to be worthwhile. For example using a
+   * {@link Executors#newSingleThreadExecutor()} in the Gridworld example increases its execution
+   * time six-fold, purely through its overhead. Be sure that your {@code Action}s really do need to
+   * be executed in their own threads.
    * </p>
+   * 
    * @param executor the {@code ExecutorService} that the resulting {@code Agent} will use.
    * @return this builder, for chaining
    */

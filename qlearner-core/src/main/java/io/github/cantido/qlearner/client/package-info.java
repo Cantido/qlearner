@@ -20,8 +20,8 @@
  * interface represent some system (real-world or otherwise) that you are trying to affect.
  * This program will use a single instance of your {@code Environment} implementation to fetch
  * data at every learning iteration. An {@code Environment} provides its current state in a
- * {@link io.github.cantido.qlearner.client.State State} object, provided by {@link io.github.
- * cantido.qlearner.client.Environment#getState() Environment.getState()}.
+ * {@link io.github.cantido.qlearner.client.State State} object, provided by
+ * {@link io.github.cantido.qlearner.client.Environment#getState() Environment.getState()}.
  * </p><p>
  * Implementations of the {@link io.github.cantido.qlearner.client.State State} interface represent
  * certain conditions of the system you are trying to affect. If your {@code Environment} has a
@@ -33,15 +33,16 @@
  * <em>Warning</em>: This program does not yet have the functionality necessary to learn continuous
  * values. You must build your {@code State} objects to round these continuous values to the point
  * where it is likely that the program will see that value again. For instance, you could round
- * temperature readings to a lower precision. See {@link io.github.cantido.qlearner.algorithm.
- * quality.QualityHashMap QualityHashMap} for more information.
+ * temperature readings to a lower precision. See
+ * {@link io.github.cantido.qlearner.algorithm.quality.QualityHashMap QualityHashMap} for more
+ * information.
  * </p><p>
  *  Implementations of the {@link io.github.cantido.qlearner.client.Action Action} interface
  *  represent a thing that can be done to affect the {@code Environment}. This program tries to
- *  learn the best {@code Action} to take for a given {@code State}. Each call to {@link io.github.
- *  cantido.qlearner.agent.Agent#takeNextAction() Agent.takeNextAction()} will call {@link io.
- *  github.cantido.qlearner.client.Action#run() Action.run()} once.
- * <p>
+ *  learn the best {@code Action} to take for a given {@code State}. Each call to
+ *  {@link io.github.cantido.qlearner.agent.Agent#takeNextAction() Agent.takeNextAction()} will
+ *  call {@link io.github.cantido.qlearner.client.Action#run() Action.run()} once.
+ * </p>
  */
 @javax.annotation.ParametersAreNonnullByDefault
 package io.github.cantido.qlearner.client;
