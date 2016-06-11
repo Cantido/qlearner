@@ -1,0 +1,173 @@
+= QLearner
+Robert Richter <http://github.com/Cantido>
+:toc:
+:travispage: https://travis-ci.org/Cantido/qlearner
+:travisimage: https://travis-ci.org/Cantido/qlearner.svg?branch=master
+
+
+image::{travisimage}[alt="Build Status", link={travispage}]
+
+A demonstration of the q-learning reinforcement learning technique. For more
+information about the technique itself, see the
+link:https://en.wikipedia.org/wiki/Q_learning[Wikipedia page on Q-Learning].
+
+This program uses the q-learning technique to move an agent through a grid.
+There is a starting square and a goal square, and the agent has to
+learn, using q-learning, how to reach the goal in the fewest number of moves.
+
+
+== Usage
+
+The `gridworld` module and its tests demonstrate how to build a qlearner to
+move throughout a grid, from a starting state, to a goal state. It all starts
+with an `Agent` class.
+
+=== Agent
+
+The *Agent* class the entry point to this software, and has only one method:
+`takeNextAction()`.
+
+[source, java]
+.Creating and using the most basic Agent
+----
+Agent agent = new Agent(
+                    environment,
+                    explorationStrategy,
+                    learningRate,
+                    discountFactor,
+                    qualityMap);
+
+while(true) {
+    agent.takeNextAction();
+}
+----
+
+Each call to `Agent.takeNextAction()` will:
+
+. Get the current `State` object from the given `Environment`
+. Update the learned values based on this new state's `Reward` 
+. Choose and execute the next `Action` given by the current `State`
+
+For real-world applications, you may want to allow some time for your actions
+to have an affect, and for your environment to get to a new state:
+
+[source, java]
+.Waiting in between actions
+----
+while(true) {
+    agent.takeNextAction();
+    Thread.sleep(ONE_MINUTE);
+}
+----
+
+If you are trying to reach a goal state after which your program will exit,
+you will have to specify your own way of identifying that. Since your
+`Environment` implementation is responsible for managing `States`, why not add
+a method to your subclass?
+
+[source, java]
+.Taking timed actions until the environment is in a goal state
+----
+while(!myEnvironment.isAtGoalState()) {
+    agent.takeNextAction();
+    Thread.sleep(ONE_MINUTE);
+}
+----
+
+If you ever need to reset the agent while preserving the learned behavior,
+call `Agent.reset()`. This is important if you are trying to train your agent.
+If, for example, you are trying to have your agent learn how to play a game,
+you will need to call `Agent.reset()` when the game ends, otherwise the
+program will learn that it can make a move at the end of the game that will
+put it back to the beginning of the game!
+
+[source, java]
+.Training an agent to play a game
+----
+while(isTraining) {
+    myGameEnvironment.startGame();
+    
+    while(!myGameEnvironment.isAtGoalState()) {
+        agent.takeNextAction();
+    }
+    // The game is over, now we have to reset before we start the game again
+    
+    agent.reset();
+    myGameEnvironment.endGame();
+}
+----
+
+You can also create a brand new `Agent` object, just be sure to save the
+`QualityMap` that you created it with. That is where we keep the learned
+values, and represents the hard work you just performed!
+
+== Making Your Own
+
+To allow an agent to solve your problems, you must implement the
+`Environment`, `State`, and `Action` interfaces.
+
+=== Environment
+
+Implementations of the *Environment* interface represent some system
+(real-world or otherwise) that you are trying to affect. This program will use
+a single instance of an `Environment` class to fetch data on every learning
+iteration.
+
+=== State
+
+Implementations of the *State* interface are returned by `Environment`
+classes via `Environment.getState()`, and represent a certain condition of the
+system you are trying to affect. If an `Environment` class is a temperature
+sensor, a `State` class would be an individual temperature reading.
+
+A `State` class has a `Reward` value, that represents how desirable it is.
+This program tries to maximize positive rewards and minimize negative rewards.
+
+[WARNING]
+--
+This program does not yet have the functionality necessary to learn continuous
+values. You must build your `State` objects to round these continuous values
+to the point where it is likely that the program will see that value again.
+For instance, round temperature value to a smaller precision. See the
+`QualityHashMap` class for more information.
+--
+
+`State` classes area also responsible for returning the `Action` classes that
+it is possible to take from that state.
+
+=== Action
+
+Implementations of the *Action* interface represent a thing that can be done
+to affect the `Environment`. This program tries to learn the best `Action` to
+take for a given `State`. Each iteration of this program calls
+`Action.execute()` once.
+
+== Domain Values
+
+=== Reward
+
+Specifying *Reward* values is the core way that you tell this program what you
+want. Higher reward values mean more desirable states. This program tries to
+maximize positive rewards and minimize negative rewards.
+
+[TIP]
+--
+Do not try to over-think things when specifying the reward value of a certain
+state. The domain objects of this program were organized with a `State` being
+responsible for a `Reward` because *you should not be rewarding behavior, you
+should be rewarding state.* This program learns *behavior*, and can probably
+do a better job at it than a human can. No offense.
+--
+
+=== Other learning variables
+
+Some other values can be specified to affect how this program learns.
+
+LearningRate:: affects how quickly the algorithm will adapt to changing conditions. This value needs to
+be chosen in correlation with how often a given `State`-`Action` pair will lead to the same next `State`. In
+fully deterministic environments, a value of 1 is optimal.
+DiscountFactor:: determines the importance of future rewards. Higher discount factors will make the program
+favor states with higher long-term rewards. Lower discount factors will make the program favor states that have higher
+ExplorationFactor:: is used to determine how likely the program will pick non-optimal actions in order to
+better explore the problem space. By default, this program uses a random exploration strategy, and higher values of
+this variable will make the program more likely to pick a random `Action`.
