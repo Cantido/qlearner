@@ -56,7 +56,7 @@ public class BackwardInduction implements QualityUpdateStrategy {
 
     @Signed
     double qualityValue =
-      oldQualityValue
+        oldQualityValue
         + (learningRate.doubleValue()
             * (reward.doubleValue()
                 + discountFactor.doubleValue() * optimalFutureValueEstimate.doubleValue()

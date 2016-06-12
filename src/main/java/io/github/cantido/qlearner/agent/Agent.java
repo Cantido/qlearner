@@ -66,7 +66,7 @@ public class Agent {
   @Nullable
   private Step lastStep;
   
-  @Nonnull
+  @Nullable
   private Future<?> lastExecutedActionFuture = Futures.immediateFuture(null);
   
   /**
@@ -121,7 +121,7 @@ public class Agent {
     State currentState = environment.getState();
     SortedSet<StateActionQuality> potentialQualities = buildTriplets(currentState);
     Action nextAction = explorationStrategy.getNextAction(potentialQualities);
-
+    
     lastExecutedActionFuture = actionExecutorService.submit(nextAction);
     
 
@@ -155,7 +155,8 @@ public class Agent {
    * 
    * @return the most recent {@code Step} taken by this object.
    */
-  public Optional<Step> getLastStep() {
+  @SuppressWarnings("null")
+public Optional<Step> getLastStep() {
     return Optional.of(lastStep);
   }
   
@@ -180,6 +181,10 @@ public class Agent {
    * @throws InterruptedException if the current thread was interrupted while waiting
    */
   public void await() throws InterruptedException, ExecutionException {
-    lastExecutedActionFuture.get();
+    Future<?> actionFuture = lastExecutedActionFuture;
+    if (actionFuture == null) {
+      return;
+    }
+    actionFuture.get();
   }
 }
