@@ -189,8 +189,6 @@
 			</plugin>
 		</plugins>
 	</reporting>
-	<dependencyManagement>
-	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>io.github.cantido</groupId>
