@@ -8,16 +8,13 @@
 		<version>1.5</version>
 	</skin>
 	<body>
-		<menu ref="modules" />
+		<links>
+			<item name="Q-learning on Wikipedia" href="https://en.wikipedia.org/wiki/Q-learning"/>
+		</links>
+		<menu name="Overview">
+			<item name="Introduction" href="index.html" />
+		</menu>
+		<menu ref="parent" />
+		<menu ref="reports" />
 	</body>
-		<custom>
-		<fluidoSkin>
-			<sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
-			<gitHub>
-				<projectId>Cantido/qlearner</projectId>
-				<ribbonOrientation>right</ribbonOrientation>
-				<ribbonColor>red</ribbonColor>
-			</gitHub>
-		</fluidoSkin>
-	</custom>
 </project>

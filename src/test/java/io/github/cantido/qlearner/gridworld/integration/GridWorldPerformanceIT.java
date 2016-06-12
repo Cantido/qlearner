@@ -45,7 +45,7 @@ public class GridWorldPerformanceIT {
    * What I've supplied is what approximately works on my machine.
    */
   
-  private static final int DESIRED_TEST_DURATION_SECONDS = 5;
+  private static final int DESIRED_TEST_DURATION_SECONDS = 10;
   
   private static final int EXPECTED_OPERATIONS_PER_SECOND = 50_000;
   private static final int TIMEOUT = (int) (DESIRED_TEST_DURATION_SECONDS * 1.5);
