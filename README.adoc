@@ -1,23 +1,29 @@
-qlearner
-========
+= qlearner
+:travispage: https://travis-ci.org/Cantido/qlearner
+:travisimage: https://travis-ci.org/Cantido/qlearner.svg?branch=master
 
-[![Build Status](https://travis-ci.org/Cantido/qlearner.svg?branch=master)](https://travis-ci.org/Cantido/qlearner)
+image::{travisimage}[alt="Build Status", link={travispage}]
+
 
 A demonstration of the q-learning reinforcement learning technique. For more
-information about the technique itself, see [its Wikipedia page][wiki].
+information about the technique itself, see the
+link:https://en.wikipedia.org/wiki/Q_learning[Wikipedia page on Q-Learning].
 
 This program uses the q-learning technique to move an agent through a grid.
 There is a starting square and a goal square, and the agent has to
 learn, using q-learning, how to reach the goal in the fewest number of moves.
 
-Usage
------
-See the `qlearner-core` module for the core library, or see the `gridworld` module
-for an example implementation.
+== Usage
+
+See the `qlearner-core` module for the core library. Its tests build a
+"`Grid World`" implementation that functions as a simple example.
 
 License
 -------
-Released under the [GNU General Public License, Version 3](http://www.gnu.org/licenses/gpl.html)
+
+(C) Robert Richter 2016
+
+Released under the link:http://www.gnu.org/licenses/gpl.html[GNU General Public License, Version 3]
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,6 +36,4 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-[wiki]: https://en.wikipedia.org/wiki/Q_learning "Q-learning - Wikipedia, the free encycopedia"
+along with this program.  If not, see http://www.gnu.org/licenses/.
